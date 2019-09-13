@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'register',
     pathMatch: 'full'
   },
   {
@@ -14,7 +14,13 @@ const routes: Routes = [
   {
     path: 'list',
     loadChildren: () => import('./list/list.module').then(m => m.ListPageModule)
-  }
+  },
+  {
+    path: 'register',
+    loadChildren: () => import('./login-register/register/register/register.module').then(m => m.RegisterPageModule)
+  },
+  // { path: 'register', loadChildren: './login-register/register/register/register.module#RegisterPageModule' }
+
 ];
 
 @NgModule({

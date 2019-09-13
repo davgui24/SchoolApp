@@ -1,33 +1,31 @@
+import { Group } from './group';
+
+
 export class User {
-    // let valueRole = {
-    //     value: ['Admin','Student','Teacher'],
-    //     message:'Option invalid'
-
-    // }
-
     id: String;
     role: String;
     name: String;
     user: String;
+    group: Group;
     password: String;
     email: String;
     phone: String;
-    datecreate: Date;
-    datedelete: Date;
-    lastlogin: Date;
-    dateupdate: Date;
+    lastLogin: Date;
+    dateCreate: Date;
+    dateDelete: Date;
+    dateUpdate: Date;
 
-    constructor(role:ValueRole, name:string, user:string, password:string){
+    constructor(role: ValueRole, name: string, user: string, password: string, group?: Group){
         this.role=role;
         this.name=name;
         this.user=user;
         this.password=password;
-        this.datecreate=new Date();
+        this.dateCreate=new Date();
     }
 }
 
-    export interface IUser {
 
+    export interface IUser {
         id: String;
         rol: String;
         name: String;
@@ -35,14 +33,15 @@ export class User {
         password: String;
         email: String;
         phone: String;
-        date_creation: Date;
-        date_delete: Date;
-        last_login: Date;
-        date_update: Date;
+        lastLogin: Date;
+        dateCreate: Date;
+        dateDelete: Date;
+        dateUpdate: Date;
     }
 
+
     export enum ValueRole  {
-            value1 = 'Admin',
-            value2 = 'Teacher',
-            value3 = 'Student'
+            admin = 'Admin',
+            teacher = 'Teacher',
+            student = 'Student'
         }
