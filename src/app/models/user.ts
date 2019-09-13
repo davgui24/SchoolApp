@@ -3,11 +3,11 @@ import { Group } from './group';
 
 export class User {
     id: String;
-    role: String;
     name: String;
-    user: String;
-    group: Group;
+    username: String;
     password: String;
+    role: string;
+    group: Group;
     email: String;
     phone: String;
     lastLogin: Date;
@@ -15,10 +15,10 @@ export class User {
     dateDelete: Date;
     dateUpdate: Date;
 
-    constructor(role: ValueRole, name: string, user: string, password: string, group?: Group){
+    constructor(name: string, user: string, password: string, role: string, group?: Group){
         this.role=role;
         this.name=name;
-        this.user=user;
+        this.username=user;
         this.password=password;
         this.dateCreate=new Date();
     }

@@ -14,21 +14,44 @@
   (ionScrollEnd)="logScrollEnd()">
       <ion-content>
 
-          <ion-grid style="margin-left: 5%; margin-top: 10%; margin-right: 5%;">
+          <ion-grid style="margin-left: 5%; margin-top: 30%; margin-right: 5%;">
+            <form (ngSubmit)="logForm()">
               <ion-row>
                   <ion-col size="12">
                       <ion-item-group>
                         <ion-item>
+                            <ion-label position="floating">Name</ion-label>
+                            <ion-input [(ngModel)]="name" name="name" type="text" value="" placeholder="Enter name" autocomplete="off"></ion-input>
+                        </ion-item>
+                        <ion-item>
                           <ion-label position="floating">User name</ion-label>
-                          <ion-input type="text" value="" placeholder="Enter user" autocomplete="off"></ion-input>
+                          <ion-input [(ngModel)]="username" name="username" type="text" value="" placeholder="Enter user" autocomplete="off"></ion-input>
                       </ion-item>
                       <ion-item>
                           <ion-label position="floating">Password</ion-label>
-                          <ion-input type="Password" value="" placeholder="Enter password" autocomplete="off"></ion-input>
+                          <ion-input [(ngModel)]="password" name="password" type="Password" value="" placeholder="Enter password" autocomplete="off"></ion-input>
                       </ion-item>
                   </ion-item-group>
                   </ion-col>
               </ion-row>
+              <ion-row>
+                  <ion-col size="12">
+                      <ion-item-group>
+                        <ion-item>
+                          <ion-label position="floating">Role</ion-label>
+                          <ion-select [(ngModel)]="role" name="role" placeholder="Select One">
+                              <ion-select-option value="admin">Admin</ion-select-option>
+                              <ion-select-option value="teacher">Teacher</ion-select-option>
+                              <ion-select-option value="student">Student</ion-select-option>
+                            </ion-select>
+                      </ion-item>
+                  </ion-item-group>
+                  <ion-button expand="full" color="primary" type="submit" block style="margin-top: 10%;">
+                      <ion-icon name="person-add"></ion-icon>
+                  </ion-button>
+                  </ion-col>
+              </ion-row>
+            </form>
           </ion-grid>
 
       </ion-content>

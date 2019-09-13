@@ -9,17 +9,28 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+
+// FIREBASE
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule, AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { firebaseConfig } from './config';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
     AppRoutingModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    AngularFireDatabase ,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
