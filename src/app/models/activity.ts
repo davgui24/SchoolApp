@@ -1,7 +1,8 @@
 import { Group } from './group';
+import { User } from './user';
     
     
-    export class User {
+    export class Activity {
         id: String;    
         name: String;
         description: String;

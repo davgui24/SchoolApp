@@ -7,3 +7,20 @@ export const firebaseConfig = {
     messagingSenderId: "13971649756",
     appId: "1:13971649756:web:44312ce236720ade5d3019"
   };
+
+
+
+export let inputFormUser = {
+  inputSchool: false,
+  ImputGroup: false
+}
+
+export let sideOption  = {
+  user: false,
+  school: false,
+  course: false,
+  group: false,
+  subject: false,
+  activity: false
+}
+

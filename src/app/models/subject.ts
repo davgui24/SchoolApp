@@ -1,4 +1,5 @@
-import { User } from './activity';
+import { User } from './user';
+
 
 
 export class Subject {

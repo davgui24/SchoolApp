@@ -27,7 +27,7 @@ export class UserService {
     });
   }
 
-  getUsuario(user){
+  getUsuario(user: User){
     return new Promise((resolve, reject) => {
     this.afDB.object("/usuarios/" + user).valueChanges().subscribe(data => {
           if (data) {
@@ -66,5 +66,15 @@ export class UserService {
 
   eliminarUsuario(usuario: User) {
     return this.afDB.database.ref("/usuarios/" + usuario.username).remove();
+  }
+
+
+
+  setLocalStorage(role: string){
+    localStorage.setItem('role', role);
+  }
+
+  getLocalStorage(){
+    localStorage.getItem('role');
   }
 }

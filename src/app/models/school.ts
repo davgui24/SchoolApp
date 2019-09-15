@@ -1,22 +1,23 @@
-import { User } from './activity';
+import { User } from './user';
 
-export class Curso {  
+
+export class School {  
     id: String;   
     name: String;
     admin: User;
     director: string;
     email: string;
     phone: String;
-    datecreate: Date;
-    datedelete: Date;   
-    dateupdate: Date;
+    dateCreate: Date;
+    dateDelete: Date;   
+    dateUpdate: Date;
 
     constructor(name: string, admin: User, director: string, phone: String){
         this.name = name;
         this.admin = admin;   
         this.director = director;
         this.phone = phone;
-        this.datecreate = new Date();
+        this.dateCreate = new Date();
     }
 
 }
@@ -26,9 +27,12 @@ export class Curso {
     export interface ISchool {
         id: String;   
         name: String;
-        grade: String;  
-        datecreate: Date;
-        datedelete: Date;    
-        date_update: Date;
+        admin: User;
+        director: string;
+        email: string;
+        phone: String;
+        dateCreate: Date;
+        dateDelete: Date;   
+        dateUpdate: Date;
     }
 
