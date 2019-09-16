@@ -26,7 +26,6 @@ export class RegisterPage implements OnInit {
 
   ngOnInit() {
     this._userService.getUsuarios().then((users: any) =>{
-      console.log('Esperando');
       if(users){
         this.users = users;
         // console.log('Usuarios', users);

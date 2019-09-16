@@ -3,7 +3,8 @@ import { User } from './user';
     
     
     export class Activity {
-        id: string;    
+        id: string;
+        idSchool: string;    
         name: string;
         description: string;
         type: string;

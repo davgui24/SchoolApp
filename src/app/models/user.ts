@@ -10,6 +10,7 @@ import { School } from './school';
         password: string;
         role: string;
         school: School;
+        admin: User;
         group: Group;
         students: User;
         email: string;
@@ -19,7 +20,7 @@ import { School } from './school';
         dateDelete: Date;
         dateUpdate: Date;
 
-        constructor(name: string, user: string, password: string, role: string, school?: School, group?: Group, students?: User[]){
+        constructor(name: string, user: string, password: string, role: string,  admin?: User, school?: School, group?: Group, students?: User[]){
             this.role=role;
             this.name=name;
             this.username=user;

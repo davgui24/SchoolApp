@@ -7,7 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { User } from './models/user';
 import { UserService } from './services/user.service';
 import { ConfigOptionsService } from './services/config-options-service';
-import { sideOption } from './config';
+
 
 @Component({
   selector: 'app-root',
@@ -17,7 +17,7 @@ import { sideOption } from './config';
 export class AppComponent implements OnInit {
 
   user: User;
-  sideOption
+  sideOption: any;
 
   public appPages = []
 
@@ -34,7 +34,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
   this.user = this._userService.getLocalStorage();
   this.sideOption = this._configOptionservice.configOptionSidemenu(this.user.role);
-  console.log('Validation', this.sideOption);
   this.upLoadMenu();
   }
 
@@ -50,7 +49,7 @@ export class AppComponent implements OnInit {
     this.appPages = [
       {
         title: 'User',
-        url: 'home/' + this.user.id,
+        url: 'list-admins',
         icon: 'person-add',
         validation: this.sideOption.user
       },

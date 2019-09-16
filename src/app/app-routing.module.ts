@@ -47,10 +47,14 @@ const routes: Routes = [
     path: "login",
     loadChildren: "./login-register/login/login/login.module#LoginPageModule"
   },
+  // { 
+  //   path: 'register-user', 
+  //   loadChildren: './forms/register-user/register-user.module#RegisterUserPageModule',
+  // },
   {
-    path: "register",
-    loadChildren: "./login-register/register/register/register.module#RegisterPageModule"
-  },
+   path: "register",
+   loadChildren: "./login-register/register/register/register.module#RegisterPageModule",
+   },
   {
     path: "home",
     loadChildren: "./pages/home/home.module#HomePageModule"
@@ -58,8 +62,12 @@ const routes: Routes = [
   {
     path: "home/:idUser",
     loadChildren: "./pages/home/home.module#HomePageModule"
-  },  { path: 'menu', loadChildren: './components/menu/menu.module#MenuPageModule' },
+  },
   { path: 'menu', loadChildren: './components/menu/menu.module#MenuPageModule' },
+  { path: 'menu', loadChildren: './components/menu/menu.module#MenuPageModule' },
+  { path: 'list-admins', loadChildren: './pages/list-admins/list-admins.module#ListAdminsPageModule' },
+
+
 
   // { path: "login", loadChildren: "./pages/login/login.module#LoginPageModule" },
   // { path: "home", loadChildren: "./pages/home/home.module#HomePageModule" },

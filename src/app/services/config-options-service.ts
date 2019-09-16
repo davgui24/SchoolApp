@@ -15,18 +15,23 @@ export class ConfigOptionsService {
     if(role == 'Global') {
       inputFormUser.inputSchool= true;
       inputFormUser.ImputGroup = false;
+      inputFormUser.ImputStudents = true;
     }else if(role == 'Admin') {
-      inputFormUser.inputSchool= false;
+      inputFormUser.inputSchool= true;
       inputFormUser.ImputGroup = false;
+      inputFormUser.ImputStudents = false;
     }else if(role == 'Teacher') {
       inputFormUser.inputSchool= true;
       inputFormUser.ImputGroup = false;
+      inputFormUser.ImputStudents = false;
     }else if(role == 'Student') {
       inputFormUser.inputSchool= false;
       inputFormUser.ImputGroup = true;
+      inputFormUser.ImputStudents = false;
     }else if(role == 'Father') {
       inputFormUser.inputSchool= false;
       inputFormUser.ImputGroup = false;
+      inputFormUser.ImputStudents = false;
     }
     return inputFormUser;
   }
@@ -49,7 +54,7 @@ export class ConfigOptionsService {
       sideOption.subject = true;
       sideOption.activity = true;
     }else if(role == 'Teacher') {
-      sideOption.user = false;
+      sideOption.user = true;
       sideOption.school = false;
       sideOption.course = true;
       sideOption.group = true;

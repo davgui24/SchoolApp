@@ -1,9 +1,11 @@
+import { Group } from './group';
 
 
 export class Course {  
     id: string;   
     name: string;
-    grade: ValueCourse;  
+    grade: ValueCourse;
+    groups: Group[];
     dateCreate: Date;
     dateDelete: Date;
     dateUpdate: Date;
@@ -12,6 +14,7 @@ export class Course {
         this.name = name;
         this.grade = grade;        
         this.dateCreate = new Date();
+        this.groups = [];
         this.id = Date.now().toString();
     }
 
