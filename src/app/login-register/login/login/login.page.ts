@@ -13,7 +13,7 @@ import { LoadingController } from '@ionic/angular';
 export class LoginPage implements OnInit {
 
   users: User[] = [];
-  user: User = null;
+  user: any;
   username: string;
   password: string;
   role: string;
@@ -31,8 +31,8 @@ export class LoginPage implements OnInit {
 
 
   loginForm(){
-    this._userService.getUsuarios().then(async(users: any) =>{
-       
+    this._userService.getUsuarios().then(async(users: any[]) =>{
+       users[0].date
       const loading = await this.loadingController.create({
         message: 'Hellooo',
         // duration: 2000
@@ -43,14 +43,12 @@ export class LoginPage implements OnInit {
         for(let i=0; i<this.users.length; i++){
           if(this.username == this.users[i].username && this.password == this.users[i].password && this.role == this.users[i].role){
             loading.onDidDismiss();
-            this._userService.setLocalStorage(this.role)
-            this.navCtrl.navigateBack("/home");
+            this.navCtrl.navigateBack("home/" + this.users[i].id);
             break;
           }else{
-
+           console.log('No se pudo loguear');
           }
         }
-        // console.log(this._configOptionsService.configFormUser(this.users[0].role));;
       }
     })
   }

@@ -3,21 +3,22 @@ import { User } from './user';
     
     
     export class Activity {
-        id: String;    
-        name: String;
-        description: String;
-        type: String;
+        id: string;    
+        name: string;
+        description: string;
+        type: string;
         user: User;
-        datefrom: Date;
-        dateto: Date;
+        group: Group;
+        dateFrom: Date;
+        dateTo: Date;
         state: boolean;
         dateCreate: Date;
         dateDelete: Date;
         dateUpdate: Date;
-        group: Group;
+        
 
 
-        constructor(name: string, description: String, type: ValueType, user: User){
+        constructor(name: string, description: string, type: ValueType, user: User){
             this.name = name;
             this.description = description;
             this.type = type;
@@ -25,6 +26,7 @@ import { User } from './user';
             this.user = user;
             this.group = this.group;
             this.dateCreate = new Date();
+            this.id = Date.now().toString();
         }
     }
 

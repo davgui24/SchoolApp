@@ -19,6 +19,7 @@ export class RegisterPage implements OnInit {
   school: School;
   role: string;
   group: Group;
+  students: User;
 
   constructor(private _userService: UserService,
               private _configOptionsService: ConfigOptionsService) { }
@@ -43,7 +44,7 @@ export class RegisterPage implements OnInit {
     this.role = '';
     this.school = null;
     this.group = null;
-    
+    this.students = null;
 
     // console.log(this.user);
   }

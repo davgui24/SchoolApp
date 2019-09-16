@@ -4,37 +4,40 @@ import { School } from './school';
 
 
     export class User {
-        id: String;
-        name: String;
-        username: String;
-        password: String;
+        id: string;
+        name: string;
+        username: string;
+        password: string;
         role: string;
+        school: School;
         group: Group;
-        email: String;
-        phone: String;
+        students: User;
+        email: string;
+        phone: string;
         lastLogin: Date;
         dateCreate: Date;
         dateDelete: Date;
         dateUpdate: Date;
 
-        constructor(name: string, user: string, password: string, role: string, school?: School, group?: Group){
+        constructor(name: string, user: string, password: string, role: string, school?: School, group?: Group, students?: User[]){
             this.role=role;
             this.name=name;
             this.username=user;
             this.password=password;
             this.dateCreate=new Date();
-        }
+            this.id = Date.now().toString();
+         }
     }
 
 
     export interface IUser {
-        id: String;
-        rol: String;
-        name: String;
-        user: String;
-        password: String;
-        email: String;
-        phone: String;
+        id: string;
+        rol: string;
+        name: string;
+        user: string;
+        password: string;
+        email: string;
+        phone: string;
         lastLogin: Date;
         dateCreate: Date;
         dateDelete: Date;
@@ -46,5 +49,6 @@ import { School } from './school';
             global = 'Global',
             admin = 'Admin',
             teacher = 'Teacher',
-            student = 'Student'
+            student = 'Student',
+            fatherFamily = 'Father'
         }

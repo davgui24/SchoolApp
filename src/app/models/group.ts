@@ -3,21 +3,22 @@ import { Subject } from './subject';
 
 
 export class Group {
-    id: String;    
-    name: String;
+    id: string;    
+    name: string;
     directorGroup: User;
-    subject: Subject
+    subject: Subject[];
     students: User[];
     dateCreate: Date;
     dateDelete: Date;
     dateUpdate: Date;
 
-        constructor(name: string, directorGroup: User, subject, students: User[]){
+        constructor(name: string, directorGroup: User, subject: Subject[]){
             this.name = name;
             this.directorGroup = directorGroup;
-            this.subject = subject;
+            this.subject = [];
             this.students = [];
             this.dateCreate=new Date();
+            this.id = Date.now().toString();
         }
 }
 

@@ -1,8 +1,8 @@
 
 
 export class Course {  
-    id: String;   
-    name: String;
+    id: string;   
+    name: string;
     grade: ValueCourse;  
     dateCreate: Date;
     dateDelete: Date;
@@ -12,6 +12,7 @@ export class Course {
         this.name = name;
         this.grade = grade;        
         this.dateCreate = new Date();
+        this.id = Date.now().toString();
     }
 
 }
@@ -19,9 +20,9 @@ export class Course {
 
 export interface Icourse {
 
-    id: String;   
-    name: String;
-    grade: String;  
+    id: string;   
+    name: string;
+    grade: string;  
     dateCreate: Date;
     dateUpdate: Date;
     dateDelete: Date;

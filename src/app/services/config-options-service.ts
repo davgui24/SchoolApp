@@ -24,6 +24,9 @@ export class ConfigOptionsService {
     }else if(role == 'Student') {
       inputFormUser.inputSchool= false;
       inputFormUser.ImputGroup = true;
+    }else if(role == 'Father') {
+      inputFormUser.inputSchool= false;
+      inputFormUser.ImputGroup = false;
     }
     return inputFormUser;
   }
@@ -53,6 +56,13 @@ export class ConfigOptionsService {
       sideOption.subject = true;
       sideOption.activity = true;
     }else if(role == 'Student') {
+      sideOption.user = false;
+      sideOption.school = false;
+      sideOption.course = false;
+      sideOption.group = true;
+      sideOption.subject = true;
+      sideOption.activity = true;
+    }else if(role == 'Father') {
       sideOption.user = false;
       sideOption.school = false;
       sideOption.course = false;

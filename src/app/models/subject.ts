@@ -3,8 +3,8 @@ import { User } from './user';
 
 
 export class Subject {
-    id: String;    
-    name: String;
+    id: string;    
+    name: string;
     code: string;
     teacher: User;
     dateCreate: Date;
@@ -16,12 +16,13 @@ export class Subject {
             this.code = code;
             this.teacher = teacher;
             this.dateCreate=new Date();
+            this.id = Date.now().toString();
         }
 }
 
     export interface ISubject {
-        id: String;    
-        name: String;
+        id: string;    
+        name: string;
         code: string;
         teacher: User;
         dateCreate: Date;
