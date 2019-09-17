@@ -5,6 +5,7 @@ import { Group } from 'src/app/models/group';
 import { UserService } from 'src/app/services/user.service';
 import { ConfigOptionsService } from 'src/app/services/config-options-service';
 import { inputFormUser } from 'src/app/config';
+import { SchoolService } from 'src/app/services/school.service';
 
 @Component({
   selector: 'app-register-user',
@@ -28,23 +29,29 @@ export class RegisterUserPage implements OnInit {
   group: Group;
   students: User;
 
+  admins: User[] = [];
+  schools: School[] = [];
+
   constructor(private _userService: UserService,
-    private _configOptionservice: ConfigOptionsService,) { }
+              private _schoolService: SchoolService,
+              private _configOptionservice: ConfigOptionsService,) { }
 
     ngOnInit() {
       this.userlogin = this._userService.getLocalStorage();
       this.inputFormUser = this._configOptionservice.configFormUser(this.userlogin.role);
-      this._userService.getUsuarios().then((users: any) =>{
-        if(users){
-          this.users = users;
-          // console.log('Usuarios', users);
-          // console.log(this._configOptionsService.configFormUser(this.users[0].role));;
-        }
+      // this._userService.getUsuarios().then((users: User[]) =>{
+      //   this.users = users;
+      // })
+
+      // Carga de colegios
+      this._schoolService.getSchools().then((schools: School[]) =>{
+        this.schools = schools;
       })
     }
   
     private registerForm(){
       this.user = new User(this.name, this.username, this.password, this.role);
+      this.user.school = this.school;
       this._userService.crearUsuario(this.user);
       this.name = '';
       this.username = '';
@@ -53,8 +60,6 @@ export class RegisterUserPage implements OnInit {
       this.school = null;
       this.group = null;
       this.students = null;
-  
-      // console.log(this.user);
     }
 
 }

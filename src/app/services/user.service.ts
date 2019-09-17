@@ -40,9 +40,9 @@ export class UserService {
     });
   }
 
-  verificarUsuario(user: string) {
+  verificarUsuario(userId: string) {
     return new Promise((resolve, reject) => {
-      this.afDB.object("/usuarios/" + user).valueChanges().subscribe(data => {
+      this.afDB.object("/usuarios/" + userId).valueChanges().subscribe(data => {
           if (data) {
             resolve(data);
           } else {
@@ -53,11 +53,11 @@ export class UserService {
   }
 
   crearUsuario(usuario: User) {
-    this.afDB.database.ref("/usuarios/" + usuario.username).set(usuario);
+    this.afDB.database.ref("/usuarios/" + usuario.id).set(usuario);
   }
 
   editarUsuario(usuario: User) {
-    let usuarioEditado = this.afDB.database.ref("/usuarios/" + usuario.username).set(usuario);
+    let usuarioEditado = this.afDB.database.ref("/usuarios/" + usuario.id).set(usuario);
     if (usuarioEditado == undefined || usuarioEditado == null) {
       return false;
     } else {
@@ -66,7 +66,7 @@ export class UserService {
   }
 
   eliminarUsuario(usuario: User) {
-    return this.afDB.database.ref("/usuarios/" + usuario.username).remove();
+    return this.afDB.database.ref("/usuarios/" + usuario.id).remove();
   }
 
   // ==================================================

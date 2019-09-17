@@ -66,6 +66,9 @@ const routes: Routes = [
   { path: 'menu', loadChildren: './components/menu/menu.module#MenuPageModule' },
   { path: 'menu', loadChildren: './components/menu/menu.module#MenuPageModule' },
   { path: 'list-admins', loadChildren: './pages/list-admins/list-admins.module#ListAdminsPageModule' },
+  { path: 'register-school', loadChildren: './forms/register-school/register-school.module#RegisterSchoolPageModule' },
+  { path: 'assign-admin-to-school/:idSchool', loadChildren: './forms/assign-admin-to-school/assign-admin-to-school.module#AssignAdminToSchoolPageModule' },
+
 
 
 

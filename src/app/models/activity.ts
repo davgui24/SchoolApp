@@ -10,12 +10,12 @@ import { User } from './user';
         type: string;
         user: User;
         group: Group;
-        dateFrom: Date;
-        dateTo: Date;
+        dateFrom: string;
+        dateTo: string;
         state: boolean;
-        dateCreate: Date;
-        dateDelete: Date;
-        dateUpdate: Date;
+        dateCreate: string;
+        dateDelete: string;
+        dateUpdate: string;
         
 
 
@@ -26,7 +26,7 @@ import { User } from './user';
             this.state = true;
             this.user = user;
             this.group = this.group;
-            this.dateCreate = new Date();
+            this.dateCreate=new Date().toString();
             this.id = Date.now().toString();
         }
     }
@@ -37,13 +37,13 @@ import { User } from './user';
         description: String;
         user: User;
         type: String;
-        datefrom: Date;
-        dateto: Date;
+        datefrom: string;
+        dateto: string;
         datecreate: Date;
         state: boolean;
-        dateCreate: Date;
-        dateUpdate: Date;
-        dateDelete: Date;
+        dateCreate: string;
+        dateDelete: string;
+        dateUpdate: string;
     }
 
 export enum ValueType  {

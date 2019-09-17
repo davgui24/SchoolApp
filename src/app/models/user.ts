@@ -10,22 +10,21 @@ import { School } from './school';
         password: string;
         role: string;
         school: School;
-        admin: User;
         group: Group;
         students: User;
         email: string;
         phone: string;
-        lastLogin: Date;
-        dateCreate: Date;
-        dateDelete: Date;
-        dateUpdate: Date;
+        lastLogin: string;
+        dateCreate: string;
+        dateDelete: string;
+        dateUpdate: string;
 
-        constructor(name: string, user: string, password: string, role: string,  admin?: User, school?: School, group?: Group, students?: User[]){
+        constructor(name: string, user: string, password: string, role: string, school?: School, group?: Group, students?: User[]){
             this.role=role;
             this.name=name;
             this.username=user;
             this.password=password;
-            this.dateCreate=new Date();
+            this.dateCreate=new Date().toString();
             this.id = Date.now().toString();
          }
     }
@@ -39,10 +38,10 @@ import { School } from './school';
         password: string;
         email: string;
         phone: string;
-        lastLogin: Date;
-        dateCreate: Date;
-        dateDelete: Date;
-        dateUpdate: Date;
+        lastLogin: string;
+        dateCreate: string;
+        dateDelete: string;
+        dateUpdate: string;
     }
 
 

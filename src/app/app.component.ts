@@ -83,6 +83,12 @@ export class AppComponent implements OnInit {
         icon: 'person-add',
         validation: this.sideOption.activity
       },
+      {
+        title: 'Loguoy',
+        url: 'login',
+        icon: 'power',
+        validation: true
+      },
     ];
   }
 }

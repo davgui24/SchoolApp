@@ -8,25 +8,24 @@ export class School {
     admin: User;
     director: string;
     email: string;
-    phone: string;
+    telephone: string;
     teachers: User[];
     courses: Course[];
     students: User[];
     fathers: User[];
-    dateCreate: Date;
-    dateDelete: Date;
-    dateUpdate: Date;
+    dateCreate: string;
+    dateDelete: string;
+    dateUpdate: string;
 
-    constructor(name: string, admin: User, director: string, phone: string){
-        this.name = name;
-        this.admin = admin;   
+    constructor(name: string, director: string, telephone: string){
+        this.name = name;  
         this.director = director;
-        this.phone = phone;
+        this.telephone = telephone;
         this.teachers = [];
         this.courses = [];
         this.students = [];
         this.fathers = [];
-        this.dateCreate = new Date();
+        this.dateCreate=new Date().toString();
         this.id = Date.now().toString();
     }
 }
@@ -39,9 +38,9 @@ export class School {
         admin: User;
         director: string;
         email: string;
-        phone: string;
-        dateCreate: Date;
-        dateDelete: Date;   
-        dateUpdate: Date;
+        telephone: string;
+        dateCreate: string;
+        dateDelete: string;
+        dateUpdate: string;
     }
 

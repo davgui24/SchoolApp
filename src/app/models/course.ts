@@ -6,14 +6,14 @@ export class Course {
     name: string;
     grade: ValueCourse;
     groups: Group[];
-    dateCreate: Date;
-    dateDelete: Date;
-    dateUpdate: Date;
+    dateCreate: string;
+    dateDelete: string;
+    dateUpdate: string;
 
     constructor(name: string, grade: ValueCourse){
         this.name = name;
         this.grade = grade;        
-        this.dateCreate = new Date();
+        this.dateCreate=new Date().toString();
         this.groups = [];
         this.id = Date.now().toString();
     }
@@ -26,9 +26,9 @@ export interface Icourse {
     id: string;   
     name: string;
     grade: string;  
-    dateCreate: Date;
-    dateUpdate: Date;
-    dateDelete: Date;
+    dateCreate: string;
+    dateDelete: string;
+    dateUpdate: string;
 }
 
 

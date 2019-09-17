@@ -7,15 +7,15 @@ export class Subject {
     name: string;
     code: string;
     teacher: User;
-    dateCreate: Date;
-    dateDelete: Date;
-    dateUpdate: Date;
+    dateCreate: string;
+    dateDelete: string;
+    dateUpdate: string;
 
         constructor(name: string, code: string, teacher: User){
             this.name = name;
             this.code = code;
             this.teacher = teacher;
-            this.dateCreate=new Date();
+            this.dateCreate=new Date().toString();
             this.id = Date.now().toString();
         }
 }
@@ -25,7 +25,7 @@ export class Subject {
         name: string;
         code: string;
         teacher: User;
-        dateCreate: Date;
-        dateDelete: Date;
-        dateUpdate: Date;
+        dateCreate: string;
+        dateDelete: string;
+        dateUpdate: string;
     }

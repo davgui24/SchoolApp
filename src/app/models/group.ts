@@ -8,16 +8,16 @@ export class Group {
     directorGroup: User;
     subject: Subject[];
     students: User[];
-    dateCreate: Date;
-    dateDelete: Date;
-    dateUpdate: Date;
+    dateCreate: string;
+    dateDelete: string;
+    dateUpdate: string;
 
         constructor(name: string, directorGroup: User, subject: Subject[]){
             this.name = name;
             this.directorGroup = directorGroup;
             this.subject = [];
             this.students = [];
-            this.dateCreate=new Date();
+            this.dateCreate=new Date().toString();
             this.id = Date.now().toString();
         }
 }
@@ -27,7 +27,7 @@ export class Group {
         name: String;
         directorGroup: User;
         subject;
-        dateCreate: Date;
-        dateDelete: Date;
-        dateUpdate: Date;
+        dateCreate: string;
+        dateDelete: string;
+        dateUpdate: string;
     }

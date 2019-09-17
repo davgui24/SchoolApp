@@ -15,7 +15,7 @@ export class ConfigOptionsService {
     if(role == 'Global') {
       inputFormUser.inputSchool= true;
       inputFormUser.ImputGroup = false;
-      inputFormUser.ImputStudents = true;
+      inputFormUser.ImputStudents = false;
     }else if(role == 'Admin') {
       inputFormUser.inputSchool= true;
       inputFormUser.ImputGroup = false;
