@@ -5,14 +5,15 @@ import { Course } from './course';
 export class School {
     id: string;   
     name: string;
-    admin: User;
+    admin: string;
     director: string;
     email: string;
     telephone: string;
-    teachers: User[];
-    courses: Course[];
-    students: User[];
-    fathers: User[];
+    subcjet: string[];
+    teachers: string[];
+    courses: string[];
+    students: string[];
+    fathers: string[];
     dateCreate: string;
     dateDelete: string;
     dateUpdate: string;
@@ -21,6 +22,7 @@ export class School {
         this.name = name;  
         this.director = director;
         this.telephone = telephone;
+        this.subcjet = [];
         this.teachers = [];
         this.courses = [];
         this.students = [];
@@ -29,18 +31,4 @@ export class School {
         this.id = Date.now().toString();
     }
 }
-
-
-
-    export interface ISchool {
-        id: string;   
-        name: string;
-        admin: User;
-        director: string;
-        email: string;
-        telephone: string;
-        dateCreate: string;
-        dateDelete: string;
-        dateUpdate: string;
-    }
 

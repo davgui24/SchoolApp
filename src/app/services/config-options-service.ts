@@ -21,9 +21,9 @@ export class ConfigOptionsService {
       inputFormUser.ImputGroup = false;
       inputFormUser.ImputStudents = false;
     }else if(role == 'Teacher') {
-      inputFormUser.inputSchool= true;
-      inputFormUser.ImputGroup = false;
-      inputFormUser.ImputStudents = false;
+      inputFormUser.inputSchool= false;
+      inputFormUser.ImputGroup = true;
+      inputFormUser.ImputStudents = true;
     }else if(role == 'Student') {
       inputFormUser.inputSchool= false;
       inputFormUser.ImputGroup = true;

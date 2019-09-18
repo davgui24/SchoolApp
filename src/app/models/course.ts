@@ -5,7 +5,7 @@ export class Course {
     id: string;   
     name: string;
     grade: ValueCourse;
-    groups: Group[];
+    groups: string[];
     dateCreate: string;
     dateDelete: string;
     dateUpdate: string;
@@ -18,17 +18,6 @@ export class Course {
         this.id = Date.now().toString();
     }
 
-}
-
-
-export interface Icourse {
-
-    id: string;   
-    name: string;
-    grade: string;  
-    dateCreate: string;
-    dateDelete: string;
-    dateUpdate: string;
 }
 
 

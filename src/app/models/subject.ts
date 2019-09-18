@@ -3,18 +3,19 @@ import { User } from './user';
 
 
 export class Subject {
-    id: string;    
+    id: string;
+    school: string;    
     name: string;
     code: string;
-    teacher: User;
+    teacher: string;
     dateCreate: string;
     dateDelete: string;
     dateUpdate: string;
 
-        constructor(name: string, code: string, teacher: User){
+        constructor(name: string, code: string, school: string){
             this.name = name;
             this.code = code;
-            this.teacher = teacher;
+            this.school = school;
             this.dateCreate=new Date().toString();
             this.id = Date.now().toString();
         }

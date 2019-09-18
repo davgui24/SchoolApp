@@ -14,9 +14,9 @@ export class LoginPage implements OnInit {
 
   users: User[] = [];
   user: any;
-  username: string;
-  password: string;
-  role: string;
+  username: string = 'userGlobal1';
+  password: string = '123456';
+  role: string = 'Global';
 
   constructor(private _userService: UserService,
              private _configOptionsService: ConfigOptionsService,
@@ -25,7 +25,7 @@ export class LoginPage implements OnInit {
              ) { }
 
   ngOnInit() {
-
+  localStorage.clear();
   }
 
 

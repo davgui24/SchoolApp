@@ -9,7 +9,7 @@ import { School } from './school';
         username: string;
         password: string;
         role: string;
-        school: School;
+        school: string;
         group: Group;
         students: User;
         email: string;
@@ -19,29 +19,14 @@ import { School } from './school';
         dateDelete: string;
         dateUpdate: string;
 
-        constructor(name: string, user: string, password: string, role: string, school?: School, group?: Group, students?: User[]){
+        constructor(name: string, username: string, password: string, role: string, school?: string, group?: Group, students?: User[]){
             this.role=role;
             this.name=name;
-            this.username=user;
+            this.username=username;
             this.password=password;
             this.dateCreate=new Date().toString();
             this.id = Date.now().toString();
          }
-    }
-
-
-    export interface IUser {
-        id: string;
-        rol: string;
-        name: string;
-        user: string;
-        password: string;
-        email: string;
-        phone: string;
-        lastLogin: string;
-        dateCreate: string;
-        dateDelete: string;
-        dateUpdate: string;
     }
 
 

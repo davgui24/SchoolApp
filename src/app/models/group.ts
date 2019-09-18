@@ -5,14 +5,14 @@ import { Subject } from './subject';
 export class Group {
     id: string;    
     name: string;
-    directorGroup: User;
-    subject: Subject[];
-    students: User[];
+    directorGroup: string;
+    subject: string[];
+    students: string[];
     dateCreate: string;
     dateDelete: string;
     dateUpdate: string;
 
-        constructor(name: string, directorGroup: User, subject: Subject[]){
+        constructor(name: string, directorGroup: string, subject: string[]){
             this.name = name;
             this.directorGroup = directorGroup;
             this.subject = [];
@@ -21,13 +21,3 @@ export class Group {
             this.id = Date.now().toString();
         }
 }
-
-    export interface IGroup {
-        id: String;    
-        name: String;
-        directorGroup: User;
-        subject;
-        dateCreate: string;
-        dateDelete: string;
-        dateUpdate: string;
-    }

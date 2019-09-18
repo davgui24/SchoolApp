@@ -3,13 +3,12 @@ import { User } from './user';
     
     
     export class Activity {
-        id: string;
-        idSchool: string;    
+        id: string;   
         name: string;
         description: string;
         type: string;
-        user: User;
-        group: Group;
+        user: string;
+        group: string;
         dateFrom: string;
         dateTo: string;
         state: boolean;
@@ -19,32 +18,18 @@ import { User } from './user';
         
 
 
-        constructor(name: string, description: string, type: ValueType, user: User){
+        constructor(name: string, description: string, type: ValueType, user: string, group: string){
             this.name = name;
             this.description = description;
             this.type = type;
             this.state = true;
             this.user = user;
-            this.group = this.group;
+            this.group = group;
             this.dateCreate=new Date().toString();
             this.id = Date.now().toString();
         }
     }
 
-    export interface IActivity {
-        id: String;
-        name: String;
-        description: String;
-        user: User;
-        type: String;
-        datefrom: string;
-        dateto: string;
-        datecreate: Date;
-        state: boolean;
-        dateCreate: string;
-        dateDelete: string;
-        dateUpdate: string;
-    }
 
 export enum ValueType  {
     academic = 'Academic',

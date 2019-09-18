@@ -32,6 +32,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    // ***   Creacion auxiliar de un usuario
+    // const userAux: User = new User('Global 1', 'userGlobal1', '123456', 'Global'); 
+    // this._userService.crearUsuario(userAux);
+
   this.user = this._userService.getLocalStorage();
   this.sideOption = this._configOptionservice.configOptionSidemenu(this.user.role);
   this.upLoadMenu();
@@ -72,7 +76,7 @@ export class AppComponent implements OnInit {
         validation: this.sideOption.group
       },
       {
-        title: 'Subject',
+        title: 'Subjects',
         url: 'home/' + this.user.id,
         icon: 'person-add',
         validation: this.sideOption.subject
@@ -84,7 +88,7 @@ export class AppComponent implements OnInit {
         validation: this.sideOption.activity
       },
       {
-        title: 'Loguoy',
+        title: 'Login',
         url: 'login',
         icon: 'power',
         validation: true

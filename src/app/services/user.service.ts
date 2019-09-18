@@ -94,7 +94,7 @@ export class UserService {
     if(admin.role=='Admin'){
       this.getUsuarios().then((users: User[]) =>{
          users.forEach(user => {
-           if(user.role=='Teacher' && user.school.id==JSON.parse(admin.school).id){
+           if(user.role=='Teacher' && user.school==admin.school){
             teachers.push(user);
            }
          });
@@ -112,7 +112,7 @@ export class UserService {
     localStorage.setItem('name', user.name);
     localStorage.setItem('username', user.username);
     localStorage.setItem('role', user.role);
-    localStorage.setItem('school', JSON.stringify(user.school));
+    localStorage.setItem('school', user.school);
     localStorage.setItem('group', JSON.stringify(user.group));
     localStorage.setItem('students', JSON.stringify(user.students));
   }

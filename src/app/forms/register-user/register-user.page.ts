@@ -39,6 +39,7 @@ export class RegisterUserPage implements OnInit {
     ngOnInit() {
       this.userlogin = this._userService.getLocalStorage();
       this.inputFormUser = this._configOptionservice.configFormUser(this.userlogin.role);
+      console.log( this.inputFormUser );
       // this._userService.getUsuarios().then((users: User[]) =>{
       //   this.users = users;
       // })
@@ -51,15 +52,22 @@ export class RegisterUserPage implements OnInit {
   
     private registerForm(){
       this.user = new User(this.name, this.username, this.password, this.role);
-      this.user.school = this.school;
+      this.user.school = this.school.id;
+      // creamos el admin y le asignamos un colegio
       this._userService.crearUsuario(this.user);
-      this.name = '';
-      this.username = '';
-      this.password = '';
-      this.role = '';
-      this.school = null;
-      this.group = null;
-      this.students = null;
-    }
 
+      // al asignar un Admons a un colegio, le asignamos a ese colegio el mismo admin
+      this.school.admin = this.user.id;
+      if(this._schoolService.editarSchool(this.school)){
+        this.name = '';
+        this.username = '';
+        this.password = '';
+        this.role = '';
+        this.school = null;
+        this.group = null;
+        this.students = null;
+      }else{
+        console.log('Nos e pudeo asignar el usuario: ' + this.user.id + 'al colegio: ' + this.school);
+      }
+    }
 }
