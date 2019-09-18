@@ -51,23 +51,32 @@ export class RegisterUserPage implements OnInit {
     }
   
     private registerForm(){
-      this.user = new User(this.name, this.username, this.password, this.role);
-      this.user.school = this.school.id;
-      // creamos el admin y le asignamos un colegio
-      this._userService.crearUsuario(this.user);
+      if(this.role == 'Admin' || this.role == 'Teacher' || this.role == 'Admin' || this.role == 'Student' || this.role == 'Father'){
+        this.user = new User(this.name, this.username, this.password, this.role);
+        this.user.school = this.school.id;
 
-      // al asignar un Admons a un colegio, le asignamos a ese colegio el mismo admin
-      this.school.admin = this.user.id;
-      if(this._schoolService.editarSchool(this.school)){
-        this.name = '';
-        this.username = '';
-        this.password = '';
-        this.role = '';
-        this.school = null;
-        this.group = null;
-        this.students = null;
-      }else{
-        console.log('Nos e pudeo asignar el usuario: ' + this.user.id + 'al colegio: ' + this.school);
+        
+        // creamos el admin y le asignamos un colegio  
+        // al asignar un Admons a un colegio, le asignamos a ese colegio el mismo admin
+        if(this.school.admin == null){
+          this.school.admin = [];
+          this.school.admin.push(this.user.id);
+        }else{
+          this.school.admin.push(this.user.id);
+        }
+
+        // una vez agregado el admin se actualiza el colegio
+        if(this._schoolService.editarSchool(this.school)){
+          this.name = '';
+          this.username = '';
+          this.password = '';
+          this.role = '';
+          this.school = null;
+          this.group = null;
+          this.students = null;
+        }else{
+          console.log('Nos e pudeo asignar el usuario: ' + this.user.id + 'al colegio: ' + this.school);
+        }
       }
     }
 }

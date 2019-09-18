@@ -48,7 +48,7 @@ export class ConfigOptionsService {
       sideOption.activity = false;
     }else if(role == 'Admin') {
       sideOption.user = true;
-      sideOption.school = true;
+      sideOption.school = false;
       sideOption.course = true;
       sideOption.group = true;
       sideOption.subject = true;

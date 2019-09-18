@@ -5,7 +5,7 @@ import { Course } from './course';
 export class School {
     id: string;   
     name: string;
-    admin: string;
+    admin: string[];
     director: string;
     email: string;
     telephone: string;
