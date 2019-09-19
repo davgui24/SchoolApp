@@ -38,11 +38,13 @@ export class AppComponent implements OnInit {
 
   this.user = this._userService.getLocalStorage();
 
-  if(this.user==null){
-    this.sideOption.user=false;
-  } 
-  this.sideOption = this._configOptionservice.configOptionSidemenu(this.user.role);
-  this.upLoadMenu();
+    if(this.user==null){
+      // this.sideOption.user=false;
+    }else{
+      this.sideOption = this._configOptionservice.configOptionSidemenu(this.user.role);
+      this.upLoadMenu();
+    }
+
   }
 
   initializeApp() {

@@ -11,10 +11,9 @@ export class Course {
     dateDelete: string;
     dateUpdate: string;
 
-    constructor(name: string, grade: string, school: string){
+    constructor(name: string, grade: string){
         this.name = name;
-        this.grade = grade;  
-        this.school = school;      
+        this.grade = grade;       
         this.dateCreate=new Date().toString();
         this.groups = [];
         this.id = Date.now().toString();

@@ -45,23 +45,25 @@ export class RegisterSubjectsPage implements OnInit {
   
 
   registerForm(){
-    // Se crea una asignatura en el local y luego en la base de datos
+    // Se crea una asignatura en el local
     this.subcjet = new Subject(this.name, this.code, this.idSchool);
-    this._subjectService.crearSubject(this.subcjet);
+
 
     // Si no existe el areglo de asignaturas del colegio, entonces se crea y luego se agrega
     if(this.school.subcjet == null){
       this.school.subcjet = [];
       this.school.subcjet.push(this.subcjet);
+    }else{
+      this.school.subcjet.push(this.subcjet);
+    }
+
+    // Una ves se cree la asignatura, se actualiza el colegio
+    if(this._schoolService.editarSchool(this.school)){
       this.name = '';
       this.code = '';
     }else{
-      this.school.subcjet.push(this.subcjet);
-      this.name = '';
-      this.code = '';
+      console.log('No se pudo crear la asignatura');
     }
-    // Una ves se cree la asignatura, se actualiza el colegio
-    this._schoolService.editarSchool(this.school);
 
   }
 }

@@ -5,6 +5,7 @@ import { Subject } from './subject';
 export class Group {
     id: string;    
     name: string;
+    school: string;
     directorGroup: string;
     subject: string[];
     students: string[];

@@ -9,6 +9,7 @@ import { User } from './user';
         type: string;
         user: string;
         group: string;
+        school: string;
         dateFrom: string;
         dateTo: string;
         state: boolean;

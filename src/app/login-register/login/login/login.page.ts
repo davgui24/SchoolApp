@@ -66,7 +66,6 @@ export class LoginPage implements OnInit {
           })
         });
       })
-      console.log('All users', this.users);
     })
   }
 
@@ -80,7 +79,6 @@ export class LoginPage implements OnInit {
             // duration: 2000
           });
 
-
             for(let i=0; i<this.users.length; i++){
               if(this.username == this.users[i].username && this.password == this.users[i].password && this.role == this.users[i].role){
                 loading.onDidDismiss();
@@ -92,7 +90,7 @@ export class LoginPage implements OnInit {
                console.log('No se pudo loguear');
               }
             }
-  }
+      }
 
 
 
@@ -106,7 +104,7 @@ export class LoginPage implements OnInit {
 
     const { role, data } = await loading.onDidDismiss();
 
-    console.log('Loading dismissed!');
+     console.log('Loading dismissed!');
   }
 
 
@@ -120,5 +118,4 @@ export class LoginPage implements OnInit {
     });
     return await loading.present();
   }
-
 }

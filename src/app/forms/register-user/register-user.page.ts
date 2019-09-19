@@ -39,10 +39,6 @@ export class RegisterUserPage implements OnInit {
     ngOnInit() {
       this.userlogin = this._userService.getLocalStorage();
       this.inputFormUser = this._configOptionservice.configFormUser(this.userlogin.role);
-      console.log( this.inputFormUser );
-      // this._userService.getUsuarios().then((users: User[]) =>{
-      //   this.users = users;
-      // })
 
       // Carga de colegios
       this._schoolService.getSchools().then((schools: School[]) =>{
@@ -50,24 +46,21 @@ export class RegisterUserPage implements OnInit {
       })
     }
   
+    
     private registerForm(){
       if(this.role == 'Admin' || this.role == 'Teacher' || this.role == 'Student' || this.role == 'Father'){
         this.user = new User(this.name, this.username, this.password, this.role);
         this.user.school = this.school.id;
-
-        // console.log(this.user);
-        // console.log(this.school);
         
         // creamos el admin y le asignamos un colegio  
         // al asignar un Admons a un colegio, le asignamos a ese colegio el mismo admin
         if(this.school.admin == null){
           this.school.admin = [];
           this.school.admin.push(this.user);
-        }else{
           this.school.admin.push(this.user);
         }
-        // una vez agregado el admin se actualiza el colegio
 
+        // una vez agregado el admin se actualiza el colegio
         if(this._schoolService.editarSchool(this.school)){
           this.name = '';
           this.username = '';
