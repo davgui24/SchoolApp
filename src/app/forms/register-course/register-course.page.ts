@@ -52,11 +52,11 @@ export class RegisterCoursePage implements OnInit {
     // Si no existe el arreglo de cursos del colegio, entonces se crea y luego se agrega
     if(this.school.courses == null){
       this.school.courses = [];
-      this.school.courses.push(this.course.id);
+      this.school.courses.push(this.course);
       this.name = '';
       this.grade = '';
     }else{
-      this.school.courses.push(this.course.id);
+      this.school.courses.push(this.course);
       this.name = '';
       this.grade = '';
     }

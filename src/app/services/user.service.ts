@@ -113,7 +113,7 @@ export class UserService {
     localStorage.setItem('username', user.username);
     localStorage.setItem('role', user.role);
     localStorage.setItem('lastLogin', user.lastLogin);
-    localStorage.setItem('school', JSON.stringify(user.school));
+    localStorage.setItem('school', user.school);
     localStorage.setItem('group', JSON.stringify(user.group));
     localStorage.setItem('students', JSON.stringify(user.students));
   }

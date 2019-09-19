@@ -16,7 +16,7 @@ export class LoginPage implements OnInit {
 
   users: User[] = [];
   admins: User[] = [];
-  user: any;
+  user: User;
   username: string = 'userGlobal1';
   password: string = '123456';
   role: string = 'Global';
@@ -30,27 +30,57 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
   localStorage.clear();
+  this. upLoadusers();
+  }
+
+  upLoadusers(){
+    this._userService.getUsuarios().then((users: User[]) =>{
+      // llenamos el arreglo de usuarios globales
+      users.forEach(user => {
+        this.users.push(user);
+      });
+
+      // Seguimos llenando el arreglo de los demas usuarios
+      this._schoolService.getSchools().then((schools: School[]) =>{
+        schools.forEach(school => {
+          school.admin.forEach(admin => {
+            this.users.push(admin);
+          });
+          if(school.teachers==null){
+            school.teachers = [];
+          }
+          school.teachers.forEach(teacher => {
+            this.users.push(teacher);
+          });
+          if(school.students==null){
+            school.students = [];
+          }
+          school.students.forEach(student => {
+            this.users.push(student);
+          });
+          if(school.fathers==null){
+            school.fathers = [];
+          }
+          school.fathers.forEach(father => {
+            this.users.push(father)
+          })
+        });
+      })
+      console.log('All users', this.users);
+    })
   }
 
 
 
-  loginForm(){
-    this._userService.getUsuarios().then(async(users: any[]) =>{
-       users[0].date
-
-      // buscamos los adminstradores de colegios
-      this._schoolService.getSchools().then((schools: School[]) =>{
-        schools.forEach(school => {
-         school.admin.forEach(async admin => {
-          users.push(admin);
+  async  loginForm(){
+    console.log(this.users);
 
           const loading = await this.loadingController.create({
             message: 'Hellooo',
             // duration: 2000
           });
-    
-          if(users){
-            this.users = users;
+
+
             for(let i=0; i<this.users.length; i++){
               if(this.username == this.users[i].username && this.password == this.users[i].password && this.role == this.users[i].role){
                 loading.onDidDismiss();
@@ -62,14 +92,6 @@ export class LoginPage implements OnInit {
                console.log('No se pudo loguear');
               }
             }
-          }
-         });
-        });
-      })
-      
-
-  
-    })
   }
 
 

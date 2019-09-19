@@ -51,10 +51,12 @@ export class RegisterUserPage implements OnInit {
     }
   
     private registerForm(){
-      if(this.role == 'Admin' || this.role == 'Teacher' || this.role == 'Admin' || this.role == 'Student' || this.role == 'Father'){
+      if(this.role == 'Admin' || this.role == 'Teacher' || this.role == 'Student' || this.role == 'Father'){
         this.user = new User(this.name, this.username, this.password, this.role);
-        this.user.school = this.school;
+        this.user.school = this.school.id;
 
+        // console.log(this.user);
+        // console.log(this.school);
         
         // creamos el admin y le asignamos un colegio  
         // al asignar un Admons a un colegio, le asignamos a ese colegio el mismo admin
@@ -64,8 +66,8 @@ export class RegisterUserPage implements OnInit {
         }else{
           this.school.admin.push(this.user);
         }
-
         // una vez agregado el admin se actualiza el colegio
+
         if(this._schoolService.editarSchool(this.school)){
           this.name = '';
           this.username = '';

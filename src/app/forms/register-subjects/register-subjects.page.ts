@@ -27,7 +27,6 @@ export class RegisterSubjectsPage implements OnInit {
   ngOnInit() {
     this.idSchool = this._userService.getLocalStorage().school;
     this.uploadSchool();
-    
   }
 
 
@@ -53,11 +52,11 @@ export class RegisterSubjectsPage implements OnInit {
     // Si no existe el areglo de asignaturas del colegio, entonces se crea y luego se agrega
     if(this.school.subcjet == null){
       this.school.subcjet = [];
-      this.school.subcjet.push(this.subcjet.id);
+      this.school.subcjet.push(this.subcjet);
       this.name = '';
       this.code = '';
     }else{
-      this.school.subcjet.push(this.subcjet.id);
+      this.school.subcjet.push(this.subcjet);
       this.name = '';
       this.code = '';
     }

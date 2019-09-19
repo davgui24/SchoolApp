@@ -1,5 +1,6 @@
 import { Group } from './group';
 import { School } from './school';
+import { Subject } from './subject';
 
 
 
@@ -9,7 +10,8 @@ import { School } from './school';
         username: string;
         password: string;
         role: string;
-        school: School;
+        school: string;
+        subject: Subject[];
         group: Group[];
         students: User[];
         email: string;
