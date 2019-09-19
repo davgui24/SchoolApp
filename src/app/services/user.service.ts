@@ -112,6 +112,7 @@ export class UserService {
     localStorage.setItem('name', user.name);
     localStorage.setItem('username', user.username);
     localStorage.setItem('role', user.role);
+    localStorage.setItem('lastLogin', user.lastLogin);
     localStorage.setItem('school', JSON.stringify(user.school));
     localStorage.setItem('group', JSON.stringify(user.group));
     localStorage.setItem('students', JSON.stringify(user.students));
@@ -127,6 +128,7 @@ export class UserService {
         name: localStorage.getItem('name'),
         username: localStorage.getItem('username'),
         role: localStorage.getItem('role'),
+        lastLogin: localStorage.getItem('lastLogin'),
         school: localStorage.getItem('school'),
         group: localStorage.getItem('group'),
         students: localStorage.getItem('students')
