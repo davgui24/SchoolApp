@@ -53,16 +53,16 @@ export class RegisterUserPage implements OnInit {
     private registerForm(){
       if(this.role == 'Admin' || this.role == 'Teacher' || this.role == 'Admin' || this.role == 'Student' || this.role == 'Father'){
         this.user = new User(this.name, this.username, this.password, this.role);
-        this.user.school = this.school.id;
+        this.user.school = this.school;
 
         
         // creamos el admin y le asignamos un colegio  
         // al asignar un Admons a un colegio, le asignamos a ese colegio el mismo admin
         if(this.school.admin == null){
           this.school.admin = [];
-          this.school.admin.push(this.user.id);
+          this.school.admin.push(this.user);
         }else{
-          this.school.admin.push(this.user.id);
+          this.school.admin.push(this.user);
         }
 
         // una vez agregado el admin se actualiza el colegio

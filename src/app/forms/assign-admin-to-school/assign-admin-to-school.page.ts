@@ -41,7 +41,7 @@ export class AssignAdminToSchoolPage implements OnInit {
 
 
   registerForm(){
-   this.school.admin = this.admin.id;
+  //  this.school.admin = this.admin.id;
    this.admin.school = this.school.id;
   //  this._schoolService.editarSchool(this.school);
   //  this._userServices.editarUsuario(this.admin);

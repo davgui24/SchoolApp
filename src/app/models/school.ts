@@ -1,19 +1,20 @@
 import { User } from './user';
 import { Course } from './course';
+import { Subject } from './subject';
 
 
 export class School {
     id: string;   
     name: string;
-    admin: string[];
+    admin: User[];
     director: string;
     email: string;
     telephone: string;
-    subcjet: string[];
-    teachers: string[];
-    courses: string[];
-    students: string[];
-    fathers: string[];
+    subcjet: Subject[];
+    teachers: User[];
+    courses: Course[];
+    students: User[];
+    fathers: User[];
     dateCreate: string;
     dateDelete: string;
     dateUpdate: string;
