@@ -7,7 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { User } from './models/user';
 import { UserService } from './services/user.service';
 import { ConfigOptionsService } from './services/config-options-service';
-import { homedir } from 'os';
+
 
 
 @Component({
@@ -37,19 +37,56 @@ export class AppComponent implements OnInit {
     // recibimos el evento ta sea de login o de homedir, recivimos el usuario y segun el rol carga el menú
     this._configOptionservice.roleLogin.subscribe(user =>{
      if(user==null){
-       this.appPages[0].validation = false;
-       this.appPages[1].validation = false;
-       this.appPages[2].validation = false;
-       this.appPages[3].validation = false;
-       this.appPages[4].validation = false;
-       this.appPages[5].validation = false;
-       this.appPages[6].validation = false;
+       this.appPages = [
+        {
+          title: 'User',
+          url: 'list-admins',
+          icon: 'person-add',
+          validation: false
+        },
+        {
+          title: 'School',
+          url: 'home/',
+          icon: 'home',
+          validation: false
+        },
+        {
+          title: 'Course',
+          url: 'home/' ,
+          icon: 'person-add',
+          validation: false
+        },
+        {
+          title: 'Group',
+          url: 'home/',
+          icon: 'person-add',
+          validation: false
+        },
+        {
+          title: 'Subjects',
+          url: 'home/',
+          icon: 'person-add',
+          validation: false
+        },
+        {
+          title: 'Activity',
+          url: 'home/',
+          icon: 'person-add',
+          validation: false
+        },
+        {
+          title: 'LogOut',
+          url: 'login',
+          icon: 'power',
+          validation: false
+        },
+      ];
     }else{
       this.sideOption = this._configOptionservice.configOptionSidemenu(user.role);
       this.appPages = this._configOptionservice.upLoadMenu(this.sideOption, user);
     }
     });
-    
+
     // ***   Creacion auxiliar de un usuario
     this.user = this._userService.getLocalStorage();
   }
