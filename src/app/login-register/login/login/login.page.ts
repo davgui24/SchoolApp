@@ -25,10 +25,12 @@ export class LoginPage implements OnInit {
              private _schoolService: SchoolService,
              private _configOptionsService: ConfigOptionsService,
              private navCtrl: NavController,
-             public loadingController: LoadingController
+             public loadingController: LoadingController,
              ) { }
 
   ngOnInit() {
+    this._configOptionsService.roleLogin.emit(null);
+
   localStorage.clear();
   this. upLoadusers();
   }
@@ -72,8 +74,6 @@ export class LoginPage implements OnInit {
 
 
   async  loginForm(){
-    console.log(this.users);
-
           const loading = await this.loadingController.create({
             message: 'Hellooo',
             // duration: 2000
@@ -82,9 +82,28 @@ export class LoginPage implements OnInit {
             for(let i=0; i<this.users.length; i++){
               if(this.username == this.users[i].username && this.password == this.users[i].password && this.role == this.users[i].role){
                 loading.onDidDismiss();
-                this.navCtrl.navigateBack("home/" + this.users[i].id);
-                this.users[i].lastLogin = new Date().toString();
-                this._userService.editarUsuario(this.users[i]);
+                if(this.users[i].school != null){
+                  this._schoolService.getSchools().then((schools: School[]) =>{
+                    for(let j=0; j<schools.length; j++){
+                      if(schools[j].id == this.users[i].school){
+                        for(let k=0; k<schools[j].admin.length; k++){
+                          if(schools[j].admin[k].id == this.users[i].id){
+                            schools[j].admin[k].lastLogin = new Date().toString();
+                            console.log(this._schoolService.editarSchool(schools[j]));
+                            this.navCtrl.navigateBack("home/" + this.users[i].id);
+                            break;
+                          }
+                        }
+                        break;
+                      }else{
+                        console.log('No se encontro el colegio');
+                      }
+                    }
+                  })
+                }else{
+                  console.log(this._userService.editarUsuario(this.users[i]));
+                  this.navCtrl.navigateBack("home/" + this.users[i].id);
+                }
                 break;
               }else{
                console.log('No se pudo loguear');

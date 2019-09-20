@@ -22,6 +22,7 @@ export let sideOption  = {
   course: false,
   group: false,
   subject: false,
-  activity: false
+  activity: false,
+  logOut: false
 }
 

@@ -10,9 +10,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-
   constructor(private afDB: AngularFireDatabase) {
-
   }
 
 

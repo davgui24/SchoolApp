@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { inputFormUser, sideOption } from '../config';
 import { User } from '../models/user';
 
@@ -8,6 +8,7 @@ import { User } from '../models/user';
 export class ConfigOptionsService {
  
   public appPages = [];
+  roleLogin = new EventEmitter<any>();
 
   constructor() { }
   
@@ -47,6 +48,7 @@ export class ConfigOptionsService {
       sideOption.group= false;
       sideOption.subject = false;
       sideOption.activity = false;
+      sideOption.logOut = true;
     }else if(role == 'Admin') {
       sideOption.user = true;
       sideOption.school = false;
@@ -54,6 +56,7 @@ export class ConfigOptionsService {
       sideOption.group = true;
       sideOption.subject = true;
       sideOption.activity = true;
+      sideOption.logOut = true;
     }else if(role == 'Teacher') {
       sideOption.user = true;
       sideOption.school = false;
@@ -61,6 +64,7 @@ export class ConfigOptionsService {
       sideOption.group = true;
       sideOption.subject = true;
       sideOption.activity = true;
+      sideOption.logOut = true;
     }else if(role == 'Student') {
       sideOption.user = false;
       sideOption.school = false;
@@ -68,6 +72,7 @@ export class ConfigOptionsService {
       sideOption.group = true;
       sideOption.subject = true;
       sideOption.activity = true;
+      sideOption.logOut = true;
     }else if(role == 'Father') {
       sideOption.user = false;
       sideOption.school = false;
@@ -75,6 +80,15 @@ export class ConfigOptionsService {
       sideOption.group = true;
       sideOption.subject = true;
       sideOption.activity = true;
+      sideOption.logOut = true;
+    }else{
+      sideOption.user = false;
+      sideOption.school = false;
+      sideOption.course = false;
+      sideOption.group = false;
+      sideOption.subject = false;
+      sideOption.activity = false;
+      sideOption.logOut = false;
     }
     return sideOption;
   }
@@ -120,10 +134,10 @@ export class ConfigOptionsService {
         validation: sideOption.activity
       },
       {
-        title: 'Login',
+        title: 'LogOut',
         url: 'login',
         icon: 'power',
-        validation: true
+        validation: sideOption.logOut
       },
     ];
     return this.appPages;
