@@ -6,6 +6,7 @@ import { NavController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
 import { SchoolService } from '../../../services/school.service';
 import { School } from 'src/app/models/school';
+import { app } from 'firebase';
 
 @Component({
   selector: 'app-login',
@@ -29,10 +30,11 @@ export class LoginPage implements OnInit {
              ) { }
 
   ngOnInit() {
+    // emitimos un evento indicando que no hay usuario logueado, para que lo reciba el app.Component y no cargue ninguna opcion en el menú
     this._configOptionsService.roleLogin.emit(null);
 
-  localStorage.clear();
-  this. upLoadusers();
+    localStorage.clear();
+    this. upLoadusers();
   }
 
   upLoadusers(){

@@ -48,6 +48,7 @@ export class HomePage implements OnInit {
       this.users.forEach(user => {
         if(idUser == user.id){
           this.user = user;
+          // emitimos un evento indicando el usuario logueado, para que lo reciba el app.Component y cargue el menú segun el rol
           this._configOptionservice.roleLogin.emit(this.user);
           this._userService.setLocalStorage(user);
         }else{
