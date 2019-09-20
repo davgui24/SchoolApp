@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { inputFormUser, sideOption } from '../config';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigOptionsService {
  
-
+  public appPages = [];
 
   constructor() { }
   
@@ -76,6 +77,56 @@ export class ConfigOptionsService {
       sideOption.activity = true;
     }
     return sideOption;
+  }
+
+
+
+  upLoadMenu(sideOption: any, user: User){
+    this.appPages = [
+      {
+        title: 'User',
+        url: 'list-admins',
+        icon: 'person-add',
+        validation: sideOption.user
+      },
+      {
+        title: 'School',
+        url: 'home/' + user.id,
+        icon: 'home',
+        validation: sideOption.school
+      },
+      {
+        title: 'Course',
+        url: 'home/' + user.id,
+        icon: 'person-add',
+        validation: sideOption.course
+      },
+      {
+        title: 'Group',
+        url: 'home/' + user.id,
+        icon: 'person-add',
+        validation: sideOption.group
+      },
+      {
+        title: 'Subjects',
+        url: 'home/' + user.id,
+        icon: 'person-add',
+        validation: sideOption.subject
+      },
+      {
+        title: 'Activity',
+        url: 'home/' + user.id,
+        icon: 'person-add',
+        validation: sideOption.activity
+      },
+      {
+        title: 'Login',
+        url: 'login',
+        icon: 'power',
+        validation: true
+      },
+    ];
+    return this.appPages;
   }
  
 }

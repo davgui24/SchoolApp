@@ -46,7 +46,7 @@ export class RegisterSubjectsPage implements OnInit {
 
   registerForm(){
     // Se crea una asignatura en el local
-    this.subcjet = new Subject(this.name, this.code, this.idSchool);
+    this.subcjet = new Subject(this.name, this.code, this.school.id);
 
 
     // Si no existe el areglo de asignaturas del colegio, entonces se crea y luego se agrega

@@ -19,9 +19,10 @@ import { User } from './user';
         
 
 
-        constructor(name: string, description: string, type: ValueType, user: string, group: string){
+        constructor(name: string, description: string, type: string, school: string, user: string, group: string){
             this.name = name;
             this.description = description;
+            this.school = school;
             this.type = type;
             this.state = true;
             this.user = user;

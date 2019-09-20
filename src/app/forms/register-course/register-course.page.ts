@@ -47,21 +47,22 @@ export class RegisterCoursePage implements OnInit {
   registerForm(){
     // Se crea un curso en el local y luego en la base de datos
     this.course = new Course(this.name, this.grade, this.idSchool);
-    this._courseService.crearCourse(this.course);
+
 
     // Si no existe el arreglo de cursos del colegio, entonces se crea y luego se agrega
     if(this.school.courses == null){
       this.school.courses = [];
       this.school.courses.push(this.course);
+    }else{
+      this.school.courses.push(this.course);
+    }
+    // Una vez se cree el curso se actualiza el colegio
+    if(this._schoolService.editarSchool(this.school)){
       this.name = '';
       this.grade = '';
     }else{
-      this.school.courses.push(this.course);
-      this.name = '';
-      this.grade = '';
-    }
-    // Una vez se cree el curso se actualiza el colegio
-    this._schoolService.editarSchool(this.school);
+      console.log('No se pudo crear el curso');
+    };
 
   }
 

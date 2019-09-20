@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   user: User;
   sideOption: any;
 
-  public appPages = []
+  public appPages = [];
 
   constructor(
     private platform: Platform,
@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
       // this.sideOption.user=false;
     }else{
       this.sideOption = this._configOptionservice.configOptionSidemenu(this.user.role);
-      this.upLoadMenu();
+      this.appPages = this._configOptionservice.upLoadMenu(this.sideOption, this.user);
     }
 
   }
@@ -52,53 +52,5 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
-  }
-
-
-  upLoadMenu(){
-    this.appPages = [
-      {
-        title: 'User',
-        url: 'list-admins',
-        icon: 'person-add',
-        validation: this.sideOption.user
-      },
-      {
-        title: 'School',
-        url: 'home/' + this.user.id,
-        icon: 'home',
-        validation: this.sideOption.school
-      },
-      {
-        title: 'Course',
-        url: 'home/' + this.user.id,
-        icon: 'person-add',
-        validation: this.sideOption.course
-      },
-      {
-        title: 'Group',
-        url: 'home/' + this.user.id,
-        icon: 'person-add',
-        validation: this.sideOption.group
-      },
-      {
-        title: 'Subjects',
-        url: 'home/' + this.user.id,
-        icon: 'person-add',
-        validation: this.sideOption.subject
-      },
-      {
-        title: 'Activity',
-        url: 'home/' + this.user.id,
-        icon: 'person-add',
-        validation: this.sideOption.activity
-      },
-      {
-        title: 'Login',
-        url: 'login',
-        icon: 'power',
-        validation: true
-      },
-    ];
   }
 }

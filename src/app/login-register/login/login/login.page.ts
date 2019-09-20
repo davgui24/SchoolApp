@@ -17,9 +17,9 @@ export class LoginPage implements OnInit {
   users: User[] = [];
   admins: User[] = [];
   user: User;
-  username: string = 'userGlobal1';
+  username: string = 'userAdmin1';
   password: string = '123456';
-  role: string = 'Global';
+  role: string = 'Admin';
 
   constructor(private _userService: UserService,
              private _schoolService: SchoolService,
