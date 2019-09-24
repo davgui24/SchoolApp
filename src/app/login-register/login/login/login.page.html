@@ -13,17 +13,23 @@
       <ion-content>
 
           <ion-grid style="margin-left: 5%; margin-top: 15%; margin-right: 5%;">
-            <form (ngSubmit)="loginForm()">
+            <form (ngSubmit)="loginForm(form)" #form="ngForm">
               <ion-row>
                   <ion-col size="12">
                       <ion-item-group>
                         <ion-item>
                           <ion-label position="floating">User name</ion-label>
-                          <ion-input [(ngModel)]="username" name="username" type="text" value="" placeholder="Enter user" autocomplete="off"></ion-input>
+                          <ion-input [(ngModel)]="username" (keyup)=validate(form) name="username" type="text" value="" placeholder="Enter user" autocomplete="off" required></ion-input>
+                          <ion-text color="danger" *ngIf="validateUser">
+                            Required field.
+                          </ion-text>
                       </ion-item>
                       <ion-item>
                           <ion-label position="floating">Password</ion-label>
-                          <ion-input [(ngModel)]="password" name="password" type="Password" value="" placeholder="Enter password" autocomplete="off"></ion-input>
+                          <ion-input [(ngModel)]="password" (keyup)=validate(form) name="password" type="Password" value="" placeholder="Enter password" autocomplete="off" required></ion-input>
+                          <ion-text color="danger" *ngIf="validatePassword">
+                            Required field.
+                          </ion-text>
                       </ion-item>
                   </ion-item-group>
                   </ion-col>
@@ -34,16 +40,19 @@
                         <ion-item>
                           <ion-label position="floating">Role</ion-label>
                           <ion-select [(ngModel)]="role" name="role" placeholder="Select Role">
-                              <ion-select-option value="Global">Global</ion-select-option>
+                              <ion-select-option value=""></ion-select-option>
                               <ion-select-option value="Admin">Admin</ion-select-option>
                               <ion-select-option value="Teacher">Teacher</ion-select-option>
                               <ion-select-option value="Student">Student</ion-select-option>
                               <ion-select-option value="Father">Father</ion-select-option>
                             </ion-select>
+                            <ion-text color="danger" *ngIf="validateRole">
+                              Required field.
+                            </ion-text>
                       </ion-item>
 
                   </ion-item-group>
-                  <ion-button expand="full" color="primary" type="submit" block style="margin-top: 10%;">
+                  <ion-button expand="full" color="primary" type="submit" block style="margin-top: 10%;" >
                     Login
                       <!-- <ion-icon name="person-add"></ion-icon> -->
                   </ion-button>
