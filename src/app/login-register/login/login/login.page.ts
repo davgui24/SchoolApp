@@ -83,7 +83,6 @@ export class LoginPage implements OnInit {
   validatePassword = false;
   validateRole = false;
   async  loginForm(form){
-    let validateLogin: boolean= false;
     if(form.value.role == '' && (form.value.password.trim().length <= 0  || form.value.username.trim().length <= 0)){
       this.presentAlertLoginGlobal(form);
     }else if(form.value.role == ''){
@@ -100,21 +99,25 @@ export class LoginPage implements OnInit {
         // duration: 2000
       });
       
+      let validateLogin: boolean = false;
         for(let i=0; i<this.admins.length; i++){
           if(this.username == this.admins[i].username && this.password == this.admins[i].password && this.role == this.admins[i].role){
+            validateLogin = true;
             loading.onDidDismiss();
               this._schoolService.getSchools().then((schools: School[]) =>{
                 for(let j=0; j<schools.length; j++){
                   if(schools[j].id == this.admins[i].school){
                     for(let k=0; k<schools[j].admin.length; k++){
                       if(schools[j].admin[k].id == this.admins[i].id){
-                        validateLogin = true;
-                        this.admin = schools[j].admin[k];
+                        this.admin = this.admins[i];
+                        this.admin.lastLogin = new Date().toString();
+                        schools[j].admin[k] = this.admin;
                         this.school = schools[j];
-                        schools[j].admin[k].lastLogin = new Date().toString();
-                        console.log(this._schoolService.editarSchool(schools[j]));
+                        console.log(this._schoolService.editarSchool(this.school));
                         this.navCtrl.navigateBack("home/" + this.admins[i].id);
                         break;
+                      }else{
+                        
                       }
                     }
                     break;
@@ -127,6 +130,12 @@ export class LoginPage implements OnInit {
           }else{
             
           }
+          
+        }
+        if(validateLogin){
+          this.navCtrl.navigateBack("home/" + this.admin.id);
+        }else{
+          this.presentAlertError();
         }
       }
     }
@@ -204,16 +213,19 @@ export class LoginPage implements OnInit {
       header: 'Login',
       subHeader: 'Global Admin',
       message: 'Enter your credentials',
+      id: 'global',
       inputs: [
         {
           name: 'username',
           type: 'text',
-          placeholder: 'Enter username'
+          placeholder: 'Enter username',
+          value: ''
         },
         {
           name: 'password',
           type: 'password',
-          placeholder: 'Enter password'
+          placeholder: 'Enter password',
+          value: ''
         },
       ], buttons: [
         {
@@ -226,26 +238,40 @@ export class LoginPage implements OnInit {
         }, {
           text: 'Ok',
           handler: (dataLogin) => {
+            let validateLogin: boolean = false;
             this.validateRole = false;
             this.validatePassword = false;
             this.validateUser = false;
             for(let user of this.users){
               if(dataLogin.username == user.username && dataLogin.password == user.password){
+                this.user = user;
                 loading.onDidDismiss();
-                user.lastLogin = new Date().toString();
-                console.log(this._userService.editarUsuario(user));
-                this.navCtrl.navigateBack("home/" + user.id);
+                validateLogin = true;
+                // user.lastLogin = new Date().toString();
+                // console.log(this._userService.editarUsuario(user));
+                // this.navCtrl.navigateBack("home/" + user.id);
+                break;
               }else{
-                this.presentAlertError();
+                // this.presentAlertError();
               }
+            }
+
+
+            if(validateLogin){
+              this.user.lastLogin = new Date().toString();
+              console.log(this._userService.editarUsuario(this.user));
+              this.navCtrl.navigateBack("home/" + this.user.id);
+            }else{
+              this.presentAlertError();
             }
           }
         }
       ]
 
     });
-
-    await alert.present();
+    await alert.present().then(() =>{
+      document.getElementById('global').focus();
+    })
   }
 
   // -----------------------------
