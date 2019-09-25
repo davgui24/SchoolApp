@@ -26,3 +26,11 @@ export let sideOption  = {
   logOut: false
 }
 
+export let selectRole = {
+  global: false,
+  admin: false,
+  teacher: false,
+  father: false,
+  student: false
+}
+

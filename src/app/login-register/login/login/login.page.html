@@ -39,8 +39,8 @@
                       <ion-item-group>
                         <ion-item>
                           <ion-label position="floating">Role</ion-label>
-                          <ion-select [(ngModel)]="role" name="role" placeholder="Select Role">
-                              <ion-select-option value=""></ion-select-option>
+                          <ion-select [(ngModel)]="role" name="role" (ionChange)=validate(form) placeholder="Select Role">
+                              <ion-select-option value="">Select Role</ion-select-option>
                               <ion-select-option value="Admin">Admin</ion-select-option>
                               <ion-select-option value="Teacher">Teacher</ion-select-option>
                               <ion-select-option value="Student">Student</ion-select-option>

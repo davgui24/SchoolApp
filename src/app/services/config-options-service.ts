@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { inputFormUser, sideOption } from '../config';
+import { inputFormUser, sideOption, selectRole } from '../config';
 import { User } from '../models/user';
 
 @Injectable({
@@ -15,11 +15,11 @@ export class ConfigOptionsService {
   // validate role from form user
   configFormUser(role:string) {
     if(role == 'Global') {
-      inputFormUser.inputSchool= true;
+      inputFormUser.inputSchool= false;
       inputFormUser.ImputGroup = false;
       inputFormUser.ImputStudents = false;
     }else if(role == 'Admin') {
-      inputFormUser.inputSchool= true;
+      inputFormUser.inputSchool= false;
       inputFormUser.ImputGroup = false;
       inputFormUser.ImputStudents = false;
     }else if(role == 'Teacher') {
@@ -91,6 +91,48 @@ export class ConfigOptionsService {
       sideOption.logOut = false;
     }
     return sideOption;
+  }
+
+
+  configSelectRole(role: string){
+    if(role == 'Global'){
+      selectRole.global = true;
+      selectRole.admin = false;
+      selectRole.teacher = false;
+      selectRole.father = false;
+      selectRole.student = false;
+    }else if(role == 'Admin'){
+      selectRole.global = false;
+      selectRole.admin = false;
+      selectRole.teacher = true;
+      selectRole.father = true;
+      selectRole.student = true;
+    }else if(role == 'Teacher'){
+      selectRole.global = false;
+      selectRole.admin = false;
+      selectRole.teacher = false;
+      selectRole.father = false;
+      selectRole.student = false;
+    }else if(role == 'Father'){
+      selectRole.global = false;
+      selectRole.admin = false;
+      selectRole.teacher = false;
+      selectRole.father = false;
+      selectRole.student = false;
+    }else if(role == 'Student'){
+      selectRole.global = false;
+      selectRole.admin = false;
+      selectRole.teacher = false;
+      selectRole.father = false;
+      selectRole.student = false;
+    }else{
+      selectRole.global = false;
+      selectRole.admin = false;
+      selectRole.teacher = false;
+      selectRole.father = false;
+      selectRole.student = false;
+    }
+    return selectRole;
   }
 
 

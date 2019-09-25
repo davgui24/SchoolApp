@@ -18,6 +18,8 @@ export class LoginPage implements OnInit {
 
   users: User[] = [];
   admins: User[] = [];
+  admin: User;
+  school: School;
   user: User;
   username: string = 'userAdmin1';
   password: string = '123456';
@@ -81,11 +83,11 @@ export class LoginPage implements OnInit {
   validatePassword = false;
   validateRole = false;
   async  loginForm(form){
+    let validateLogin: boolean= false;
     if(form.value.role == '' && (form.value.password.trim().length <= 0  || form.value.username.trim().length <= 0)){
-      this.presentAlert(form);
+      this.presentAlertLoginGlobal(form);
     }else if(form.value.role == ''){
       this.validateRole = true;
-      console.log('Entró 2');
     }else if(form.value.username.trim().length < 6){
       this.validateUser = true;
       console.log('Entró 3');
@@ -93,55 +95,45 @@ export class LoginPage implements OnInit {
         this.validatePassword = true;
         console.log('Entró 4');
     }else{
-
+      const loading = await this.loadingController.create({
+        message: 'Hellooo',
+        // duration: 2000
+      });
+      
+        for(let i=0; i<this.admins.length; i++){
+          if(this.username == this.admins[i].username && this.password == this.admins[i].password && this.role == this.admins[i].role){
+            loading.onDidDismiss();
+              this._schoolService.getSchools().then((schools: School[]) =>{
+                for(let j=0; j<schools.length; j++){
+                  if(schools[j].id == this.admins[i].school){
+                    for(let k=0; k<schools[j].admin.length; k++){
+                      if(schools[j].admin[k].id == this.admins[i].id){
+                        validateLogin = true;
+                        this.admin = schools[j].admin[k];
+                        this.school = schools[j];
+                        schools[j].admin[k].lastLogin = new Date().toString();
+                        console.log(this._schoolService.editarSchool(schools[j]));
+                        this.navCtrl.navigateBack("home/" + this.admins[i].id);
+                        break;
+                      }
+                    }
+                    break;
+                  }else{
+                    console.log('No se encontro el colegio');
+                  }
+                }
+              })
+            break;
+          }else{
+            
+          }
+        }
+      }
     }
     
 
 
-          const loading = await this.loadingController.create({
-            message: 'Hellooo',
-            // duration: 2000
-          });
 
-          if(this.role == 'Global' && this.username.trim().length===0 && this.password.trim().length===0){
-            // for(let user of this.users =>{
-               console.log('Entra como global');
-            // })
-          }else if(this.role == 'Global' && this.username.trim().length>0 && this.password.trim().length>0){
-
-          }
-
-            for(let i=0; i<this.admins.length; i++){
-              if(this.username == this.admins[i].username && this.password == this.admins[i].password && this.role == this.admins[i].role){
-                loading.onDidDismiss();
-                if(this.admins[i].school != null){
-                  this._schoolService.getSchools().then((schools: School[]) =>{
-                    for(let j=0; j<schools.length; j++){
-                      if(schools[j].id == this.admins[i].school){
-                        for(let k=0; k<schools[j].admin.length; k++){
-                          if(schools[j].admin[k].id == this.admins[i].id){
-                            schools[j].admin[k].lastLogin = new Date().toString();
-                            console.log(this._schoolService.editarSchool(schools[j]));
-                            this.navCtrl.navigateBack("home/" + this.admins[i].id);
-                            break;
-                          }
-                        }
-                        break;
-                      }else{
-                        console.log('No se encontro el colegio');
-                      }
-                    }
-                  })
-                }else{
-                  console.log(this._userService.editarUsuario(this.admins[i]));
-                  this.navCtrl.navigateBack("home/" + this.admins[i].id);
-                }
-                break;
-              }else{
-               console.log('No se pudo loguear');
-              }
-            }
-      }
 
 
   validate(form){
@@ -193,7 +185,7 @@ export class LoginPage implements OnInit {
 
 
   // ==========  Alert
-  async presentAlert(form) {
+  async presentAlertLoginGlobal(form) {
 
     const loading = await this.loadingController.create({
       message: 'Hellooo',
@@ -237,7 +229,6 @@ export class LoginPage implements OnInit {
             this.validateRole = false;
             this.validatePassword = false;
             this.validateUser = false;
-            console.log('Entró 1');
             for(let user of this.users){
               if(dataLogin.username == user.username && dataLogin.password == user.password){
                 loading.onDidDismiss();
@@ -245,7 +236,7 @@ export class LoginPage implements OnInit {
                 console.log(this._userService.editarUsuario(user));
                 this.navCtrl.navigateBack("home/" + user.id);
               }else{
-                console.log('Salio mal 1');
+                this.presentAlertError();
               }
             }
           }
@@ -256,5 +247,19 @@ export class LoginPage implements OnInit {
 
     await alert.present();
   }
+
+  // -----------------------------
+
+  async presentAlertError() {
+    const alert = await this.alertController.create({
+      header: 'Error!!',
+      subHeader: 'Check',
+      message: 'Bad credentials',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
 
 }

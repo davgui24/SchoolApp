@@ -1,20 +1,29 @@
 <ion-content>
     <ion-grid style="margin-left: 5%; margin-top: 10%; margin-right: 5%;">
-        <form (ngSubmit)="registerForm()">
+        <form (ngSubmit)="registerForm(form)" #form="ngForm">
           <ion-row>
               <ion-col size="12">
                   <ion-item-group>
                     <ion-item>
                         <ion-label position="floating">Name</ion-label>
-                        <ion-input [(ngModel)]="name" name="name" type="text" value="" placeholder="Enter name" autocomplete="off"></ion-input>
+                        <ion-input [(ngModel)]="name" (keyup)=validate(form) name="name" type="text" value="" placeholder="Enter name" autocomplete="off"></ion-input>
+                        <ion-text color="danger" *ngIf="validateName">
+                          Required field.
+                        </ion-text>
                     </ion-item>
                     <ion-item>
                       <ion-label position="floating">User name</ion-label>
-                      <ion-input [(ngModel)]="username" name="username" type="text" value="" placeholder="Enter user" autocomplete="off"></ion-input>
+                      <ion-input [(ngModel)]="username" (keyup)=validate(form) name="username" type="text" value="" placeholder="Enter user" autocomplete="off"></ion-input>
+                      <ion-text color="danger" *ngIf="validateUserName">
+                        Required field.
+                      </ion-text>
                   </ion-item>
                   <ion-item>
                       <ion-label position="floating">Password</ion-label>
-                      <ion-input [(ngModel)]="password" name="password" type="Password" value="" placeholder="Enter password" autocomplete="off"></ion-input>
+                      <ion-input [(ngModel)]="password" (keyup)=validate(form) name="password" type="Password" value="" placeholder="Enter password" autocomplete="off"></ion-input>
+                      <ion-text color="danger" *ngIf="validatePassword">
+                        Required field.
+                      </ion-text>
                   </ion-item>
               </ion-item-group>
               </ion-col>
@@ -24,23 +33,29 @@
                   <ion-item-group>
                     <ion-item *ngIf="inputFormUser.inputSchool">
                         <ion-label position="floating">School</ion-label>
-                        <ion-select [(ngModel)]="school" name="school" placeholder="Select School">
+                        <ion-select [(ngModel)]="school" (ionChange)=validate(form) name="school" placeholder="Select School">
                             <ion-select-option [value]="school" *ngFor="let school of schools">{{school.name}}</ion-select-option>
                           </ion-select>
+                          <ion-text color="danger" *ngIf="validateSchool">
+                            Required field.
+                          </ion-text>
                     </ion-item>
                     <ion-item>
                       <ion-label position="floating">Role</ion-label>
-                      <ion-select [(ngModel)]="role" name="role" placeholder="Select Role">
-                          <ion-select-option value="Global">Global</ion-select-option>
-                          <ion-select-option value="Admin">Admin</ion-select-option>
-                          <ion-select-option value="Teacher">Teacher</ion-select-option>
-                          <ion-select-option value="Student">Student</ion-select-option>
-                          <ion-select-option value="Father">Father</ion-select-option>
+                      <ion-select [(ngModel)]="role" (ionChange)=validate(form) name="role" placeholder="Select Role">
+                          <ion-select-option value="Global" *ngIf="selectRole.global">Global</ion-select-option>
+                          <ion-select-option value="Admin" *ngIf="selectRole.admin">Admin</ion-select-option>
+                          <ion-select-option value="Teacher" *ngIf="selectRole.teacher">Teacher</ion-select-option>
+                          <ion-select-option value="Student" *ngIf="selectRole.student">Student</ion-select-option>
+                          <ion-select-option value="Father" *ngIf="selectRole.father">Father</ion-select-option>
                         </ion-select>
+                        <ion-text color="danger" *ngIf="validateRole">
+                          Required field.
+                        </ion-text>
                   </ion-item>
                   <ion-item  *ngIf="inputFormUser.ImputGroup">
                     <ion-label position="floating">Group</ion-label>
-                    <ion-select [(ngModel)]="group" name="group" placeholder="Select Group">
+                    <ion-select [(ngModel)]="group" (ionChange)=validate(form) name="group" placeholder="Select Group">
                         <ion-select-option value="7-E">7-E</ion-select-option>
                         <ion-select-option value="6-A">6-A</ion-select-option>
                         <ion-select-option value="8-B">8-B</ion-select-option>
@@ -48,10 +63,13 @@
                         <ion-select-option value="11-A">11-A</ion-select-option>
                         <ion-select-option value="9-C">9-C</ion-select-option>
                       </ion-select>
+                      <ion-text color="danger" *ngIf="validateGroup">
+                        Required field.
+                      </ion-text>
                 </ion-item>
                 <ion-item *ngIf="inputFormUser.ImputStudents">
                   <ion-label position="floating">Students</ion-label>
-                  <ion-select [(ngModel)]="students" name="students" placeholder="Select students">
+                  <ion-select [(ngModel)]="students" (ionChange)=validate(form) name="students" placeholder="Select students" multiple>
                       <ion-select-option value="admin">Anita Pacheco</ion-select-option>
                       <ion-select-option value="6-A">Luis Castaño</ion-select-option>
                       <ion-select-option value="8-B">Brayam Jimenez</ion-select-option>
@@ -59,6 +77,9 @@
                       <ion-select-option value="11-A">Sarha Sofía Enao</ion-select-option>
                       <ion-select-option value="9-C">Jose Maria Martinez</ion-select-option>
                     </ion-select>
+                    <ion-text color="danger" *ngIf="validateStudent">
+                      Required field.
+                    </ion-text>
               </ion-item>
               </ion-item-group>
               <ion-card>
