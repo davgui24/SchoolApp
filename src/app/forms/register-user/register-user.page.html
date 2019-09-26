@@ -6,7 +6,7 @@
                   <ion-item-group>
                     <ion-item>
                         <ion-label position="floating">Name</ion-label>
-                        <ion-input formControlName="name" type="text" value="" placeholder="Enter name" autocomplete="off"></ion-input>
+                        <ion-input formControlName="name" type="text" placeholder="Enter name" autocomplete="off"></ion-input>
                         <ion-text color="danger" *ngIf="frmEntity().name.invalid && frmEntity().name.dirty">
                           Required field.
                         </ion-text>
@@ -53,7 +53,7 @@
                           Required field.
                         </ion-text>
                   </ion-item>
-                  <ion-item  *ngIf="inputFormUser.ImputGroup">
+                  <ion-item  *ngIf="inputFormUser.c">
                     <ion-label position="floating">Group</ion-label>
                     <ion-select formControlName="group">
                         <ion-select-option value="7-E">7-E</ion-select-option>

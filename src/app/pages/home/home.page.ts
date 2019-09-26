@@ -49,7 +49,7 @@ export class HomePage implements OnInit {
         if(idUser == user.id){
           this.user = user;
           // emitimos un evento indicando el usuario logueado, para que lo reciba el app.Component y cargue el menú segun el rol
-          this._configOptionservice.roleLogin.emit(this.user);
+          this._configOptionservice.roleLogin.emit(this.user.role);
           this._userService.setLocalStorage(user);
         }else{
           console.log('No se encontró usuario');

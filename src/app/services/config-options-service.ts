@@ -8,7 +8,7 @@ import { User } from '../models/user';
 export class ConfigOptionsService {
  
   public appPages = [];
-  roleLogin = new EventEmitter<any>();
+  roleLogin = new EventEmitter<string>();
 
   constructor() { }
   
@@ -43,6 +43,10 @@ export class ConfigOptionsService {
   configOptionSidemenu(role: string){
     if(role == 'Global') {
       sideOption.user = true;
+      sideOption.admin = true;
+      sideOption.teacher = false;
+      sideOption.student = false;
+      sideOption.father = false;
       sideOption.school = true;
       sideOption.course = false;
       sideOption.group= false;
@@ -50,7 +54,11 @@ export class ConfigOptionsService {
       sideOption.activity = false;
       sideOption.logOut = true;
     }else if(role == 'Admin') {
-      sideOption.user = true;
+      sideOption.user = false;
+      sideOption.admin = false;
+      sideOption.teacher = true;
+      sideOption.student = true;
+      sideOption.father = true;
       sideOption.school = false;
       sideOption.course = true;
       sideOption.group = true;
@@ -58,7 +66,11 @@ export class ConfigOptionsService {
       sideOption.activity = true;
       sideOption.logOut = true;
     }else if(role == 'Teacher') {
-      sideOption.user = true;
+      sideOption.user = false;
+      sideOption.admin = true;
+      sideOption.teacher = false;
+      sideOption.student = true;
+      sideOption.father = false;
       sideOption.school = false;
       sideOption.course = true;
       sideOption.group = true;
@@ -67,6 +79,10 @@ export class ConfigOptionsService {
       sideOption.logOut = true;
     }else if(role == 'Student') {
       sideOption.user = false;
+      sideOption.admin = false;
+      sideOption.teacher = false;
+      sideOption.student = false;
+      sideOption.father = true;
       sideOption.school = false;
       sideOption.course = false;
       sideOption.group = true;
@@ -75,8 +91,12 @@ export class ConfigOptionsService {
       sideOption.logOut = true;
     }else if(role == 'Father') {
       sideOption.user = false;
+      sideOption.admin = false;
+      sideOption.teacher = true;
+      sideOption.student = true;
+      sideOption.father = false;
       sideOption.school = false;
-      sideOption.course = false;
+      sideOption.course = true;
       sideOption.group = true;
       sideOption.subject = true;
       sideOption.activity = true;
@@ -141,9 +161,33 @@ export class ConfigOptionsService {
     this.appPages = [
       {
         title: 'User',
-        url: 'list-admins',
+        url: 'list-user',
         icon: 'person-add',
         validation: sideOption.user
+      },
+      {
+        title: 'Admin',
+        url: 'list-user',
+        icon: 'person-add',
+        validation: sideOption.admin
+      },
+      {
+        title: 'Teacher',
+        url: 'list-user',
+        icon: 'person-add',
+        validation: sideOption.teacher
+      },
+      {
+        title: 'Students',
+        url: 'list-user',
+        icon: 'person-add',
+        validation: sideOption.student
+      },
+      {
+        title: 'father',
+        url: 'list-user',
+        icon: 'person-add',
+        validation: sideOption.father
       },
       {
         title: 'School',

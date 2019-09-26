@@ -34,13 +34,41 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    // ***   Creacion auxiliar de un usuario
+    this.user = this._userService.getLocalStorage();
+
     // recibimos el evento ta sea de login o de homedir, recivimos el usuario y segun el rol carga el menú
-    this._configOptionservice.roleLogin.subscribe(user =>{
-     if(user==null){
+    this._configOptionservice.roleLogin.subscribe(role =>{
+      console.log('Desde el app component', role);
+     if(role==null || role == ''){
        this.appPages = [
         {
           title: 'User',
           url: 'list-admins',
+          icon: 'person-add',
+          validation: false
+        },
+        {
+          title: 'Admin',
+          url: 'list-user',
+          icon: 'person-add',
+          validation: false
+        },
+        {
+          title: 'Teacher',
+          url: 'list-user',
+          icon: 'person-add',
+          validation: false
+        },
+        {
+          title: 'Students',
+          url: 'list-user',
+          icon: 'person-add',
+          validation: false
+        },
+        {
+          title: 'Father',
+          url: 'list-user',
           icon: 'person-add',
           validation: false
         },
@@ -81,14 +109,12 @@ export class AppComponent implements OnInit {
           validation: false
         },
       ];
-    }else{
-      this.sideOption = this._configOptionservice.configOptionSidemenu(user.role);
-      this.appPages = this._configOptionservice.upLoadMenu(this.sideOption, user);
-    }
+      }else{
+        this.sideOption = this._configOptionservice.configOptionSidemenu(role);
+        this.appPages = this._configOptionservice.upLoadMenu(this.sideOption, this.user);
+      }
     });
 
-    // ***   Creacion auxiliar de un usuario
-    this.user = this._userService.getLocalStorage();
   }
 
   initializeApp() {

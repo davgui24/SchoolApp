@@ -18,6 +18,10 @@ export let inputFormUser = {
 
 export let sideOption  = {
   user: false,
+  admin: false,
+  teacher: false,
+  student: false,
+  father: false,
   school: false,
   course: false,
   group: false,
