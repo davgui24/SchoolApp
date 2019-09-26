@@ -129,7 +129,6 @@ export class RegisterUserPage implements OnInit {
 
         // una vez agregado el admin se actualiza el colegio
         if(this._schoolService.editarSchool(this.school)){
-          console.log('Entro', this.school);
           this.FormEntity.reset();
         }else{
           console.log('Nos e pudeo asignar el usuario: ' + this.user.id + 'al colegio: ' + this.school);
@@ -142,7 +141,6 @@ export class RegisterUserPage implements OnInit {
 
       }else{
         this.markAsDirty(this.FormEntity);
-        console.log('Entro acá');
       }
 
     }
