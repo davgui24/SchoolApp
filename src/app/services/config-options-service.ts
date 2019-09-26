@@ -19,7 +19,7 @@ export class ConfigOptionsService {
       inputFormUser.ImputGroup = false;
       inputFormUser.ImputStudents = false;
     }else if(role == 'Admin') {
-      inputFormUser.inputSchool= false;
+      inputFormUser.inputSchool= true;
       inputFormUser.ImputGroup = false;
       inputFormUser.ImputStudents = false;
     }else if(role == 'Teacher') {
@@ -103,7 +103,7 @@ export class ConfigOptionsService {
       selectRole.student = false;
     }else if(role == 'Admin'){
       selectRole.global = false;
-      selectRole.admin = false;
+      selectRole.admin = true;
       selectRole.teacher = true;
       selectRole.father = true;
       selectRole.student = true;

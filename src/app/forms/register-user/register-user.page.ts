@@ -6,6 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { ConfigOptionsService } from 'src/app/services/config-options-service';
 import { inputFormUser, selectRole } from 'src/app/config';
 import { SchoolService } from 'src/app/services/school.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register-user',
@@ -18,8 +19,9 @@ export class RegisterUserPage implements OnInit {
 
   inputFormUser: any = inputFormUser;
   selectRole: any = selectRole;
-  userlogin: User;
+  public FormEntity: FormGroup;
 
+  userlogin: User;
   users: User[] = [];
   user: User = null;
   name: string = '';
@@ -49,43 +51,71 @@ export class RegisterUserPage implements OnInit {
       this._schoolService.getSchools().then((schools: School[]) =>{
         this.schools = schools;
       })
+
+      this.initForm();
     }
   
-    // ======================================
+    // =====================================
 
-    validateName = false;
-    validateUserName = false;
-    validatePassword = false;
-    validateRole = false;
-    validateSchool= false;
-    validateGroup = false;
-    validateStudent = false;
-    private registerForm(form){
-  if(form.value.name.trim().length < 6 ){
-    this.validateName = true;
-  }
-  if(form.value.username.trim().length < 6){
-    this.validateUserName = true;
-  }
-  if(form.value.password.trim().length < 6){
-    this.validatePassword = true;
-  }
-  if(form.value.school == null){
-    this.validateSchool = true;
-  }
-  if(form.value.role == null){
-    this.validateRole = true;
-  }
-  if(form.value.group == null){
-    this.validateGroup = true;
-  }
-  if(form.value.students == null){
-    this.validateStudent = true;
+  private initForm() {
+    this.FormEntity = new FormGroup({
+        name: new FormControl('', [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(50)
+        ]),
+        username: new FormControl('', [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(30)
+      ]),
+
+        password: new FormControl('', [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(15),
+        ]),
+
+        school: new FormControl(null, [
+            Validators.required
+        ]),
+
+        role: new FormControl('', [
+            Validators.required
+      ]),
+
+        group: new FormControl(null, [
+            // Validators.required
+        ]),
+
+        students: new FormControl(null, [
+          // Validators.required
+        ]),
+    });
   }
 
 
-      if(form.value.role  == 'Admin' || form.value.role  == 'Teacher' || form.value.role == 'Student' || form.value.role  == 'Father'){
-        this.user = new User(form.value.name, form.value.username, form.value.password, form.value.role);
+  // *************************
+  public frmEntity(){
+    return this.FormEntity.controls;
+  }
+
+  public markAsDirty(form: FormGroup) {
+    let controlKeys = Object.keys(form.controls);
+    controlKeys.forEach(key => {
+      let control = form.controls[key];
+      control.markAsDirty();
+    });
+  }
+// *************************
+
+
+     registerForm(){
+      if(this.FormEntity.valid){
+        
+      if(this.FormEntity.value.role  == 'Admin' || this.FormEntity.value.role  == 'Teacher' || this.FormEntity.value.role == 'Student' || this.FormEntity.value.role  == 'Father'){
+        this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+        this.school = this.FormEntity.value.school;
         this.user.school = this.school.id;
         
         // creamos el admin y le asignamos un colegio  
@@ -93,96 +123,27 @@ export class RegisterUserPage implements OnInit {
         if(this.school.admin == null){
           this.school.admin = [];
           this.school.admin.push(this.user);
+        }else{
           this.school.admin.push(this.user);
         }
 
         // una vez agregado el admin se actualiza el colegio
         if(this._schoolService.editarSchool(this.school)){
-          this.name = '';
-          this.username = '';
-          this.password = '';
-          this.role = '';
-          this.school = null;
-          this.group = null;
-          this.students = null;
+          console.log('Entro', this.school);
+          this.FormEntity.reset();
         }else{
           console.log('Nos e pudeo asignar el usuario: ' + this.user.id + 'al colegio: ' + this.school);
         }
-      }else if(form.value.role  == 'Global'){
-        this.user = new User(form.value.name, form.value.username, form.value.password, form.value.role);
+      }else if(this.FormEntity.value.role  == 'Global'){
+        this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
         this._userService.crearUsuario(this.user);
-        this.name = '';
-        this.username = '';
-        this.password = '';
-        this.role = '';
-        this.school = null;
-        this.group = null;
-        this.students = null;
+        this.FormEntity.reset();
       }
-    }
 
+      }else{
+        this.markAsDirty(this.FormEntity);
+        console.log('Entro acá');
+      }
 
-    // ----------------------
-
-    validate(form){
-
-      // if(!form.value.name.touched){
-      //   this.validateName = false;
-      //   }else{
-      //     if(form.value.name.trim().length < 6){
-      //       this.validateName = true;
-      //     }
-      //   }
-        
-      //   if(!form.value.username.touched){
-      //     this.validateUserName = false;
-      //   }else{
-      //     if(form.value.username.trim().length < 6 ){
-      //       this.validateUserName = true;
-      //     }
-      //   }
-
-      //   if(!form.value.password.touched){
-      //     this.validatePassword = false;
-      //   }else{
-      //     if(form.value.password.trim().length < 6){
-      //       this.validatePassword = true;
-      //     }
-      //   }
-
-      //   // if(!form.value.school.touched){
-      //     if(form.value.school != null ){
-      //       console.log(form.value.school);
-      //       this.validateSchool = true;
-      //     }else{
-      //         this.validateSchool = false;
-      //     }
-      //   // }
-
-      //   // if(!form.value.role.touched){
-      //     if(form.value.role == ''){
-      //       console.log(form.value.role);
-      //       this.validateRole = true;
-      //     }else{
-      //         this.validateRole = false;
-      //     }
-      //   // }
-
-      //   // if(!form.value.group.touched){
-      //     if(form.value.group != null){
-      //       this.validateGroup = true;
-      //     }else{
-      //         this.validateGroup = false;
-      //     }
-      //   // }
-
-      //   // if(!form.value.students.touched){
-      //     if(form.value.students != null){
-      //       this.validateStudent= true;
-      //     }else{
-      //         this.validateStudent = false;
-      //     }
-      //   // }
-     
     }
 }

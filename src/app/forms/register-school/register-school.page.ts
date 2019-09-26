@@ -73,7 +73,6 @@ export class RegisterSchoolPage implements OnInit {
 // *************************
 
   registerForm(){
-    console.log(this.FormEntity.value);
     if(this.FormEntity.valid){
       this.school = new School(this.FormEntity.value.name, this.FormEntity.value.director, this.FormEntity.value.telephone);
       this._schoolService.crearSchool(this.school);

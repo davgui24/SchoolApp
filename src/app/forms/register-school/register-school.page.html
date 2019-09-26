@@ -6,21 +6,21 @@
                   <ion-item-group>
                     <ion-item>
                         <ion-label position="floating">Name</ion-label>
-                        <ion-input  formControlName="name" type="text" value="" placeholder="Enter name" autocomplete="off"></ion-input>
+                        <ion-input  formControlName="name" type="text"  placeholder="Enter name" autocomplete="off"></ion-input>
                         <ion-text color="danger"  *ngIf="frmEntity().name.invalid && frmEntity().name.dirty">
                             Required field.
                           </ion-text>
                     </ion-item>
                     <ion-item>
                       <ion-label position="floating">Director</ion-label>
-                      <ion-input  formControlName="director" type="text" value="" placeholder="Enter director" autocomplete="off"></ion-input>
+                      <ion-input  formControlName="director" type="text" placeholder="Enter director" autocomplete="off"></ion-input>
                       <ion-text color="danger"  *ngIf="frmEntity().director.invalid && frmEntity().director.dirty">
                         Required field.
                       </ion-text>
                   </ion-item>
                   <ion-item>
                       <ion-label position="floating">Telephone</ion-label>
-                      <ion-input maxlength="10" pattern="[0-9]*"  formControlName="telephone" type="tel" value="" placeholder="Enter telephone" autocomplete="off"></ion-input>
+                      <ion-input maxlength="10" pattern="[0-9]*"  formControlName="telephone" type="tel" placeholder="Enter telephone" autocomplete="off"></ion-input>
                       <ion-text color="danger"  *ngIf="frmEntity().telephone.invalid && frmEntity().telephone.dirty">
                         Required field.
                       </ion-text>
