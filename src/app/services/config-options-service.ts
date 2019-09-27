@@ -167,7 +167,7 @@ export class ConfigOptionsService {
       },
       {
         title: 'Admin',
-        url: 'list-user',
+        url: 'list-admin',
         icon: 'person-add',
         validation: sideOption.admin
       },

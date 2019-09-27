@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
         },
         {
           title: 'Admin',
-          url: 'list-user',
+          url: 'list-admin',
           icon: 'person-add',
           validation: false
         },

@@ -72,7 +72,25 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     // en este metodo validamos si al formulario llegan valores, si es asi, entonces se va a editar y se agregan los valosres en los inputs
     // sino, de va a agregar, entonces los inputs quedan vacios
     upLoadUserEdit(){
-      this.userUrl = JSON.parse(localStorage.getItem('userList'));
+      if(JSON.parse(localStorage.getItem('userList'))){
+        this.userUrl = JSON.parse(localStorage.getItem('userList'));
+      }else if(this.userUrl = JSON.parse(localStorage.getItem('adminList'))){
+        this.userUrl = JSON.parse(localStorage.getItem('adminList'));
+        this._schoolService.getSchools().then((schools: School[]) =>{
+
+          this.schools = schools;
+
+          for(let school of this.schools){
+             if(school.id == this.userUrl.school){
+               this.school = school;
+               break;
+             }
+          }
+        })
+
+      }
+      
+
 
       if(this.userUrl == null){
         console.log('no llego nada');
@@ -131,7 +149,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
             Validators.maxLength(15),
         ]),
 
-        school: new FormControl(null, school),
+        school: new FormControl(this.school, school),
 
         role: new FormControl(this.role, [
             Validators.required
@@ -197,8 +215,9 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
 
     // *********************
-    // Cuando se destruya el componente elimine el arreglo "userList" del localStorage
+    // Cuando se destruya el componente elimine el arreglo "userList, adminList" del localStorage
     ngOnDestroy(): void {
       localStorage.removeItem('userList');
+      localStorage.removeItem('adminList');
     }
 }

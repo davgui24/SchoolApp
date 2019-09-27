@@ -30,7 +30,7 @@ export class RegisterSchoolPage implements OnInit {
 
   ngOnInit() {
     this.user = this._userService.getLocalStorage();
-    this._configOptionservice.roleLogin.emit(this.user);
+    this._configOptionservice.roleLogin.emit(this.user.role);
     this.initForm();
   }
 

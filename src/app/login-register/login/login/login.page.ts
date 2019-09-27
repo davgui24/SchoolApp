@@ -34,8 +34,6 @@ export class LoginPage implements OnInit {
              ) { }
 
   ngOnInit() {
-    // emitimos un evento indicando que no hay usuario logueado, para que lo reciba el app.Component y no cargue ninguna opcion en el menú
-    this._configOptionsService.roleLogin.emit(this.user);
 
     localStorage.clear();
     this. upLoadusers();

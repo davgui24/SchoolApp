@@ -66,4 +66,10 @@ export class RegisterCoursePage implements OnInit {
 
   }
 
+
+  // *******************
+      ngOnDestroy(): void {
+        localStorage.removeItem('courseList');
+    }
+
 }
