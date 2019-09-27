@@ -1,9 +1,15 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>listUser</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>List-Admins</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <ion-list *ngFor="let shc of admins">
+        <ion-item>
+            <ion-label> {{shc.name}} </ion-label>
+            <ion-label> {{shc.telephone}} </ion-label>
+        </ion-item>
+    </ion-list>
 
 </ion-content>
