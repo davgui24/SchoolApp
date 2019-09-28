@@ -140,21 +140,21 @@ export class ConfigOptionsService {
     }else if(role == 'Teacher'){
       selectRole.global = false;
       selectRole.admin = false;
-      selectRole.teacher = false;
+      selectRole.teacher = true;
       selectRole.father = false;
       selectRole.student = false;
     }else if(role == 'Father'){
       selectRole.global = false;
       selectRole.admin = false;
       selectRole.teacher = false;
-      selectRole.father = false;
+      selectRole.father = true;
       selectRole.student = false;
     }else if(role == 'Student'){
       selectRole.global = false;
       selectRole.admin = false;
       selectRole.teacher = false;
       selectRole.father = false;
-      selectRole.student = false;
+      selectRole.student = true;
     }else{
       selectRole.global = false;
       selectRole.admin = false;

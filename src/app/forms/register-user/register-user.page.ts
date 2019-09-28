@@ -49,26 +49,23 @@ export class RegisterUserPage implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,) { }
 
     ngOnInit() {
-<<<<<<< HEAD
+
       // caragamos el usuario del localStorage
       this.userlogin = this._userService.getLocalStorage();
 
       // Recibimos el rol que viene de la lista (por la url) para asi caragar el formilario
       let roleUrl = this.activatedRoute.snapshot.paramMap.get('role');
-=======
->>>>>>> b474c117df88d322d4c0c1626606840dd574e2fd
+
 
       // cargamos el usuario del localStorage
       this.userlogin = this._userService.getLocalStorage();
 
-      // Recibimos el rol que viene de la lista (por la url) para asi caragar el formilario
-      let roleUrl = this.activatedRoute.snapshot.paramMap.get('role');
-         
       // Confuguramos el formulario para que muestre solo los campos segun el rol a editar
       this.inputFormUser = this._configOptionservice.configFormUser(roleUrl);
            
        // Confuguramos el selectRole para que muestre solo los options segun el rol a editar
       this.selectRole = this._configOptionservice.configSelectRole(roleUrl);
+      console.log(selectRole);
 
       // Emitimos el rol del usuario logeado para que lo reciba el appComponent (ver linea 41 del appComponent) y cargue el menú
       this._configOptionservice.roleLogin.emit(this.userlogin.role);
@@ -100,19 +97,13 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                
             for( let subject of this.school.subcjet){
               this.subjects.push(subject);
-              
             }
-            
-            
-
-
-               break;
-             }
+            break;
           }
-        })
+        }
+      })
 
       }else{
-        console.log('esto es lo que sea');
         this._schoolService.getSchools().then((schools: School[]) =>{
 
           this.schools = schools;
@@ -123,16 +114,10 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                
                
             for( let subject of this.school.subcjet){
-              this.subjects.push(subject);
-              
+              this.subjects.push(subject);   
             }
-           
-            
-            
-
-
-               break;
-             }
+            break;
+           }
           }
         })
       }
@@ -210,7 +195,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
         school: new FormControl(this.school, school),
 
         role: new FormControl('Admin', [
-            // Validators.required
+            Validators.required
       ]),
 
         group: new FormControl(null, group),
@@ -242,38 +227,56 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
      registerForm(){
       
-          console.log(this.FormEntity.value.subject);
-      // if(this.FormEntity.valid){
+          // console.log(this.FormEntity.value);
+      if(this.FormEntity.valid){
         
-      // if(this.FormEntity.value.role  == 'Admin' || this.FormEntity.value.role  == 'Teacher' || this.FormEntity.value.role == 'Student' || this.FormEntity.value.role  == 'Father'){
-      //   this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
-      //   this.school = this.FormEntity.value.school;
-      //   this.user.school = this.school.id;
+      if(this.FormEntity.value.role  == 'Admin' || this.FormEntity.value.role  == 'Teacher' || this.FormEntity.value.role == 'Student' || this.FormEntity.value.role  == 'Father'){
+        this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+        // this.school = this.FormEntity.value.school;
+        this.user.school = this.school.id;
         
-      //   // creamos el admin y le asignamos un colegio  
-      //   // al asignar un Admins a un colegio, le asignamos el id del colegio el mismo admin
-      //   if(this.school.admin == null){
-      //     this.school.admin = [];
-      //     this.school.admin.push(this.user);
-      //   }else{
-      //     this.school.admin.push(this.user);
-      //   }
+        // creamos el user y le asignamos un colegio  
+        // al asignar un user a un colegio, le asignamos el id del colegio el mismo user
+     if(this.FormEntity.value.role == 'Admin'){
+      if(this.school.admin == null){
+        this.school.admin = [];
+        this.school.admin.push(this.user);
+      }else{
+        this.school.admin.push(this.user);
+      }
+     }else if(this.FormEntity.value.role == 'Teacher'){
+       let subjects: Subject[] = [];
+       subjects = this.FormEntity.value.subject;
+       if(this.user.subject == null){
+        this.user.subject = [];
+        this.user.subject = subjects;
+       }else{
+        this.user.subject = subjects;
+       }
+      if(this.school.teachers == null){
+        this.school.teachers = [];
+        this.school.teachers.push(this.user);
+      }else{
+        this.school.teachers.push(this.user);
+      }
+     }
 
-      //   // una vez agregado el admin se actualiza el colegio
-      //   if(this._schoolService.editarSchool(this.school)){
-      //     this.FormEntity.reset();
-      //   }else{
-      //     console.log('Nos e pudeo asignar el usuario: ' + this.user.id + 'al colegio: ' + this.school);
-      //   }
-      // }else if(this.FormEntity.value.role  == 'Global'){
-      //   this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
-      //   this._userService.crearUsuario(this.user);
-      //   this.FormEntity.reset();
-      // }
 
-      // }else{
-      //   this.markAsDirty(this.FormEntity);
-      // }
+        // una vez agregado el user se actualiza el colegio
+        if(this._schoolService.editarSchool(this.school)){
+          this.FormEntity.reset();
+        }else{
+          console.log('Nos e pudeo asignar el usuario: ' + this.user.id + 'al colegio: ' + this.school);
+        }
+      }else if(this.FormEntity.value.role  == 'Global'){
+        this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+        this._userService.crearUsuario(this.user);
+        this.FormEntity.reset();
+      }
+
+      }else{
+        this.markAsDirty(this.FormEntity);
+      }
 
     }
 
