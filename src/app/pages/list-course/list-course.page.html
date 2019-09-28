@@ -4,7 +4,11 @@
   </ion-toolbar>
 </ion-header> -->
 
-<ion-content>
+<ion-content
+[scrollEvents]="true"
+(ionScrollStart)="logScrollStart()"
+(ionScroll)="logScrolling($event)"
+(ionScrollEnd)="logScrollEnd()">
 
   <ion-list style="margin: 10%;" *ngFor="let course of courses">
       <ion-item-sliding>

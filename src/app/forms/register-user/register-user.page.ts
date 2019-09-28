@@ -45,6 +45,9 @@ export class RegisterUserPage implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,) { }
 
     ngOnInit() {
+      // caragamos el usuario del localStorage
+      this.userlogin = this._userService.getLocalStorage();
+
       // Recibimos el rol que viene de la lista (por la url) para asi caragar el formilario
       let roleUrl = this.activatedRoute.snapshot.paramMap.get('role');
 
@@ -58,7 +61,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
       this.selectRole = this._configOptionservice.configSelectRole(roleUrl);
 
       // Emitimos el rol del usuario logeado para que lo reciba el appComponent (ver linea 41 del appComponent) y cargue el menú
-      this._configOptionservice.roleLogin.emit(roleUrl);
+      this._configOptionservice.roleLogin.emit(this.userlogin.role);
 
       // Carga de colegios
       this._schoolService.getSchools().then((schools: School[]) =>{
