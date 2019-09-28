@@ -8,6 +8,8 @@ import { inputFormUser, selectRole } from 'src/app/config';
 import { SchoolService } from 'src/app/services/school.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Course } from 'src/app/models/course';
+import { Subject } from '../../models/subject';
 
 @Component({
   selector: 'app-register-user',
@@ -37,6 +39,8 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
   admins: User[] = [];
   schools: School[] = [];
+  courses: Course[] = [];
+  subjects: Subject[] = [];
   
 
   constructor(private _userService: UserService,
@@ -45,20 +49,21 @@ export class RegisterUserPage implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,) { }
 
     ngOnInit() {
-      // Recibimos el rol que viene de la lista (por la url) para asi caragar el formilario
-      let roleUrl = this.activatedRoute.snapshot.paramMap.get('role');
 
-      // caragamos el usuario del localStorage
+      // cargamos el usuario del localStorage
       this.userlogin = this._userService.getLocalStorage();
 
+      // Recibimos el rol que viene de la lista (por la url) para asi caragar el formilario
+      let roleUrl = this.activatedRoute.snapshot.paramMap.get('role');
+         
       // Confuguramos el formulario para que muestre solo los campos segun el rol a editar
       this.inputFormUser = this._configOptionservice.configFormUser(roleUrl);
-
+           
        // Confuguramos el selectRole para que muestre solo los options segun el rol a editar
       this.selectRole = this._configOptionservice.configSelectRole(roleUrl);
 
       // Emitimos el rol del usuario logeado para que lo reciba el appComponent (ver linea 41 del appComponent) y cargue el menú
-      this._configOptionservice.roleLogin.emit(roleUrl);
+      this._configOptionservice.roleLogin.emit(this.userlogin.role);
 
       // Carga de colegios
       this._schoolService.getSchools().then((schools: School[]) =>{
@@ -72,7 +77,59 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     // en este metodo validamos si al formulario llegan valores, si es asi, entonces se va a editar y se agregan los valosres en los inputs
     // sino, de va a agregar, entonces los inputs quedan vacios
     upLoadUserEdit(){
-      this.userUrl = JSON.parse(localStorage.getItem('userList'));
+      if(JSON.parse(localStorage.getItem('userList'))){
+        this.userUrl = JSON.parse(localStorage.getItem('userList'));
+      }else if(this.userUrl = JSON.parse(localStorage.getItem('adminList'))){
+        this.userUrl = JSON.parse(localStorage.getItem('adminList'));
+        this._schoolService.getSchools().then((schools: School[]) =>{
+
+          this.schools = schools;
+
+          for(let school of this.schools){
+             if(school.id == this.userUrl.school){
+               this.school = school;
+               
+               
+            for( let subject of this.school.subcjet){
+              this.subjects.push(subject);
+              
+            }
+            
+            
+
+
+               break;
+             }
+          }
+        })
+
+      }else{
+        console.log('esto es lo que sea');
+        this._schoolService.getSchools().then((schools: School[]) =>{
+
+          this.schools = schools;
+
+          for(let school of this.schools){
+             if(school.id == this.userlogin.school){
+               this.school = school;
+               
+               
+            for( let subject of this.school.subcjet){
+              this.subjects.push(subject);
+              
+            }
+           
+            
+            
+
+
+               break;
+             }
+          }
+        })
+      }
+      
+
 
       if(this.userUrl == null){
         console.log('no llego nada');
@@ -96,6 +153,8 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     let group; 
     let school;
     let student;
+    let course;
+    let subject;
     if(inputFormUser.ImputStudents){
       student = [Validators.required];
     }else{
@@ -110,6 +169,15 @@ export class RegisterUserPage implements OnInit, OnDestroy {
       school = [Validators.required]
     }else{
       school = [] 
+    }
+    if(inputFormUser.ImputCourse){
+      course = [Validators.required]
+    }else{
+      course = [] 
+    }if(inputFormUser.InputSubject){  
+      subject = [Validators.required];
+    }else{
+      subject = [] 
     }
 
 // Aqui le damos los valores iniciales y resticciones a cada input
@@ -131,15 +199,19 @@ export class RegisterUserPage implements OnInit, OnDestroy {
             Validators.maxLength(15),
         ]),
 
-        school: new FormControl(null, school),
+        school: new FormControl(this.school, school),
 
-        role: new FormControl(this.role, [
-            Validators.required
+        role: new FormControl('Admin', [
+            // Validators.required
       ]),
 
         group: new FormControl(null, group),
 
+        course: new FormControl(null, course),
+
         students: new FormControl(null, student),
+
+        subject: new FormControl(null, subject),
     });
   }
 
@@ -161,44 +233,47 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
 
      registerForm(){
-      if(this.FormEntity.valid){
+      
+          console.log(this.FormEntity.value.subject);
+      // if(this.FormEntity.valid){
         
-      if(this.FormEntity.value.role  == 'Admin' || this.FormEntity.value.role  == 'Teacher' || this.FormEntity.value.role == 'Student' || this.FormEntity.value.role  == 'Father'){
-        this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
-        this.school = this.FormEntity.value.school;
-        this.user.school = this.school.id;
+      // if(this.FormEntity.value.role  == 'Admin' || this.FormEntity.value.role  == 'Teacher' || this.FormEntity.value.role == 'Student' || this.FormEntity.value.role  == 'Father'){
+      //   this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+      //   this.school = this.FormEntity.value.school;
+      //   this.user.school = this.school.id;
         
-        // creamos el admin y le asignamos un colegio  
-        // al asignar un Admins a un colegio, le asignamos el id del colegio el mismo admin
-        if(this.school.admin == null){
-          this.school.admin = [];
-          this.school.admin.push(this.user);
-        }else{
-          this.school.admin.push(this.user);
-        }
+      //   // creamos el admin y le asignamos un colegio  
+      //   // al asignar un Admins a un colegio, le asignamos el id del colegio el mismo admin
+      //   if(this.school.admin == null){
+      //     this.school.admin = [];
+      //     this.school.admin.push(this.user);
+      //   }else{
+      //     this.school.admin.push(this.user);
+      //   }
 
-        // una vez agregado el admin se actualiza el colegio
-        if(this._schoolService.editarSchool(this.school)){
-          this.FormEntity.reset();
-        }else{
-          console.log('Nos e pudeo asignar el usuario: ' + this.user.id + 'al colegio: ' + this.school);
-        }
-      }else if(this.FormEntity.value.role  == 'Global'){
-        this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
-        this._userService.crearUsuario(this.user);
-        this.FormEntity.reset();
-      }
+      //   // una vez agregado el admin se actualiza el colegio
+      //   if(this._schoolService.editarSchool(this.school)){
+      //     this.FormEntity.reset();
+      //   }else{
+      //     console.log('Nos e pudeo asignar el usuario: ' + this.user.id + 'al colegio: ' + this.school);
+      //   }
+      // }else if(this.FormEntity.value.role  == 'Global'){
+      //   this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+      //   this._userService.crearUsuario(this.user);
+      //   this.FormEntity.reset();
+      // }
 
-      }else{
-        this.markAsDirty(this.FormEntity);
-      }
+      // }else{
+      //   this.markAsDirty(this.FormEntity);
+      // }
 
     }
 
 
     // *********************
-    // Cuando se destruya el componente elimine el arreglo "userList" del localStorage
+    // Cuando se destruya el componente elimine el arreglo "userList, adminList" del localStorage
     ngOnDestroy(): void {
       localStorage.removeItem('userList');
+      localStorage.removeItem('adminList');
     }
 }

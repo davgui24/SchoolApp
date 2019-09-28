@@ -18,6 +18,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { firebaseConfig } from './config';
 import { MenuPageModule } from './components/menu/menu.module';
 
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
