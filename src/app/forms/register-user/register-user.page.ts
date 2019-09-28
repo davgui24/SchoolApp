@@ -84,7 +84,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     upLoadUserEdit(){
       if(JSON.parse(localStorage.getItem('userList'))){
         this.userUrl = JSON.parse(localStorage.getItem('userList'));
-      }else if(this.userUrl = JSON.parse(localStorage.getItem('adminList'))){
+      }else if(JSON.parse(localStorage.getItem('adminList'))){
         this.userUrl = JSON.parse(localStorage.getItem('adminList'));
         this._schoolService.getSchools().then((schools: School[]) =>{
 
@@ -102,8 +102,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
           }
         }
       })
-
-      }else{
+      }else if(this.userUrl = JSON.parse(localStorage.getItem('teacherList'))){
         this._schoolService.getSchools().then((schools: School[]) =>{
 
           this.schools = schools;
@@ -286,5 +285,6 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     ngOnDestroy(): void {
       localStorage.removeItem('userList');
       localStorage.removeItem('adminList');
+      localStorage.removeItem('teacherList')
     }
 }

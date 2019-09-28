@@ -64,4 +64,14 @@ export class ListCoursePage implements OnInit {
     this.navCtrl.navigateBack("register-course");
   }
 
+
+  // -----------------------
+  logScrollStart(){
+
+  }
+
+  loadData(event){
+    console.log(event);
+  }
+
 }

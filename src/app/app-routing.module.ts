@@ -12,7 +12,7 @@ const routes: Routes = [
     path: "login",
     loadChildren: "./login-register/login/login/login.module#LoginPageModule"
   },
-  { path: "home/:idUser", loadChildren: "./pages/home/home.module#HomePageModule" },
+  { path: "home", loadChildren: "./pages/home/home.module#HomePageModule" },
   { path: "register", loadChildren: "./login-register/register/register/register.module#RegisterPageModule" },
   { path: "register/:role", loadChildren: "./login-register/register/register/register.module#RegisterPageModule" },
   { path: 'register-school', loadChildren: './forms/register-school/register-school.module#RegisterSchoolPageModule' },
@@ -20,7 +20,8 @@ const routes: Routes = [
   { path: 'register-course', loadChildren: './forms/register-course/register-course.module#RegisterCoursePageModule' },
   { path: 'list-user', loadChildren: './pages/list-user/list-user.module#ListUserPageModule' },
   { path: 'list-admin', loadChildren: './pages/list-admin/list-admin.module#ListAdminPageModule' },
-  { path: 'list-course', loadChildren: './pages/list-course/list-course.module#ListCoursePageModule' },  { path: 'register-teacher', loadChildren: './forms/register-teacher/register-teacher.module#RegisterTeacherPageModule' },
+  { path: 'list-course', loadChildren: './pages/list-course/list-course.module#ListCoursePageModule' },
+  { path: 'register-teacher', loadChildren: './forms/register-teacher/register-teacher.module#RegisterTeacherPageModule' },
   { path: 'list-teacher', loadChildren: './pages/list-teacher/list-teacher.module#ListTeacherPageModule' },
 
 

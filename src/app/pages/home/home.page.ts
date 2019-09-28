@@ -13,6 +13,7 @@ import { ConfigOptionsService } from 'src/app/services/config-options-service';
 })
 export class HomePage implements OnInit {
 
+  userlogin: User;
   user: User;
   users: User[] = [];
 
@@ -23,38 +24,8 @@ export class HomePage implements OnInit {
               private _configOptionservice: ConfigOptionsService) {  }
 
   ngOnInit() {
-    this.getUser();
-    // this.user = this._userService.getLocalStorage();
-    // // console.log('User', this.user);
-    // this._configOptionservice.roleLogin.emit(this.user.role);
+    this.userlogin = this._userService.getLocalStorage();
+    this._configOptionservice.roleLogin.emit(this.userlogin.role);
   }
 
-
-  getUser(){
-    let idUser = this.activatedRoute.snapshot.paramMap.get('idUser');
-    this._userService.getUsuarios().then((users: User[]) =>{
-      for(let i = 0; i < users.length; i++){
-          this.users.push(users[i]);
-      }      
-    })
-
-    this._schoolService.getSchools().then((schools: School[]) =>{
-      schools.forEach(school => {
-        school.admin.forEach((admin: User) => {
-          this.users.push(admin);
-        });
-      });
-
-      this.users.forEach(user => {
-        if(idUser == user.id){
-          this.user = user;
-          // emitimos un evento indicando el usuario logueado, para que lo reciba el app.Component y cargue el menú segun el rol
-          this._configOptionservice.roleLogin.emit(this.user.role);
-          this._userService.setLocalStorage(user);
-        }else{
-          console.log('No se encontró usuario');
-        }
-      });
-    })
-  }
 }

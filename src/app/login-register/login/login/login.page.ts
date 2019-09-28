@@ -7,6 +7,7 @@ import { NavController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
 import { SchoolService } from '../../../services/school.service';
 import { School } from 'src/app/models/school';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 
 @Component({
@@ -16,14 +17,17 @@ import { School } from 'src/app/models/school';
 })
 export class LoginPage implements OnInit {
 
+  public FormEntity: FormGroup;
+
+  usersGlobals: User[] = [];
   users: User[] = [];
-  admins: User[] = [];
   admin: User;
   school: School;
-  user: User;
-  username: string = 'userAdmin1';
-  password: string = '123456';
-  role: string = 'Admin';
+  user: User = null;
+  userGlobal: User = null;
+  username: string;
+  password: string;
+  role: string;
 
   constructor(private _userService: UserService,
              private _schoolService: SchoolService,
@@ -37,38 +41,77 @@ export class LoginPage implements OnInit {
 
     localStorage.clear();
     this. upLoadusers();
+    this.initForm();
   }
+
+
+  // --------------------------
+
+    // Con este metodo iniciamos el  formulario
+    private initForm(){
+      this.FormEntity = new FormGroup({
+        username: new FormControl('userAdmin1', [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(50)
+      ]),
+        password: new FormControl('123456', [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(15)
+      ]),
+        role: new FormControl('Admin', [
+          Validators.required,
+      ]),
+      })
+    }
+
+
+    // *************************
+  // Esotos dos metodos son para mostrar un mensaje de error en caso que se hayan ingresado datos incorrectos
+  public frmEntity(){
+    return this.FormEntity.controls;
+  }
+
+  public markAsDirty(form: FormGroup) {
+    let controlKeys = Object.keys(form.controls);
+    controlKeys.forEach(key => {
+      let control = form.controls[key];
+      control.markAsDirty();
+    });
+  }
+// *************************
 
   upLoadusers(){
     this._userService.getUsuarios().then((users: User[]) =>{
       // llenamos el arreglo de usuarios globales
       users.forEach(user => {
-        this.users.push(user);
+        this.usersGlobals.push(user);
       });
 
       // Seguimos llenando el arreglo de los demas usuarios
       this._schoolService.getSchools().then((schools: School[]) =>{
         schools.forEach(school => {
           school.admin.forEach(admin => {
-            this.admins.push(admin);
+            this.users.push(admin);
           });
           if(school.teachers==null){
             school.teachers = [];
           }
           school.teachers.forEach(teacher => {
-            this.admins.push(teacher);
+            this.users.push(teacher);
           });
           if(school.students==null){
             school.students = [];
           }
           school.students.forEach(student => {
-            this.admins.push(student);
+            this.users.push(student);
           });
           if(school.fathers==null){
             school.fathers = [];
           }
           school.fathers.forEach(father => {
-            this.admins.push(father)
+            this.users.push(father)
           })
         });
       })
@@ -77,94 +120,82 @@ export class LoginPage implements OnInit {
 
 
   
-  validateUser = false;
-  validatePassword = false;
-  validateRole = false;
-  async  loginForm(form){
-    if(form.value.role == '' && (form.value.password.trim().length <= 0  || form.value.username.trim().length <= 0)){
-      this.presentAlertLoginGlobal(form);
-    }else if(form.value.role == ''){
-      this.validateRole = true;
-    }else if(form.value.username.trim().length < 6){
-      this.validateUser = true;
-      console.log('Entró 3');
-    }else if(form.value.password.trim().length < 6){
-        this.validatePassword = true;
-        console.log('Entró 4');
-    }else{
-      const loading = await this.loadingController.create({
-        message: 'Hellooo',
-        // duration: 2000
-      });
-      
-      let validateLogin: boolean = false;
-        for(let i=0; i<this.admins.length; i++){
-          if(this.username == this.admins[i].username && this.password == this.admins[i].password && this.role == this.admins[i].role){
-            validateLogin = true;
-            loading.onDidDismiss();
-              this._schoolService.getSchools().then((schools: School[]) =>{
-                for(let j=0; j<schools.length; j++){
-                  if(schools[j].id == this.admins[i].school){
-                    for(let k=0; k<schools[j].admin.length; k++){
-                      if(schools[j].admin[k].id == this.admins[i].id){
-                        this.admin = this.admins[i];
-                        this.admin.lastLogin = new Date().toString();
-                        schools[j].admin[k] = this.admin;
-                        this.school = schools[j];
-                        console.log(this._schoolService.editarSchool(this.school));
-                        this.navCtrl.navigateBack("home/" + this.admins[i].id);
-                        break;
-                      }else{
-                        
-                      }
-                    }
-                    break;
-                  }else{
-                    console.log('No se encontro el colegio');
-                  }
-                }
-              })
-            break;
-          }else{
-            
-          }
-          
-        }
-        if(validateLogin){
-          this.navCtrl.navigateBack("home/" + this.admin.id);
-        }else{
-          this.presentAlertError();
-        }
+
+  async  loginForm(){
+    if(this.FormEntity.valid){
+     for(let user of this.users){
+      if(this.FormEntity.value.username == user.username && this.FormEntity.value.password == user.password && this.FormEntity.value.role == user.role){
+        this.user = user;
+        break;
+      }else{
+        this.user = null;
       }
+     }
+
+    //  Se valida que exista el usuario despues de los filtros hechos
+     if(this.user != null){
+
+      this._schoolService.verificarSchool(this.user.school).then((school: School) =>{
+        this.school = school;
+        if(this.user.role == 'Admin'){
+          for(let admin of this.school.admin)
+            if(this.user.id == admin.id){
+              admin.lastLogin = new Date().toString();
+              this.user = admin;
+              console.log(this._schoolService.editarSchool(this.school));
+              this._userService.setLocalStorage(this.user);
+              this.navCtrl.navigateBack("home");
+            }
+        }else if(this.user.role == 'Teacher'){
+
+          for(let teacher of this.school.teachers)
+            if(this.user.id == teacher.id){
+              teacher.lastLogin = new Date().toString();
+              this.user = teacher;
+              console.log(this._schoolService.editarSchool(this.school));
+              this._userService.setLocalStorage(this.user);
+              this.navCtrl.navigateBack("home" );
+            }
+        }else if(this.user.role == 'Student'){
+          for(let student of this.school.students)
+            if(this.user.id == student.id){
+              student.lastLogin = new Date().toString();
+              this.user = student;
+              console.log(this._schoolService.editarSchool(this.school));
+              this._userService.setLocalStorage(this.user);
+              this.navCtrl.navigateBack("home" );
+            }
+        }else if(this.user.role == 'Father'){
+          for(let father of this.school.fathers)
+            if(this.user.id == father.id){
+              father.lastLogin = new Date().toString();
+              this.user = father;
+              console.log(this._schoolService.editarSchool(this.school));
+              this._userService.setLocalStorage(this.user);
+              this.navCtrl.navigateBack("home" );
+            }
+        }
+      })
+
+    
+     }else{
+      this.presentAlertError();
+     }
+    }else{
+      this.presentAlertLoginGlobal()
     }
+     
+   }
+  
     
 
 
 
 
 
-  validate(form){
-    if(form.value.username.trim().length < 6){
-      this.validateUser = true;
-      }else{
-      this.validateUser = false;
-      }
-      
-    if(form.value.password.trim().length < 6){
-        this.validatePassword = true;
-      }else{
-      this.validatePassword = false;
-      }
-      
-      if(form.value.role == ''){
-        this.validateRole = true;
-      }else{
-      this.validateRole = false;
-      }
-  }
+
 
   async presentLoading() {
-
     const loading = await this.loadingController.create({
       message: 'Hellooo',
       duration: 2000
@@ -192,20 +223,13 @@ export class LoginPage implements OnInit {
 
 
   // ==========  Alert
-  async presentAlertLoginGlobal(form) {
+  async presentAlertLoginGlobal() {
 
     const loading = await this.loadingController.create({
       message: 'Hellooo',
       // duration: 2000
     });
 
-
-    this._userService.getUsuarios().then((users: User[]) =>{
-      // llenamos el arreglo de usuarios globales
-      users.forEach(user => {
-        this.users.push(user);
-      });
-    });
 
     const alert = await this.alertController.create({
       header: 'Login',
@@ -236,29 +260,21 @@ export class LoginPage implements OnInit {
         }, {
           text: 'Ok',
           handler: (dataLogin) => {
-            let validateLogin: boolean = false;
-            this.validateRole = false;
-            this.validatePassword = false;
-            this.validateUser = false;
-            for(let user of this.users){
+            for(let user of this.usersGlobals){
               if(dataLogin.username == user.username && dataLogin.password == user.password){
-                this.user = user;
+                this.userGlobal = user;
                 loading.onDidDismiss();
-                validateLogin = true;
-                // user.lastLogin = new Date().toString();
-                // console.log(this._userService.editarUsuario(user));
-                // this.navCtrl.navigateBack("home/" + user.id);
                 break;
               }else{
                 // this.presentAlertError();
               }
             }
 
-
-            if(validateLogin){
-              this.user.lastLogin = new Date().toString();
-              console.log(this._userService.editarUsuario(this.user));
-              this.navCtrl.navigateBack("home/" + this.user.id);
+            if(this.userGlobal != null){
+              this.userGlobal.lastLogin = new Date().toString();
+              this._userService.editarUsuario(this.userGlobal);
+              this._userService.setLocalStorage(this.userGlobal);
+              this.navCtrl.navigateBack("home" );
             }else{
               this.presentAlertError();
             }

@@ -7,27 +7,25 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content
-
-  >
+<ion-content>
       <ion-content>
 
           <ion-grid style="margin-left: 5%; margin-top: 15%; margin-right: 5%;">
-            <form (ngSubmit)="loginForm(form)" #form="ngForm">
+            <form [formGroup]="FormEntity">
               <ion-row>
                   <ion-col size="12">
                       <ion-item-group>
                         <ion-item>
                           <ion-label position="floating">User name</ion-label>
-                          <ion-input [(ngModel)]="username" (keyup)=validate(form) name="username" type="text" value="" placeholder="Enter user" autocomplete="off" required></ion-input>
-                          <ion-text color="danger" *ngIf="validateUser">
+                          <ion-input formControlName="username" type="text" placeholder="Enter user" autocomplete="off" required></ion-input>
+                          <ion-text color="danger" *ngIf="frmEntity().username.invalid && frmEntity().username.dirty">
                             Required field.
                           </ion-text>
                       </ion-item>
                       <ion-item>
                           <ion-label position="floating">Password</ion-label>
-                          <ion-input [(ngModel)]="password" (keyup)=validate(form) name="password" type="Password" value="" placeholder="Enter password" autocomplete="off" required></ion-input>
-                          <ion-text color="danger" *ngIf="validatePassword">
+                          <ion-input formControlName="password" type="Password" placeholder="Enter password" autocomplete="off" required></ion-input>
+                          <ion-text color="danger" *ngIf="frmEntity().password.invalid && frmEntity().password.dirty">
                             Required field.
                           </ion-text>
                       </ion-item>
@@ -39,20 +37,20 @@
                       <ion-item-group>
                         <ion-item>
                           <ion-label position="floating">Role</ion-label>
-                          <ion-select [(ngModel)]="role" name="role" (ionChange)=validate(form) placeholder="Select Role">
+                          <ion-select formControlName="role" placeholder="Select Role">
                               <ion-select-option value="">Select Role</ion-select-option>
                               <ion-select-option value="Admin">Admin</ion-select-option>
                               <ion-select-option value="Teacher">Teacher</ion-select-option>
                               <ion-select-option value="Student">Student</ion-select-option>
                               <ion-select-option value="Father">Father</ion-select-option>
                             </ion-select>
-                            <ion-text color="danger" *ngIf="validateRole">
+                            <ion-text color="danger" *ngIf="frmEntity().role.invalid && frmEntity().role.dirty">
                               Required field.
                             </ion-text>
                       </ion-item>
 
                   </ion-item-group>
-                  <ion-button expand="full" color="primary" type="submit" block style="margin-top: 10%;" >
+                  <ion-button expand="full" color="primary" type="submit" block style="margin-top: 10%;" (click)="loginForm()">
                     Login
                       <!-- <ion-icon name="person-add"></ion-icon> -->
                   </ion-button>
