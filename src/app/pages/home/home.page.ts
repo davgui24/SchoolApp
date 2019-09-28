@@ -25,7 +25,7 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.getUser();
     // this.user = this._userService.getLocalStorage();
-    // console.log('User', this.user);
+    // // console.log('User', this.user);
     // this._configOptionservice.roleLogin.emit(this.user.role);
   }
 

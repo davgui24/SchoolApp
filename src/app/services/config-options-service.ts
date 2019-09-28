@@ -18,22 +18,32 @@ export class ConfigOptionsService {
       inputFormUser.inputSchool= false;
       inputFormUser.ImputGroup = false;
       inputFormUser.ImputStudents = false;
+      inputFormUser.ImputCourse = false;
+      inputFormUser.InputSubject = false;
     }else if(role == 'Admin') {
       inputFormUser.inputSchool= true;
       inputFormUser.ImputGroup = false;
       inputFormUser.ImputStudents = false;
+      inputFormUser.ImputCourse = false;
+      inputFormUser.InputSubject = false;
     }else if(role == 'Teacher') {
       inputFormUser.inputSchool= false;
-      inputFormUser.ImputGroup = true;
-      inputFormUser.ImputStudents = true;
+      inputFormUser.ImputGroup = false;
+      inputFormUser.ImputStudents = false;
+      inputFormUser.ImputCourse = false;
+      inputFormUser.InputSubject = true;
     }else if(role == 'Student') {
       inputFormUser.inputSchool= false;
       inputFormUser.ImputGroup = true;
       inputFormUser.ImputStudents = false;
+      inputFormUser.ImputCourse = true;
+      inputFormUser.InputSubject = false;
     }else if(role == 'Father') {
       inputFormUser.inputSchool= false;
       inputFormUser.ImputGroup = false;
       inputFormUser.ImputStudents = false;
+      inputFormUser.ImputCourse = false;
+      inputFormUser.InputSubject = false;
     }
     return inputFormUser;
   }
@@ -173,7 +183,7 @@ export class ConfigOptionsService {
       },
       {
         title: 'Teacher',
-        url: 'list-user',
+        url: 'list-teacher',
         icon: 'person-add',
         validation: sideOption.teacher
       },
@@ -197,7 +207,7 @@ export class ConfigOptionsService {
       },
       {
         title: 'Course',
-        url: 'home/' + user.id,
+        url: 'list-course',
         icon: 'person-add',
         validation: sideOption.course
       },

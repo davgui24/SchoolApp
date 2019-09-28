@@ -13,7 +13,9 @@ export const firebaseConfig = {
 export let inputFormUser = {
   inputSchool: false,
   ImputGroup: false,
-  ImputStudents: false
+  ImputStudents: false,
+  ImputCourse: false,
+  InputSubject: false,
 }
 
 export let sideOption  = {
