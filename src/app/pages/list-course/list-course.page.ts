@@ -43,8 +43,12 @@ export class ListCoursePage implements OnInit {
          if(school.id === this.userlogin.school){
             this.school = school;
 
-            for(let course of this.school.courses){
-              this.courses.push(course);
+            if(this.school.courses){
+              for(let course of this.school.courses){
+                this.courses.push(course);
+              }
+            }else{
+              this.school.courses = [];
             }
             break;
          }else{

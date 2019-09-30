@@ -18,7 +18,6 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 export class LoginPage implements OnInit {
 
   public FormEntity: FormGroup;
-
   usersGlobals: User[] = [];
   users: User[] = [];
   admin: User;
@@ -38,10 +37,10 @@ export class LoginPage implements OnInit {
              ) { }
 
   ngOnInit() {
-
     localStorage.clear();
     this. upLoadusers();
     this.initForm();
+    this._configOptionsService.roleLogin.emit(null);
   }
 
 

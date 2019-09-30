@@ -8,14 +8,16 @@ export class Subject {
     name: string;
     code: string;
     teacher: string;
+    state: boolean;
     dateCreate: string;
     dateDelete: string;
     dateUpdate: string;
 
-        constructor(name: string, code: string, school: string){
+        constructor(name: string, code: string, school: string, state: boolean){
             this.name = name;
             this.code = code;
             this.school = school;
+            this.state = false;
             this.dateCreate=new Date().toString();
             this.id = Date.now().toString();
         }

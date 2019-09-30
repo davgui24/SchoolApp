@@ -37,8 +37,12 @@ export class ListTeacherPage implements OnInit {
          if(school.id == this.userLogin.school){
            this.school = school;
 
-           for(let teacher of this.school.teachers){
-             this.teachers.push(teacher)
+           if(this.school.teachers){
+            for(let teacher of this.school.teachers){
+              this.teachers.push(teacher)
+            }
+           }else{
+            this.school.teachers = [];
            }
            break;
          }

@@ -39,8 +39,12 @@ export class ListAdminPage implements OnInit {
       this.schools = schools;
 
       for(let school of schools){
-        for(let admin of school.admin){
-          this.admins.push(admin)
+        if(school.admin){
+          for(let admin of school.admin){
+            this.admins.push(admin)
+          }
+        }else{
+          school.admin = [];
         }
       }
       console.log(this.admins);
