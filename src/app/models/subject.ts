@@ -1,7 +1,5 @@
 import { User } from './user';
 
-
-
 export class Subject {
     id: string;
     school: string;    
@@ -13,15 +11,16 @@ export class Subject {
     dateDelete: string;
     dateUpdate: string;
 
-        constructor(name: string, code: string, school: string, state: boolean){
+     constructor(name: string, code: string, school: string){
             this.name = name;
             this.code = code;
             this.school = school;
             this.state = false;
+            this.teacher = '';
             this.dateCreate=new Date().toString();
             this.id = Date.now().toString();
-        }
-}
+         }
+     }
 
     export interface ISubject {
         id: string;    
