@@ -14,7 +14,7 @@
 
                     <ion-item>
                       <ion-label position="floating">User name</ion-label>
-                      <ion-input formControlName="username" type="text"  placeholder="Enter user" autocomplete="off"></ion-input>
+                      <ion-input formControlName="username" type="text"  placeholder="Enter user" autocomplete="off" [disabled]="userUrl!=null"></ion-input>
                       <ion-text color="danger" *ngIf="frmEntity().username.invalid && frmEntity().username.dirty">
                         Required field.
                       </ion-text>

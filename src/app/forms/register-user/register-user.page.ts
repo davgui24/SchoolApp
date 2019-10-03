@@ -28,6 +28,11 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
   userlogin: User;
   users: User[] = [];
+  globals: User[] = [];
+  admins: User[] = [];
+  teachers: User[] = [];
+  students: User[] = [];
+  fathers: User[] = [];
   user: User = null;
   userUrl: User = null;
   name: string = '';
@@ -36,9 +41,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
   school: School = null;
   role: string = '';
   group: Group = null;
-  students: User = null;
 
-  admins: User[] = [];
   schools: School[] = [];
   courses: Course[] = [];
   subjects: Subject[] = [];
@@ -125,9 +128,13 @@ export class RegisterUserPage implements OnInit, OnDestroy {
       }
       
 
-
+      // CUANDO EL USURIO NO VIENE DE UNA LISTA
       if(this.userUrl == null){
-        console.log('no llego nada');
+        this._schoolService.verificarSchool(this.userlogin.school).then((schoolDB: School) =>{
+          for(let subject of schoolDB.subcjet){
+            this.subjects.push(subject);
+          }
+        })
       }else{
         this.name = this.userUrl.name;
         this.username = this.userUrl.username;
@@ -139,9 +146,9 @@ export class RegisterUserPage implements OnInit, OnDestroy {
         // this.students = this.userUrl.students;
       }
     }
-  
-    // =====================================
 
+    // ====================================
+  
 
   private initForm() {
     // creamos arreglo de validacion de campo requerido segun el rol
@@ -245,9 +252,9 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                userDB = userEdit;
                userDB.dateUpdate = new Date().toString();
                if(this._userService.editarUsuario(userDB)){
-                 this.presentAlertEdit();
+                 this.presentAlert(':)', 'Good!', 'The Global is updated successfully.');
                }else{
-                 this.presentAlertErrorEdit();
+                 this.presentAlert(':(', 'Bad!', 'The user could not be updated.');
                }
               })
 
@@ -267,9 +274,9 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                     schoolDB.admin[i] = userEdit;
                     console.log(schoolDB.admin[i]);
                     if(this._schoolService.editarSchool(schoolDB)){
-                      this.presentAlertEdit();
+                      this.presentAlert(':)', 'Good!', 'The Admin is updated successfully.');
                     }else{
-                      this.presentAlertErrorEdit();
+                      this.presentAlert(':(', 'Bad!', 'The Admin could not be updated.');
                     }
                     break;
                   }else{
@@ -290,19 +297,38 @@ export class RegisterUserPage implements OnInit, OnDestroy {
             }else{
               // CODIGO CUANDO NO HAY NINGUN USUARIO PARA EDITAR, ENTONCES SE CREA
 
-              if(this.roleUrl == 'Admin'){
-                userCreate = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role, this.FormEntity.value.school.id);
-                userCreate.dateCreate = new Date().toString();
-                  this._schoolService.verificarSchool(this.FormEntity.value.school.id).then((schoolDB: School) =>{
-                    if(schoolDB.admin){
-                      schoolDB.admin.push(userCreate);
-                    }else{
-                      schoolDB.admin == [];
-                      schoolDB.admin.push(userCreate);
+              if(this.roleUrl == 'Admin' && this.userlogin.role == 'Global'){
+                this._schoolService.getSchools().then((schoolsDB: School[]) =>{
+                  let validateAdmin: boolean = false;
+                  for(let schoolDB of schoolsDB){
+                    for(let adminDB of schoolDB.admin){
+                      if(this.FormEntity.value.username === adminDB.username){
+                        validateAdmin = true;
+                        break;
+                      }
                     }
-                    console.log(this._schoolService.editarSchool(schoolDB));
-                  })
-                  this.FormEntity.reset();
+                  }
+                  if(validateAdmin){
+
+                    this.presentAlert(':(', 'Bad!', 'This admin is already registered.');
+                  }else{
+                    userCreate = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+                    userCreate.school = this.FormEntity.value.school;
+                    userCreate.dateCreate = new Date().toString();
+                      this._schoolService.verificarSchool(this.FormEntity.value.school.id).then((schoolDB: School) =>{
+                        if(schoolDB.admin){
+                          schoolDB.admin.push(userCreate);
+                        }else{
+                          schoolDB.admin == [];
+                          schoolDB.admin.push(userCreate);
+                        }
+                        if(this._schoolService.editarSchool(schoolDB)){
+                          this.presentAlert(':)', 'Good!', 'The Admin was created successfully.');
+                        }
+                      })
+                      this.FormEntity.reset();
+                  }
+                })
               }else if(this.roleUrl == 'Teacher' && this.userlogin.role == 'Admin'){
 
   
@@ -313,13 +339,28 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
   
               }else if(this.roleUrl == 'Global' && this.userlogin.role == 'Global'){
-                userCreate = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
-                userCreate.dateCreate = new Date().toString();
-                if(this._userService.editarUsuario(userCreate)){
-                  this.presentAlertCreate();
-                }else{
-                  this.presentAlertErrorCreate();
-                }
+                this._userService.getUsuarios().then((globalsDB: User[]) =>{
+                  let validateGlobal: boolean = false;
+                  for(let globalDB of globalsDB){
+                    if(this.FormEntity.value.username === globalDB.username){
+                      validateGlobal = true;
+                      break;
+                    }
+                  }
+                  if(validateGlobal){
+                    this.presentAlert(':(', 'Bad!', 'The user could not be created.');
+                  }else{
+                  userCreate = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+                    userCreate.dateCreate = new Date().toString();
+                    if(this._userService.editarUsuario(userCreate)){
+                      this.FormEntity.reset();
+                      this.presentAlert(':)', 'Good!', 'The Global was created successfully.');
+                    }else{
+                      this.presentAlert(':(', 'Bad!', 'The Global could not be updated.');
+                    }
+                  }
+                })
+               
               }
 
             }
@@ -343,47 +384,12 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     }
 
     // ---------------------
-    async presentAlertEdit() {
-      const alert = await this.alertController.create({
-        header: ':)',
-        subHeader: 'Good!',
-        message: 'The user is updated successfully.',
-        buttons: ['OK']
-      });
-  
-      await alert.present();
-    }
 
-
-    async presentAlertErrorEdit() {
-      const alert = await this.alertController.create({
-        header: ':(',
-        subHeader: 'Bad!',
-        message: 'The user could not be updated.',
-        buttons: ['OK']
-      });
-  
-      await alert.present();
-    }
-
-       // ---------------------
-       async presentAlertCreate() {
+      async presentAlert(header: string, subHeader: string, message: string) {
         const alert = await this.alertController.create({
-          header: ':)',
-          subHeader: 'Good!',
-          message: 'The user was created successfully.',
-          buttons: ['OK']
-        });
-    
-        await alert.present();
-      }
-  
-  
-      async presentAlertErrorCreate() {
-        const alert = await this.alertController.create({
-          header: ':(',
-          subHeader: 'Bad!',
-          message: 'The user could not be created.',
+          header: header,
+          subHeader: subHeader,
+          message: message,
           buttons: ['OK']
         });
     
