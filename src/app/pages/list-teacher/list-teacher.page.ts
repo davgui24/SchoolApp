@@ -55,7 +55,7 @@ export class ListTeacherPage implements OnInit {
 
 
   editTeacher(teacher){
-    localStorage.setItem('teacherList', JSON.stringify(teacher));
+    localStorage.setItem('teacherEdit', JSON.stringify(teacher));
     this.navCtrl.navigateBack("register/" + 'Teacher');
   }
 

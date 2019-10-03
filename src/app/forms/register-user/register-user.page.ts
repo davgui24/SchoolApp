@@ -10,6 +10,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Course } from 'src/app/models/course';
 import { Subject } from '../../models/subject';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-register-user',
@@ -41,12 +42,15 @@ export class RegisterUserPage implements OnInit, OnDestroy {
   schools: School[] = [];
   courses: Course[] = [];
   subjects: Subject[] = [];
+
+  roleUrl: string;
   
 
   constructor(private _userService: UserService,
               private _schoolService: SchoolService,
               private _configOptionservice: ConfigOptionsService,
-              private activatedRoute: ActivatedRoute,) { }
+              private activatedRoute: ActivatedRoute,
+              public alertController: AlertController) { }
 
     ngOnInit() {
 
@@ -54,19 +58,18 @@ export class RegisterUserPage implements OnInit, OnDestroy {
       this.userlogin = this._userService.getLocalStorage();
 
       // Recibimos el rol que viene de la lista (por la url) para asi caragar el formilario
-      let roleUrl = this.activatedRoute.snapshot.paramMap.get('role');
+      this.roleUrl = this.activatedRoute.snapshot.paramMap.get('role');
 
 
       // cargamos el usuario del localStorage
       this.userlogin = this._userService.getLocalStorage();
 
       // Confuguramos el formulario para que muestre solo los campos segun el rol a editar
-      this.inputFormUser = this._configOptionservice.configFormUser(roleUrl);
+      this.inputFormUser = this._configOptionservice.configFormUser(this.roleUrl);
            
        // Confuguramos el selectRole para que muestre solo los options segun el rol a editar
-      this.selectRole = this._configOptionservice.configSelectRole(roleUrl);
-      console.log(selectRole);
-
+      this.selectRole = this._configOptionservice.configSelectRole(this.roleUrl);
+      
       // Emitimos el rol del usuario logeado para que lo reciba el appComponent (ver linea 41 del appComponent) y cargue el menú
       this._configOptionservice.roleLogin.emit(this.userlogin.role);
 
@@ -82,10 +85,10 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     // en este metodo validamos si al formulario llegan valores, si es asi, entonces se va a editar y se agregan los valosres en los inputs
     // sino, de va a agregar, entonces los inputs quedan vacios
     upLoadUserEdit(){
-      if(JSON.parse(localStorage.getItem('userList'))){
-        this.userUrl = JSON.parse(localStorage.getItem('userList'));
-      }else if(JSON.parse(localStorage.getItem('adminList'))){
-        this.userUrl = JSON.parse(localStorage.getItem('adminList'));
+      if(JSON.parse(localStorage.getItem('userEdit'))){
+        this.userUrl = JSON.parse(localStorage.getItem('userEdit'));
+      }else if(JSON.parse(localStorage.getItem('adminEdit'))){
+        this.userUrl = JSON.parse(localStorage.getItem('adminEdit'));
         this._schoolService.getSchools().then((schools: School[]) =>{
 
           this.schools = schools;
@@ -102,7 +105,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
           }
         }
       })
-      }else if(this.userUrl = JSON.parse(localStorage.getItem('teacherList'))){
+      }else if(this.userUrl = JSON.parse(localStorage.getItem('teacherEdit'))){
         this._schoolService.getSchools().then((schools: School[]) =>{
 
           this.schools = schools;
@@ -139,9 +142,10 @@ export class RegisterUserPage implements OnInit, OnDestroy {
   
     // =====================================
 
-    // Con este metodo iniciamos el  formulario
+
   private initForm() {
     // creamos arreglo de validacion de campo requerido segun el rol
+  
     let group; 
     let school;
     let student;
@@ -193,7 +197,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
         school: new FormControl(this.school, school),
 
-        role: new FormControl('Admin', [
+        role: new FormControl(this.roleUrl, [
             Validators.required
       ]),
 
@@ -223,55 +227,105 @@ export class RegisterUserPage implements OnInit, OnDestroy {
   }
 // *************************
 
-
      registerForm(){
-      
-          // console.log(this.FormEntity.value);
       if(this.FormEntity.valid){
-        
-      if(this.FormEntity.value.role  == 'Admin' || this.FormEntity.value.role  == 'Teacher' || this.FormEntity.value.role == 'Student' || this.FormEntity.value.role  == 'Father'){
-        this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
-        // this.school = this.FormEntity.value.school;
-        this.user.school = this.school.id;
-        
-        // creamos el user y le asignamos un colegio  
-        // al asignar un user a un colegio, le asignamos el id del colegio el mismo user
-     if(this.FormEntity.value.role == 'Admin'){
-      if(this.school.admin == null){
-        this.school.admin = [];
-        this.school.admin.push(this.user);
-      }else{
-        this.school.admin.push(this.user);
-      }
-     }else if(this.FormEntity.value.role == 'Teacher'){
-       let subjects: Subject[] = [];
-       subjects = this.FormEntity.value.subject;
-       if(this.user.subject == null){
-        this.user.subject = [];
-        this.user.subject = subjects;
-       }else{
-        this.user.subject = subjects;
-       }
-      if(this.school.teachers == null){
-        this.school.teachers = [];
-        this.school.teachers.push(this.user);
-      }else{
-        this.school.teachers.push(this.user);
-      }
-     }
+
+              // CODIGO PARA EDITAR (SI EL USUARIO A EDITAR VIENE POR EL LOCALSTORAGE)
+            let userEdit: User;
+            let userCreate: User;
+            if(JSON.parse(localStorage.getItem('userEdit'))  && this.userlogin.role == 'Global'){
+              userEdit = JSON.parse(localStorage.getItem('userEdit'));
+              let userEditAux: User = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+              userEdit.name = userEditAux.name;
+              userEdit.username = userEditAux.username;
+              userEdit.password = userEditAux.password;
+              userEdit.role = userEditAux.role;
+              userEdit.dateCreate = new Date().toString();
+              this._userService.verificarUsuario(userEdit.id).then((userDB: User) =>{
+               userDB = userEdit;
+               userDB.dateUpdate = new Date().toString();
+               if(this._userService.editarUsuario(userDB)){
+                 this.presentAlertEdit();
+               }else{
+                 this.presentAlertErrorEdit();
+               }
+              })
+
+            }else if(JSON.parse(localStorage.getItem('adminEdit'))  && this.userlogin.role == 'Global'){
+              userEdit = JSON.parse(localStorage.getItem('adminEdit'));
+              let userEditAux: User = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+              userEdit.name = userEditAux.name;
+              userEdit.username = userEditAux.username;
+              userEdit.password = userEditAux.password;
+              userEdit.role = userEditAux.role;
+              userEdit.school = this.FormEntity.value.school.id;
+              userEdit.dateCreate = new Date().toString();
+              this._schoolService.verificarSchool(this.FormEntity.value.school.id).then((schoolDB: School) =>{
+                for(let i in schoolDB.admin){
+                  if(userEdit.id == schoolDB.admin[i].id){
+                    userEdit.dateUpdate = new Date().toString();
+                    schoolDB.admin[i] = userEdit;
+                    console.log(schoolDB.admin[i]);
+                    if(this._schoolService.editarSchool(schoolDB)){
+                      this.presentAlertEdit();
+                    }else{
+                      this.presentAlertErrorEdit();
+                    }
+                    break;
+                  }else{
+                    // this.presentAlertError();
+                  }
+                }
+              }).catch(err => console.log(err));
+              
+
+            }else if(JSON.parse(localStorage.getItem('teacherEdit'))  && this.userlogin.role == 'Admin'){
+              userEdit = JSON.parse(localStorage.getItem('teacherEdit'));
+            }else if(JSON.parse(localStorage.getItem('studentEdit')) && this.userlogin.role == 'Admin'){
+              userEdit = JSON.parse(localStorage.getItem('studentEdit'));
+
+            }else if(JSON.parse(localStorage.getItem('fatherEdit')) && this.userlogin.role == 'Admin'){
+              userEdit = JSON.parse(localStorage.getItem('fatherEdit'));
+              
+            }else{
+              // CODIGO CUANDO NO HAY NINGUN USUARIO PARA EDITAR, ENTONCES SE CREA
+
+              if(this.roleUrl == 'Admin'){
+                userCreate = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role, this.FormEntity.value.school.id);
+                userCreate.dateCreate = new Date().toString();
+                  this._schoolService.verificarSchool(this.FormEntity.value.school.id).then((schoolDB: School) =>{
+                    if(schoolDB.admin){
+                      schoolDB.admin.push(userCreate);
+                    }else{
+                      schoolDB.admin == [];
+                      schoolDB.admin.push(userCreate);
+                    }
+                    console.log(this._schoolService.editarSchool(schoolDB));
+                  })
+                  this.FormEntity.reset();
+              }else if(this.roleUrl == 'Teacher' && this.userlogin.role == 'Admin'){
+
+  
+              }else if(this.roleUrl == 'Student' && this.userlogin.role == 'Admin'){
 
 
-        // una vez agregado el user se actualiza el colegio
-        if(this._schoolService.editarSchool(this.school)){
-          this.FormEntity.reset();
-        }else{
-          console.log('Nos e pudeo asignar el usuario: ' + this.user.id + 'al colegio: ' + this.school);
-        }
-      }else if(this.FormEntity.value.role  == 'Global'){
-        this.user = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
-        this._userService.crearUsuario(this.user);
-        this.FormEntity.reset();
-      }
+              }else if(this.roleUrl == 'Father' && this.userlogin.role == 'Admin'){
+
+  
+              }else if(this.roleUrl == 'Global' && this.userlogin.role == 'Global'){
+                userCreate = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+                userCreate.dateCreate = new Date().toString();
+                if(this._userService.editarUsuario(userCreate)){
+                  this.presentAlertCreate();
+                }else{
+                  this.presentAlertErrorCreate();
+                }
+              }
+
+            }
+      
+        
+
 
       }else{
         this.markAsDirty(this.FormEntity);
@@ -281,10 +335,58 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
 
     // *********************
-    // Cuando se destruya el componente elimine el arreglo "userList, adminList" del localStorage
+    // Cuando se destruya el componente elimine el arreglo "userEdit, adminEdit" del localStorage
     ngOnDestroy(): void {
-      localStorage.removeItem('userList');
-      localStorage.removeItem('adminList');
-      localStorage.removeItem('teacherList')
+      localStorage.removeItem('userEdit');
+      localStorage.removeItem('adminEdit');
+      localStorage.removeItem('teacherEdit')
     }
+
+    // ---------------------
+    async presentAlertEdit() {
+      const alert = await this.alertController.create({
+        header: ':)',
+        subHeader: 'Good!',
+        message: 'The user is updated successfully.',
+        buttons: ['OK']
+      });
+  
+      await alert.present();
+    }
+
+
+    async presentAlertErrorEdit() {
+      const alert = await this.alertController.create({
+        header: ':(',
+        subHeader: 'Bad!',
+        message: 'The user could not be updated.',
+        buttons: ['OK']
+      });
+  
+      await alert.present();
+    }
+
+       // ---------------------
+       async presentAlertCreate() {
+        const alert = await this.alertController.create({
+          header: ':)',
+          subHeader: 'Good!',
+          message: 'The user was created successfully.',
+          buttons: ['OK']
+        });
+    
+        await alert.present();
+      }
+  
+  
+      async presentAlertErrorCreate() {
+        const alert = await this.alertController.create({
+          header: ':(',
+          subHeader: 'Bad!',
+          message: 'The user could not be created.',
+          buttons: ['OK']
+        });
+    
+        await alert.present();
+      }
 }

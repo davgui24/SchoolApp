@@ -134,9 +134,9 @@ export class ConfigOptionsService {
     }else if(role == 'Admin'){
       selectRole.global = false;
       selectRole.admin = true;
-      selectRole.teacher = true;
-      selectRole.father = true;
-      selectRole.student = true;
+      selectRole.teacher = false;
+      selectRole.father = false;
+      selectRole.student = false;
     }else if(role == 'Teacher'){
       selectRole.global = false;
       selectRole.admin = false;

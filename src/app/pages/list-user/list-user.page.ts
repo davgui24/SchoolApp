@@ -41,7 +41,7 @@ export class ListUserPage implements OnInit {
 
   edituser(user: User){
     // Creamos un elemento en el localStorage temporalmente para que reciba a el usurio que va a editar
-      localStorage.setItem('userList', JSON.stringify(user));
+      localStorage.setItem('userEdit', JSON.stringify(user));
 
       // Aqui especificamos el rol que deseamos editar para que cargue el formuloario seguj este parametro
       this.navCtrl.navigateBack("register/" + 'Global');

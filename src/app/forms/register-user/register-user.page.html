@@ -36,8 +36,8 @@
                   <ion-item-group>
                     <ion-item *ngIf="inputFormUser.inputSchool">
                         <ion-label position="floating">School</ion-label>
-                        <ion-select formControlName="school">
-                            <ion-select-option [value]="school" *ngFor="let school of schools">{{school.name}}</ion-select-option>
+                        <ion-select formControlName="school" name="school">
+                            <ion-select-option *ngFor="let school of schools"  [value]="school">{{school.name}}</ion-select-option>
                           </ion-select>
                           <ion-text color="danger" *ngIf="frmEntity().school.invalid && frmEntity().school.dirty">
                             Required field.

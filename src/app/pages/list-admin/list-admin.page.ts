@@ -54,7 +54,7 @@ export class ListAdminPage implements OnInit {
 
 
   editAdmin(admin){
-    localStorage.setItem('adminList', JSON.stringify(admin));
+    localStorage.setItem('adminEdit', JSON.stringify(admin));
     this.navCtrl.navigateBack("register/" + 'Admin');
   }
 

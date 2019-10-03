@@ -21,7 +21,6 @@ const routes: Routes = [
   { path: 'list-user', loadChildren: './pages/list-user/list-user.module#ListUserPageModule' },
   { path: 'list-admin', loadChildren: './pages/list-admin/list-admin.module#ListAdminPageModule' },
   { path: 'list-course', loadChildren: './pages/list-course/list-course.module#ListCoursePageModule' },
-  { path: 'register-teacher', loadChildren: './forms/register-teacher/register-teacher.module#RegisterTeacherPageModule' },
   { path: 'list-teacher', loadChildren: './pages/list-teacher/list-teacher.module#ListTeacherPageModule' },
 
 
