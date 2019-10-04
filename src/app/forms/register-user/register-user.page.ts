@@ -273,16 +273,16 @@ export class RegisterUserPage implements OnInit, OnDestroy {
             }else if(JSON.parse(localStorage.getItem('adminEdit'))  && this.userlogin.role == 'Global'){
               userEdit = JSON.parse(localStorage.getItem('adminEdit'));
               let userEditAux: User = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
-              userEdit.name = userEditAux.name;
-              userEdit.username = userEditAux.username;
-              userEdit.password = userEditAux.password;
-              userEdit.role = userEditAux.role;
-              userEdit.school = this.FormEntity.value.school.id;
-              userEdit.dateCreate = new Date().toString();
+              
               this._schoolService.verificarSchool(this.FormEntity.value.school.id).then((schoolDB: School) =>{
                 for(let i in schoolDB.admin){
                   if(userEdit.id == schoolDB.admin[i].id){
-                    userEdit.dateUpdate = new Date().toString();
+                    schoolDB.admin[i].name = userEditAux.name;
+                    schoolDB.admin[i].username = userEditAux.username;
+                    schoolDB.admin[i].password = userEditAux.password;
+                    schoolDB.admin[i].role = userEditAux.role;
+                    schoolDB.admin[i].school = this.FormEntity.value.school.id;
+                    schoolDB.admin[i].dateUpdate = new Date().toString();
                     schoolDB.admin[i] = userEdit;
                     console.log(schoolDB.admin[i]);
                     if(this._schoolService.editarSchool(schoolDB)){
@@ -300,19 +300,17 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
             }else if(JSON.parse(localStorage.getItem('teacherEdit'))  && this.userlogin.role == 'Admin'){
               userEdit = JSON.parse(localStorage.getItem('teacherEdit'));
-              let userEditAux: User = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
-              userEdit.name = userEditAux.name;
-              userEdit.username = userEditAux.username;
-              userEdit.password = userEditAux.password;
-              userEdit.role = userEditAux.role;
-              userEdit.school = userEdit.school;
-              userEdit.dateUpdate = new Date().toString();
+              let userEditAux: User = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);             
               
-              
-
               this._schoolService.verificarSchool(userEdit.school).then((schoolDB: School) =>{
                 for(let i in schoolDB.teachers){
                 if(schoolDB.teachers[i].id === userEdit.id){
+                  schoolDB.teachers[i].name = userEditAux.name;
+                  schoolDB.teachers[i].username = userEditAux.username;
+                  schoolDB.teachers[i].password = userEditAux.password;
+                  schoolDB.teachers[i].role = userEditAux.role;
+                  schoolDB.teachers[i].school = userEdit.school;
+                  schoolDB.teachers[i].dateUpdate = new Date().toString();
 
                   for(let subjectCurrent of schoolDB.teachers[i].subject){
                     for(let j in schoolDB.subcjet){
