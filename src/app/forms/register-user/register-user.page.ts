@@ -44,7 +44,8 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
   schools: School[] = [];
   courses: Course[] = [];
-  subjects: Subject[] = [];
+  subjects: any[] = [];
+  subjectsTeacher: any[] = [];
 
   roleUrl: string;
   
@@ -119,20 +120,31 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                
                
             for( let subject of this.school.subcjet){
-              this.subjects.push(subject);   
+               this.subjects.push(subject);  
             }
             break;
            }
           }
         })
+
+        // SELECIONAMOS LAS ID DE LAS ASIGNATURAS QUE DA ESTE PROFESOR Y LAS MARCAMOS EN EL SELECT DE HTML
+        for(let subjectTeacher of this.userUrl.subject){
+          subjectTeacher.state = false;
+          this.subjectsTeacher.push(subjectTeacher.id);
+        }
+        console.log( this.subjectsTeacher);
+        
       }
-      
+
+    
 
       // CUANDO EL USURIO NO VIENE DE UNA LISTA
       if(this.userUrl == null){
         this._schoolService.verificarSchool(this.userlogin.school).then((schoolDB: School) =>{
           for(let subject of schoolDB.subcjet){
-            this.subjects.push(subject);
+            if(!subject.state){
+              this.subjects.push(subject);
+            }
           }
         })
       }else{
@@ -148,8 +160,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     }
 
     // ====================================
-  
-
+ 
   private initForm() {
     // creamos arreglo de validacion de campo requerido segun el rol
   
@@ -288,6 +299,53 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
             }else if(JSON.parse(localStorage.getItem('teacherEdit'))  && this.userlogin.role == 'Admin'){
               userEdit = JSON.parse(localStorage.getItem('teacherEdit'));
+              let userEditAux: User = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+              userEdit.name = userEditAux.name;
+              userEdit.username = userEditAux.username;
+              userEdit.password = userEditAux.password;
+              userEdit.role = userEditAux.role;
+              userEdit.school = userEdit.school;
+              userEdit.dateCreate = new Date().toString();
+
+              let subjectDB: Subject[] = [];
+
+              this._schoolService.verificarSchool(userEdit.school).then((schoolDB: School) =>{
+                console.log(schoolDB );
+                  for(let teacher of schoolDB.teachers){
+                    this.teachers.push(teacher);
+                    for(let subject of  teacher.subject){
+                       for(let subjectsSelect of this.FormEntity.value.subject){
+                        if(subjectsSelect === subject.id){
+                          let index = teacher.subject.indexOf(subject);
+                          teacher.subject.splice( index, 1 );
+                          // console.log(subjectsSelect );
+                        }
+                       }
+                    }
+                    
+                  }
+
+                  // console.log(this.FormEntity.value.subject );
+                  
+      
+                // for(let i in schoolDB.teachers){
+                //   for(let j in schoolDB.teachers[i].subject){
+                //     for(let subject of this.FormEntity.value.subject){
+                //       if(schoolDB.teachers[i].subject[j].id === subject){
+                //         let index = schoolDB.teachers[i].subject.indexOf(schoolDB.teachers[i].subject[j]);
+                //         schoolDB.teachers[i].subject.splice( index, 1 );
+                //         // console.log(schoolDB.teachers[i], index);
+                //       }else{
+                //         console.log('No lo encontró');
+                //       }
+                //     }
+                    
+                //   }
+                // }
+                // console.log('Nuevo colegio', schoolDB);
+              })
+
+
             }else if(JSON.parse(localStorage.getItem('studentEdit')) && this.userlogin.role == 'Admin'){
               userEdit = JSON.parse(localStorage.getItem('studentEdit'));
 
@@ -295,7 +353,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
               userEdit = JSON.parse(localStorage.getItem('fatherEdit'));
               
             }else{
-              // CODIGO CUANDO NO HAY NINGUN USUARIO PARA EDITAR, ENTONCES SE CREA
+// ***************************************************** CODIGO CUANDO NO HAY NINGUN USUARIO PARA EDITAR, ENTONCES SE CREA
 
               if(this.roleUrl == 'Admin' && this.userlogin.role == 'Global'){
                 this._schoolService.getSchools().then((schoolsDB: School[]) =>{
@@ -309,7 +367,6 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                     }
                   }
                   if(validateAdmin){
-
                     this.presentAlert(':(', 'Bad!', 'This admin is already registered.');
                   }else{
                     userCreate = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
@@ -330,6 +387,68 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                   }
                 })
               }else if(this.roleUrl == 'Teacher' && this.userlogin.role == 'Admin'){
+                this._schoolService.getSchools().then((schoolsDB: School[]) =>{
+                  let validateAdmin: boolean = false;
+                  for(let schoolDB of schoolsDB){
+                    for(let adminDB of schoolDB.admin){
+                      if(this.FormEntity.value.username === adminDB.username){
+                        validateAdmin = true;
+                        break;
+                      }
+                    }
+                  }
+                  if(validateAdmin){
+                    this.presentAlert(':(', 'Bad!', 'This Teacher is already registered.');
+                  }else{
+                    userCreate = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+                    userCreate.school = this.FormEntity.value.school;
+                    userCreate.dateCreate = new Date().toString();
+                    userCreate.subject = [];
+             
+                    let subjectObjects: Subject[] = [];
+                    this._schoolService.verificarSchool(this.userlogin.school).then((school: School) =>{
+                      for(let i in school.subcjet){
+                         for(let subjectSelect of this.FormEntity.value.subject){
+                           if (school.subcjet[i].id === subjectSelect){
+                            school.subcjet[i].state = true;
+                            school.subcjet[i].teacher = userCreate.id;
+                            subjectObjects.push(school.subcjet[i]);
+                           }
+                         }
+                       
+                      }
+                      userCreate.subject = subjectObjects;
+                      if(school.teachers){
+                       school.teachers.push(userCreate);
+                      }else{
+                       school.teachers = [];
+                       school.teachers.push(userCreate);
+                      }
+
+                      if(this._schoolService.editarSchool(school)){
+                        this.presentAlert(':)', 'Good!', 'The teacher was created successfully.');
+                      }else{
+                        this.presentAlert(':(', 'Bad!', 'The teacher could not be registered.');
+                      }
+
+                    })
+
+
+                    // userCreate.dateCreate = new Date().toString();
+                    //   this._schoolService.verificarSchool(this.FormEntity.value.school.id).then((schoolDB: School) =>{
+                    //     if(schoolDB.admin){
+                    //       schoolDB.admin.push(userCreate);
+                    //     }else{
+                    //       schoolDB.admin == [];
+                    //       schoolDB.admin.push(userCreate);
+                    //     }
+                    //     if(this._schoolService.editarSchool(schoolDB)){
+                    //       this.presentAlert(':)', 'Good!', 'The Admin was created successfully.');
+                    //     }
+                    //   })
+                    //   this.FormEntity.reset();
+                  }
+                })
 
   
               }else if(this.roleUrl == 'Student' && this.userlogin.role == 'Admin'){

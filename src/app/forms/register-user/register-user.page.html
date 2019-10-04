@@ -76,7 +76,7 @@
                 <ion-item *ngIf="inputFormUser.ImputCourse">
                     <ion-label position="floating">Course</ion-label>
                     <ion-select formControlName="course" multiple="true">
-                        <ion-select-option value="7-E">primero</ion-select-option>
+                        <ion-select-option  value="7-E">primero</ion-select-option>
                         <ion-select-option value="6-A">segundo</ion-select-option>
                         <ion-select-option value="8-B">tercero</ion-select-option>
                     </ion-select>
@@ -87,8 +87,8 @@
 
                 <ion-item *ngIf="inputFormUser.InputSubject">
                     <ion-label position="floating">Subject</ion-label>
-                    <ion-select formControlName="subject" multiple="true">
-                        <ion-select-option [value]="subject" *ngFor="let subject of subjects"> {{subject.name }} </ion-select-option>
+                    <ion-select formControlName="subject" multiple="true" [(ngModel)]='subjectsTeacher'>
+                        <ion-select-option [value]="subject.id" *ngFor="let subject of subjects"> {{subject.name }} </ion-select-option>
                     </ion-select>
                     <ion-text color="danger" *ngIf="frmEntity().subject.invalid && frmEntity().subject.dirty">
                         Required field.
