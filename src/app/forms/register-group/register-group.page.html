@@ -1,0 +1,48 @@
+<ion-content>
+  <ion-grid style="margin-left: 5%; margin-top: 10%; margin-right: 5%;">
+      <form [formGroup]="FormEntity" >
+        <ion-row>
+            <ion-col size="12">
+                <ion-item-group>
+                  <ion-item>
+                      <ion-label position="floating">Name</ion-label>
+                      <ion-input formControlName="name" type="text" placeholder="Enter name" autocomplete="off"></ion-input>
+                      <ion-text color="danger"  *ngIf="frmEntity().name.invalid && frmEntity().name.dirty">
+                        Required field.
+                      </ion-text>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label position="floating">Course</ion-label>
+                    <ion-select formControlName="course" placeholder="Select Course" (ionChange)="fillSubjects()">
+                        <ion-select-option [value]="course.id" *ngFor="let course of courses">{{ course.name }}</ion-select-option>
+                      </ion-select>
+                      <ion-text color="danger"  *ngIf="frmEntity().course.invalid && frmEntity().course.dirty">
+                        Required field.
+                      </ion-text>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Director</ion-label>
+                  <ion-input formControlName="director" type="text" placeholder="Optional" autocomplete="off"></ion-input>
+                  <ion-text color="danger"  *ngIf="frmEntity().director.invalid && frmEntity().director.dirty">
+                    Required field.
+                  </ion-text>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Subjects</ion-label>
+                <ion-select formControlName="subjects" placeholder="Select Subjects" multiple=true [disabled]="!enableSelectSubject">
+                    <ion-select-option [value]="subject.id" *ngFor="let subject of subjectsSelect">{{subject.name }} - {{ subject.code }}</ion-select-option>
+                  </ion-select>
+                  <ion-text color="danger"  *ngIf="frmEntity().subjects.invalid && frmEntity().subjects.dirty">
+                    Required field.
+                  </ion-text>
+            </ion-item>
+            </ion-item-group>
+            <ion-button expand="full" color="primary" type="submit" block style="margin-top: 10%;" (click)="registerForm()">
+                <ion-icon name="save"></ion-icon>
+            </ion-button>
+            </ion-col>
+        </ion-row>
+      </form>
+    </ion-grid>
+
+</ion-content>

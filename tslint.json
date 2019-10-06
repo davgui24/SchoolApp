@@ -71,18 +71,18 @@
     "one-variable-per-declaration": false,
     "component-class-suffix": [true, "Page", "Component"],
     "directive-class-suffix": true,
-    "directive-selector": [
-      true,
-      "attribute",
-      "app",
-      "camelCase"
-    ],
-    "component-selector": [
-      true,
-      "element",
-      "app",
-      "page",
-      "kebab-case"
-    ]
+    // "directive-selector": [
+    //   true,
+    //   "attribute",
+    //   "app",
+    //   "camelCase"
+    // ],
+    // "component-selector": [
+    //   true,
+    //   "element",
+    //   "app",
+    //   "page",
+    //   "kebab-case"
+    // ]
   }
 }

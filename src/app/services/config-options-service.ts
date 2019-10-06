@@ -77,7 +77,7 @@ export class ConfigOptionsService {
       sideOption.logOut = true;
     }else if(role == 'Teacher') {
       sideOption.user = false;
-      sideOption.admin = true;
+      sideOption.admin = false;
       sideOption.teacher = false;
       sideOption.student = true;
       sideOption.father = false;
@@ -206,14 +206,14 @@ export class ConfigOptionsService {
         validation: sideOption.school
       },
       {
-        title: 'Course',
+        title: 'Courses',
         url: 'list-course',
         icon: 'person-add',
         validation: sideOption.course
       },
       {
         title: 'Group',
-        url: 'home/' + user.id,
+        url: 'register-group',
         icon: 'person-add',
         validation: sideOption.group
       },

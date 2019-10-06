@@ -41,74 +41,7 @@ export class AppComponent implements OnInit {
     this._configOptionservice.roleLogin.subscribe(role =>{
       console.log('Desde el app component', role);
      if(role==null || role == ''){
-       this.appPages = [
-        {
-          title: 'User',
-          url: 'list-admins',
-          icon: 'person-add',
-          validation: false
-        },
-        {
-          title: 'Admin',
-          url: 'list-admin',
-          icon: 'person-add',
-          validation: false
-        },
-        {
-          title: 'Teacher',
-          url: 'list-user',
-          icon: 'person-add',
-          validation: false
-        },
-        {
-          title: 'Students',
-          url: 'list-user',
-          icon: 'person-add',
-          validation: false
-        },
-        {
-          title: 'Father',
-          url: 'list-user',
-          icon: 'person-add',
-          validation: false
-        },
-        {
-          title: 'School',
-          url: 'home/',
-          icon: 'home',
-          validation: false
-        },
-        {
-          title: 'Course',
-          url: 'home/' ,
-          icon: 'person-add',
-          validation: false
-        },
-        {
-          title: 'Group',
-          url: 'home/',
-          icon: 'person-add',
-          validation: false
-        },
-        {
-          title: 'Subjects',
-          url: 'home/',
-          icon: 'person-add',
-          validation: false
-        },
-        {
-          title: 'Activity',
-          url: 'home/',
-          icon: 'person-add',
-          validation: false
-        },
-        {
-          title: 'LogOut',
-          url: 'login',
-          icon: 'power',
-          validation: false
-        },
-      ];
+       this.appPages = [];
       }else{
         this.sideOption = this._configOptionservice.configOptionSidemenu(role);
         this.appPages = this._configOptionservice.upLoadMenu(this.sideOption, this.user);

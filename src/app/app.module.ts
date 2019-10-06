@@ -19,6 +19,7 @@ import { firebaseConfig } from './config';
 import { MenuPageModule } from './components/menu/menu.module';
 
 
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],

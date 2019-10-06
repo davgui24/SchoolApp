@@ -7,6 +7,7 @@ export class Group {
     id: string;    
     name: string;
     school: string;
+    course: string;
     directorGroup: string;
     subjects: Subject[];
     students: string[];
@@ -14,11 +15,12 @@ export class Group {
     dateDelete: string;
     dateUpdate: string;
 
-        constructor(name: string, directorGroup: string, school: string, subjects: Subject[]){
+        constructor(name: string, directorGroup: string, school: string, course: string, subjects: Subject[]){
             this.name = name;
             this.directorGroup = directorGroup;
             this.school = school;
             this.subjects = subjects;
+            this.course = course;
             this.students = [];
             this.dateCreate=new Date().toString();
             this.id = Date.now().toString();

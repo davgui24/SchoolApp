@@ -111,6 +111,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
         }
       })
       }else if(this.userUrl = JSON.parse(localStorage.getItem('teacherEdit'))){
+        this.userUrl = JSON.parse(localStorage.getItem('teacherEdit'));
         this._schoolService.getSchools().then((schools: School[]) =>{
 
           this.schools = schools;
@@ -121,7 +122,13 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                
                
             for( let subject of this.school.subcjet){
-               this.subjects.push(subject);  
+              if(!subject.state){
+                this.subjects.push(subject);
+              } 
+            }
+
+            for(let subjectCurrent of this.userUrl.subject){
+              this.subjects.push(subjectCurrent);
             }
             break;
            }

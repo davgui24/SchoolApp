@@ -1,21 +1,36 @@
 <ion-content>
   <ion-grid style="margin-left: 5%; margin-top: 10%; margin-right: 5%;">
-      <form (ngSubmit)="registerForm()">
+      <form [formGroup]="FormEntity" >
         <ion-row>
             <ion-col size="12">
                 <ion-item-group>
                   <ion-item>
                       <ion-label position="floating">Name</ion-label>
-                      <ion-input [(ngModel)]="name" name="name" type="text" value="" placeholder="Enter name" autocomplete="off"></ion-input>
+                      <ion-input formControlName="name" type="text" placeholder="Enter name" autocomplete="off"></ion-input>
+                      <ion-text color="danger"  *ngIf="frmEntity().name.invalid && frmEntity().name.dirty">
+                        Required field.
+                      </ion-text>
                   </ion-item>
                   <ion-item>
                     <ion-label position="floating">Code</ion-label>
-                    <ion-input [(ngModel)]="code" name="code" type="text" value="" placeholder="Enter code" autocomplete="off"></ion-input>
+                    <ion-input formControlName="code" type="text" placeholder="Enter code" autocomplete="off"></ion-input>
+                    <ion-text color="danger"  *ngIf="frmEntity().code.invalid && frmEntity().code.dirty">
+                      Required field.
+                    </ion-text>
                 </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Course</ion-label>
+                  <ion-select formControlName="course" placeholder="Select Course">
+                      <ion-select-option [value]="course" *ngFor="let course of courses">{{course.name}}</ion-select-option>
+                    </ion-select>
+                    <ion-text color="danger"  *ngIf="frmEntity().course.invalid && frmEntity().course.dirty">
+                      Required field.
+                    </ion-text>
+              </ion-item>
             </ion-item-group>
             </ion-col>
         </ion-row>
-        <ion-button expand="full" color="primary" type="submit" block style="margin-top: 10%;">
+        <ion-button expand="full" color="primary" type="submit" block style="margin-top: 10%;" (click)="registerForm()">
             <ion-icon name="save"></ion-icon>
         </ion-button>
       </form>

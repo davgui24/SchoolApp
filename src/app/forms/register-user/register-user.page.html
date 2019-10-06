@@ -88,7 +88,7 @@
                 <ion-item *ngIf="inputFormUser.InputSubject">
                     <ion-label position="floating">Subject</ion-label>
                     <ion-select formControlName="subject" multiple="true" [(ngModel)]='subjectsTeacher'>
-                        <ion-select-option [value]="subject.id" *ngFor="let subject of subjects"> {{subject.name }} </ion-select-option>
+                        <ion-select-option [value]="subject.id" *ngFor="let subject of subjects"> {{subject.name }} - {{ subject.code }}</ion-select-option>
                     </ion-select>
                     <ion-text color="danger" *ngIf="frmEntity().subject.invalid && frmEntity().subject.dirty">
                         Required field.
