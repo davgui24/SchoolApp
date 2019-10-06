@@ -219,7 +219,7 @@ export class ConfigOptionsService {
       },
       {
         title: 'Subjects',
-        url: 'home/' + user.id,
+        url: 'list-subject',
         icon: 'person-add',
         validation: sideOption.subject
       },

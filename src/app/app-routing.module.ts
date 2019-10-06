@@ -19,9 +19,11 @@ const routes: Routes = [
   { path: 'register-subjects', loadChildren: './forms/register-subjects/register-subjects.module#RegisterSubjectsPageModule' },
   { path: 'register-course', loadChildren: './forms/register-course/register-course.module#RegisterCoursePageModule' },
   { path: 'list-user', loadChildren: './pages/list-user/list-user.module#ListUserPageModule' },
+  { path: 'register-group', loadChildren: './forms/register-group/register-group.module#RegisterGroupPageModule' },
   { path: 'list-admin', loadChildren: './pages/list-admin/list-admin.module#ListAdminPageModule' },
   { path: 'list-course', loadChildren: './pages/list-course/list-course.module#ListCoursePageModule' },
-  { path: 'list-teacher', loadChildren: './pages/list-teacher/list-teacher.module#ListTeacherPageModule' },  { path: 'register-group', loadChildren: './forms/register-group/register-group.module#RegisterGroupPageModule' },
+  { path: 'list-teacher', loadChildren: './pages/list-teacher/list-teacher.module#ListTeacherPageModule' },
+  { path: 'list-subject', loadChildren: './pages/list-subject/list-subject.module#ListSubjectPageModule' },
 
 
 

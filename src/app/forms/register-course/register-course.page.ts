@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Course } from '../../models/course';
 import { School } from 'src/app/models/school';
 import { UserService } from 'src/app/services/user.service';
@@ -6,13 +6,14 @@ import { SchoolService } from 'src/app/services/school.service';
 import { User } from 'src/app/models/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AlertController, NavController } from '@ionic/angular';
+import { ConfigOptionsService } from 'src/app/services/config-options-service';
 
 @Component({
   selector: 'app-register-course',
   templateUrl: './register-course.page.html',
   styleUrls: ['./register-course.page.scss'],
 })
-export class RegisterCoursePage implements OnInit {
+export class RegisterCoursePage implements OnInit, OnDestroy {
 
   public FormEntity: FormGroup;
   userLogin: User;
@@ -27,10 +28,12 @@ export class RegisterCoursePage implements OnInit {
   constructor(private _userService: UserService,
               private _schoolService: SchoolService,
               public alertController: AlertController,
-              private navCtrl: NavController,) { }
+              private navCtrl: NavController,
+              private _configOptionservice: ConfigOptionsService) { }
 
   ngOnInit() {
     this.userLogin = this._userService.getLocalStorage();
+    this._configOptionservice.roleLogin.emit(this.userLogin.role);
     this.idSchool = this._userService.getLocalStorage().school;
     this.uploadSchool();
     this.initForm();

@@ -65,10 +65,6 @@ export class RegisterUserPage implements OnInit, OnDestroy {
       // Recibimos el rol que viene de la lista (por la url) para asi caragar el formilario
       this.roleUrl = this.activatedRoute.snapshot.paramMap.get('role');
 
-
-      // cargamos el usuario del localStorage
-      this.userlogin = this._userService.getLocalStorage();
-
       // Confuguramos el formulario para que muestre solo los campos segun el rol a editar
       this.inputFormUser = this._configOptionservice.configFormUser(this.roleUrl);
            

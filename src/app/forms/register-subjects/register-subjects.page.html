@@ -13,7 +13,7 @@
                   </ion-item>
                   <ion-item>
                     <ion-label position="floating">Code</ion-label>
-                    <ion-input formControlName="code" type="text" placeholder="Enter code" autocomplete="off"></ion-input>
+                    <ion-input formControlName="code" type="text" placeholder="Enter code" autocomplete="off" [disabled]="!usernameUnable"></ion-input>
                     <ion-text color="danger"  *ngIf="frmEntity().code.invalid && frmEntity().code.dirty">
                       Required field.
                     </ion-text>
@@ -21,7 +21,7 @@
                 <ion-item>
                   <ion-label position="floating">Course</ion-label>
                   <ion-select formControlName="course" placeholder="Select Course">
-                      <ion-select-option [value]="course" *ngFor="let course of courses">{{course.name}}</ion-select-option>
+                      <ion-select-option [value]="course.id" *ngFor="let course of courses">{{course.name}}</ion-select-option>
                     </ion-select>
                     <ion-text color="danger"  *ngIf="frmEntity().course.invalid && frmEntity().course.dirty">
                       Required field.

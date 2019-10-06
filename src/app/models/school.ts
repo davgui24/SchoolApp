@@ -1,6 +1,7 @@
 import { User } from './user';
 import { Course } from './course';
 import { Subject } from './subject';
+import { Group } from './group';
 
 
 export class School {
@@ -13,6 +14,7 @@ export class School {
     subcjet: Subject[];
     teachers: User[];
     courses: Course[];
+    groups: Group[];
     students: User[];
     fathers: User[];
     dateCreate: string;
@@ -26,6 +28,7 @@ export class School {
         this.subcjet = [];
         this.teachers = [];
         this.courses = [];
+        this.groups = [];
         this.students = [];
         this.fathers = [];
         this.dateCreate=new Date().toString();
