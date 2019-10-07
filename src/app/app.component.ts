@@ -39,7 +39,6 @@ export class AppComponent implements OnInit {
 
     // recibimos el evento ta sea de login o de homedir, recivimos el usuario y segun el rol carga el menú
     this._configOptionservice.roleLogin.subscribe(role =>{
-      console.log('Desde el app component', role);
      if(role==null || role == ''){
        this.appPages = [];
       }else{

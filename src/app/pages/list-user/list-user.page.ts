@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
 import { ConfigOptionsService } from 'src/app/services/config-options-service';
-import { NavController } from '@ionic/angular';
+import { NavController, LoadingController } from '@ionic/angular';
 
 
 
@@ -19,7 +19,8 @@ export class ListUserPage implements OnInit {
 
   constructor(private _userService: UserService,
               private _configOptionservice: ConfigOptionsService,
-              private navCtrl: NavController,) { }
+              private navCtrl: NavController,
+              public loadingController: LoadingController) { }
 
   ngOnInit() {
     // Traemos el usuario logeado desde el localStorage
@@ -31,8 +32,16 @@ export class ListUserPage implements OnInit {
   }
 
 // Cargamos a los usuarios globales
-  loadUsers(){
+  async loadUsers(){
+    const loading = await this.loadingController.create({
+      message: 'Wait a few seconds',
+    });
+    loading.present();
+
+
+
     this._userService.getUsuarios().then((users: User[]) =>{
+      loading.dismiss();
       this.users = users;
       // console.log('usuarios', this.users);
     })
@@ -45,6 +54,10 @@ export class ListUserPage implements OnInit {
 
       // Aqui especificamos el rol que deseamos editar para que cargue el formuloario seguj este parametro
       this.navCtrl.navigateBack("register/" + 'Global');
+  }
+
+  addUser(){
+    this.navCtrl.navigateBack("register");
   }
 
 }

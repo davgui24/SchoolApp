@@ -6,6 +6,12 @@
 
 <ion-content>
 
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="addAdmin()">
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
     <ion-list style="margin: 10%;" *ngFor="let admin of admins">
         <ion-item-sliding>
           <ion-item>

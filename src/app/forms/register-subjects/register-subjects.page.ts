@@ -115,7 +115,6 @@ export class RegisterSubjectsPage implements OnInit {
     if(this.FormEntity.valid){
 
       if(localStorage.getItem('subjectList')){
-        this.subject = new Subject(this.FormEntity.value.name, this.FormEntity.value.code, this.school.id, this.FormEntity.value.course);
         for(let i in this.school.subcjet){
           if(this.FormEntity.value.code == this.school.subcjet[i].code){
             for(let course of this.school.courses){
@@ -123,6 +122,7 @@ export class RegisterSubjectsPage implements OnInit {
                 this.school.subcjet[i].name = this.FormEntity.value.name;
                 this.school.subcjet[i].code = this.FormEntity.value.code;
                 this.school.subcjet[i].course = course;
+                this.school.subcjet[i].dateUpdate = new Date().toString();
                 break;
               }
             }

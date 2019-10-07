@@ -213,7 +213,7 @@ export class ConfigOptionsService {
       },
       {
         title: 'Group',
-        url: 'register-group',
+        url: 'list-group',
         icon: 'person-add',
         validation: sideOption.group
       },
@@ -231,7 +231,7 @@ export class ConfigOptionsService {
       },
       {
         title: 'LogOut',
-        url: 'login',
+        url: '../',
         icon: 'power',
         validation: sideOption.logOut
       },

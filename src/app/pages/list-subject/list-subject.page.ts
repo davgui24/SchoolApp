@@ -3,7 +3,7 @@ import { User } from 'src/app/models/user';
 import { School } from 'src/app/models/school';
 import { Subject } from '../../models/subject';
 import { SchoolService } from 'src/app/services/school.service';
-import { NavController } from '@ionic/angular';
+import { NavController, LoadingController } from '@ionic/angular';
 import { ConfigOptionsService } from 'src/app/services/config-options-service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -22,7 +22,8 @@ export class ListSubjectPage implements OnInit {
   constructor(private _schoolService: SchoolService,
     private navCtrl: NavController,
     private _configOptionservice: ConfigOptionsService,
-    private _userService: UserService,) { }
+    private _userService: UserService,
+    public loadingController: LoadingController) { }
 
 
   ngOnInit() {
@@ -33,12 +34,20 @@ export class ListSubjectPage implements OnInit {
 
   // ---------------
 
-  upLoadSchool(){
+  async upLoadSchool(){
+    const loading = await this.loadingController.create({
+      message: 'Wait a few seconds',
+    });
+    loading.present();
+
+
+
     this._schoolService.getSchools().then((schools: School[]) =>{
       this.schools = schools;
 
       for(let school of this.schools){
          if(school.id === this.userlogin.school){
+          loading.dismiss();
             this.school = school;
 
             if(this.school.subcjet){

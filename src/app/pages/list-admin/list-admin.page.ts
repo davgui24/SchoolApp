@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { ConfigOptionsService } from 'src/app/services/config-options-service';
-import { NavController } from '@ionic/angular';
+import { NavController, LoadingController } from '@ionic/angular';
 import { SchoolService } from '../../services/school.service';
 import { User } from 'src/app/models/user';
 import { School } from 'src/app/models/school';
@@ -18,9 +18,10 @@ export class ListAdminPage implements OnInit {
   admins: User[] = [];
 
   constructor(private _userService: UserService,
-    private _schoolService: SchoolService,
-    private _configOptionservice: ConfigOptionsService,
-    private navCtrl: NavController,) { }
+              private _schoolService: SchoolService,
+              private _configOptionservice: ConfigOptionsService,
+              private navCtrl: NavController,
+              public loadingController: LoadingController) { }
 
   ngOnInit() {
       // Traemos el usuario logeado desde el localStorage
@@ -34,12 +35,20 @@ export class ListAdminPage implements OnInit {
 
 
   // Cargamos a los admins 
-  loadAdmins(){
+  async loadAdmins(){
+    const loading = await this.loadingController.create({
+      message: 'Wait a few seconds',
+    });
+    loading.present();
+
+
+
     this._schoolService.getSchools().then((schools: School[]) =>{
       this.schools = schools;
 
       for(let school of schools){
         if(school.admin){
+          loading.dismiss();
           for(let admin of school.admin){
             this.admins.push(admin)
           }
@@ -51,11 +60,19 @@ export class ListAdminPage implements OnInit {
     })
   }
 
+  // +++++++++++++++++++++++++++++
 
 
   editAdmin(admin){
     localStorage.setItem('adminEdit', JSON.stringify(admin));
     this.navCtrl.navigateBack("register/" + 'Admin');
   }
+
+  addAdmin(){
+    this.navCtrl.navigateBack("register");
+  }
+
+
+  // +++++++++++++++++++++++++
 
 }

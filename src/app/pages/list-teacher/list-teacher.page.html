@@ -5,6 +5,14 @@
 </ion-header>
 
 <ion-content>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="addTeacher()">
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
+
     <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
         <ion-infinite-scroll-content
         loadingSpinner="bubbles"

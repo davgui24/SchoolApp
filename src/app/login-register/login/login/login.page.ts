@@ -81,7 +81,14 @@ export class LoginPage implements OnInit {
   }
 // *************************
 
-  upLoadusers(){
+  async upLoadusers(){
+    const loading = await this.loadingController.create({
+      message: 'Wait a few seconds',
+    });
+    loading.present();
+
+
+
     this._userService.getUsuarios().then((users: User[]) =>{
       // llenamos el arreglo de usuarios globales
       users.forEach(user => {
@@ -91,9 +98,13 @@ export class LoginPage implements OnInit {
       // Seguimos llenando el arreglo de los demas usuarios
       this._schoolService.getSchools().then((schools: School[]) =>{
         schools.forEach(school => {
-          school.admin.forEach(admin => {
-            this.users.push(admin);
-          });
+          loading.dismiss();
+          if(school.admin){
+            school.admin.forEach(admin => {
+              this.users.push(admin);
+            });
+          }
+          
           if(school.teachers==null){
             school.teachers = [];
           }
@@ -186,40 +197,6 @@ export class LoginPage implements OnInit {
      
    }
   
-    
-
-
-
-
-
-
-
-  async presentLoading() {
-    const loading = await this.loadingController.create({
-      message: 'Hellooo',
-      duration: 2000
-    });
-    await loading.present();
-
-    const { role, data } = await loading.onDidDismiss();
-
-     console.log('Loading dismissed!');
-  }
-
-
-  async presentLoadingWithOptions() {
-    const loading = await this.loadingController.create({
-      spinner: null,
-      duration: 5000,
-      message: 'Please wait...',
-      translucent: true,
-      cssClass: 'custom-class custom-loading'
-    });
-    return await loading.present();
-  }
-
-
-
 
   // ==========  Alert
   async presentAlertLoginGlobal() {

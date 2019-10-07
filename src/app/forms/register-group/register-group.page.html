@@ -13,7 +13,7 @@
                   </ion-item>
                   <ion-item>
                     <ion-label position="floating">Course</ion-label>
-                    <ion-select formControlName="course" placeholder="Select the course to load the subjects" (ionChange)="fillSubjects()">
+                    <ion-select formControlName="course" placeholder="Select the course to load the subjects" [disabled]="!enableSelectCourse" (ionChange)="fillSubjects()">
                         <ion-select-option [value]="course.id" *ngFor="let course of courses">{{ course.name }}</ion-select-option>
                       </ion-select>
                       <ion-text color="danger"  *ngIf="frmEntity().course.invalid && frmEntity().course.dirty">
@@ -29,7 +29,7 @@
               </ion-item>
               <ion-item>
                 <ion-label position="floating">Subjects</ion-label>
-                <ion-select formControlName="subjects" placeholder="Select Subjects" multiple=true [disabled]="!enableSelectSubject">
+                <ion-select formControlName="subjects" placeholder="Select Subjects" multiple=true [disabled]="!enableSelectSubject" [(ngModel)]='subjectsGroup'>
                     <ion-select-option [value]="subject.id" *ngFor="let subject of subjectsSelect">{{subject.name }} - {{ subject.code }}</ion-select-option>
                   </ion-select>
                   <ion-text color="danger"  *ngIf="frmEntity().subjects.invalid && frmEntity().subjects.dirty">
