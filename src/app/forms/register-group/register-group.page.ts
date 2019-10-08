@@ -67,7 +67,7 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
            break;
           }
         }
-        
+
         this.enableSelectSubject = true;
         this.enableSelectCourse = false;
       })

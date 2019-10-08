@@ -9,6 +9,7 @@ export class Subject {
     course: Course;
     teacher: string;
     state: boolean;
+    stateGroup: boolean;
     dateCreate: string;
     dateDelete: string;
     dateUpdate: string;
@@ -18,6 +19,7 @@ export class Subject {
             this.code = code;
             this.school = school;
             this.state = false;
+            this.stateGroup = false;
             this.course = course;
             this.teacher = '';
             this.dateCreate=new Date().toString();
