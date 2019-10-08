@@ -175,7 +175,7 @@ export class RegisterSubjectsPage implements OnInit {
   
             if(this._schoolService.editarSchool(this.school)){
               this.presentAlert(':)', '👍', 'The subject was created successfully');
-              this.FormEntity.reset();
+              // this.FormEntity.reset();
             }else{
               this.presentAlert(':(', '👎', 'Error creating subject');
             }

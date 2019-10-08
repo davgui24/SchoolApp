@@ -30,7 +30,7 @@
               <ion-item>
                 <ion-label position="floating">Subjects</ion-label>
                 <ion-select formControlName="subjects" placeholder="Select Subjects" multiple=true [disabled]="!enableSelectSubject" [(ngModel)]='subjectsGroup'>
-                    <ion-select-option [value]="subject.id" *ngFor="let subject of subjectsSelect">{{subject.name }} - {{ subject.code }}</ion-select-option>
+                    <ion-select-option [value]="subject.id" *ngFor="let subject of subjectsSelect">{{ subject.code }} - {{subject.name }}</ion-select-option>
                   </ion-select>
                   <ion-text color="danger"  *ngIf="frmEntity().subjects.invalid && frmEntity().subjects.dirty">
                     Required field.

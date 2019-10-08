@@ -30,7 +30,7 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
   director: User;
   subjects: Subject[] = [];
   subjectsSelect: Subject[] = [];
-  subjectsGroup: Subject[] = [];
+  subjectsGroup: any[] = [];
   school: School;
   userLogin: User;
   group: Group;
@@ -44,14 +44,38 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
 
     if(localStorage.getItem('groupEdit')){
       this.group = JSON.parse(localStorage.getItem('groupEdit'));
-      this.subjectsGroup = this.group.subjects;
-      this.enableSelectSubject = true;
-      this.enableSelectCourse = false;
+      this._schoolServices.verificarSchool(this.userLogin.school).then((school: School) =>{
+       
+
+
+        for(let courseDB of school.courses){
+          if(courseDB.id == this.group.course){
+           for(let subject of school.subcjet){
+             if(subject.course.id == courseDB.id){
+              this.subjectsSelect.push(subject);
+             }
+           }
+
+
+           for(let subjectGroup of this.group.subjects){
+            for(let subjectSelect of this.subjectsSelect){
+              if(subjectGroup.id == subjectSelect.id){
+                this.subjectsGroup.push(subjectGroup.id);
+              }
+            }
+           }
+           break;
+          }
+        }
+        
+        this.enableSelectSubject = true;
+        this.enableSelectCourse = false;
+      })
     }else{
       this.enableSelectSubject = false;
       this.enableSelectCourse = true;
-      let subject: Subject[] = [];
-      this.group = new Group('', '', '', '', subject);
+      this.subjectsGroup = [];
+      this.group = new Group('', '', '', '', this.subjectsGroup);
     }
 
     this.updateCourse();
@@ -64,10 +88,6 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
        this.school = school;
        this.courses = school.courses;
        this.subjects = school.subcjet;
-
-        for(let subject of this.subjects){
-          this.subjectsSelect.push(subject);
-        }
      })
   }
 
@@ -75,11 +95,13 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
 
   fillSubjects(){
     this.enableSelectSubject = true;
+    this.subjectsSelect = [];
         for(let subject of this.subjects){
            if(subject.course.id == this.FormEntity.value.course){
             this.subjectsSelect.push(subject);
            }
         }
+
   }
 
 
@@ -149,11 +171,26 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
         }
       }else{
         let validateGroup: boolean = false;
-        let newGroup: Group = new Group(this.FormEntity.value.name, this.FormEntity.value.director, this.userLogin.school, this.FormEntity.value.course, this.FormEntity.value.subjects);
+        let subjects: Subject[] = [];
+        console.log('Entro aqui');
+        for(let subjectDB of this.school.subcjet){
+          for(let subjectSelect of this.FormEntity.value.subjects){
+            if(subjectSelect == subjectDB.id){
+              subjects.push(subjectDB);
+            }
+          }
+        }
+
+        let newGroup: Group = new Group(this.FormEntity.value.name, this.FormEntity.value.director, this.userLogin.school, this.FormEntity.value.course, subjects);
         if(!this.school.groups){
           this.school.groups = [];
           this.school.groups.push(newGroup);
-          this.FormEntity.reset()
+          if(this._schoolServices.editarSchool(this.school)){
+            this.presentAlert('👍', 'Success', 'The group has been created successfully');
+            this.FormEntity.reset();
+          }else{
+            this.presentAlert('👎', 'Failure', 'Could not create group');
+          }
         }else{
           for(let group of this.school.groups){
             if(group.name == this.FormEntity.value.name){
@@ -163,14 +200,16 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
           }
 
           if(validateGroup){
+            console.log('Entro 1');
             this.presentAlert('👎', 'Failure', 'A group with this registered name already exists.')
           }else{
+            console.log('Entro 2');
             this.school.groups.push(newGroup);
             if(this._schoolServices.editarSchool(this.school)){
-              this.presentAlert('👍', 'Success', 'The group has been created successfully')
+              this.presentAlert('👍', 'Success', 'The group has been created successfully');
               this.FormEntity.reset();
             }else{
-              this.presentAlert('👎', 'Failure', 'Could not create group')
+              this.presentAlert('👎', 'Failure', 'Could not create group');
             }
           }
           

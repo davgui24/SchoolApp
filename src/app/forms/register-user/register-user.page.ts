@@ -289,6 +289,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                     schoolDB.admin[i] = userEdit;
                     console.log(schoolDB.admin[i]);
                     if(this._schoolService.editarSchool(schoolDB)){
+                      this.navCtrl.navigateBack('list-user');
                       this.presentAlert(':)', 'Good!', 'The Admin is updated successfully.');
                     }else{
                       this.presentAlert(':(', 'Bad!', 'The Admin could not be updated.');
@@ -348,6 +349,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
               
               if(this._schoolService.editarSchool(schoolDB)){
                 this.presentAlert(':)', 'Good!', 'The teacher is updated successfully.');
+                this.navCtrl.navigateBack('list-teacher');
               }else{
                 this.presentAlert(':(', 'Bad!', 'The teacher could not be updated.');
               }

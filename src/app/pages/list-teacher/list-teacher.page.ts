@@ -45,11 +45,13 @@ export class ListTeacherPage implements OnInit {
            this.school = school;
 
            if(this.school.teachers){
-             loading.dismiss();
+             
             for(let teacher of this.school.teachers){
               this.teachers.push(teacher)
+              loading.dismiss();
             }
            }else{
+            loading.dismiss();
             this.school.teachers = [];
            }
            break;
@@ -68,7 +70,7 @@ export class ListTeacherPage implements OnInit {
   }
 
   addTeacher(){
-    this.navCtrl.navigateBack("register");
+    this.navCtrl.navigateBack("register/" + 'Teacher');
   }
 
   // ----------------

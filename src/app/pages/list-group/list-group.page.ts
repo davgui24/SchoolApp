@@ -41,10 +41,17 @@ export class ListGroupPage implements OnInit {
     this._schoolService.verificarSchool(this.userLogin.school).then((school: School) =>{
       this.school = school;
 
-      for(let group of school.groups){
-        this.groups.push(group);
+      if(school.groups){
+        for(let group of school.groups){
+          this.groups.push(group);
+          loading.dismiss();
+        }
+      }else{
+        this.groups = [];
+        loading.dismiss();
       }
-      loading.dismiss();
+   
+      
     });
   }
   

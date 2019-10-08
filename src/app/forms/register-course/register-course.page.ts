@@ -83,7 +83,7 @@ private initForm() {
   this.FormEntity = new FormGroup({
       name: new FormControl(this.name, [
           Validators.required,
-          Validators.minLength(6),
+          Validators.minLength(1),
           Validators.maxLength(100)
       ]),
       grade: new FormControl(this.grade, [
@@ -114,11 +114,13 @@ private initForm() {
             this.school.courses[i] = courseEdit;
             this.school.courses[i].dateUpdate = new Date().toString();
               if(this._schoolService.editarSchool(this.school)){
-                this.presentAlert().then( ()=>{
+                this.presentAlert('👍', 'Success', 'The course was created successfully').then( ()=>{
                   this.navCtrl.navigateBack("list-course");
                 })
               }else{
-                console.log('No se pudo editar el curso');
+                this.presentAlert('👎', 'Error', 'Could not create course').then( ()=>{
+                  this.navCtrl.navigateBack("list-course");
+                })
               };
             break;
           }
@@ -135,9 +137,14 @@ private initForm() {
         }
         // Una vez se cree el curso se actualiza el colegio
         if(this._schoolService.editarSchool(this.school)){
-          this.FormEntity.reset();
+          this.presentAlert('👍', 'Success', 'The course has been created successfully').then( ()=>{
+            this.FormEntity.reset();
+            // this.navCtrl.navigateBack("list-course");
+          })
         }else{
-          console.log('No se pudo crear el curso');
+          this.presentAlert('👎', 'Error', 'Could not edit course').then( ()=>{
+            this.navCtrl.navigateBack("list-course");
+          })
         };
       }
 
@@ -151,11 +158,11 @@ private initForm() {
 
   // ----------------------
 
-  async presentAlert() {
+  async presentAlert(header: string, subHeader: string, message: string) {
     const alert = await this.alertController.create({
-      header: ':)',
-      subHeader: 'Success',
-      message: 'Successfully edited course',
+      header: header,
+      subHeader: subHeader,
+      message: message,
       buttons: ['OK']
     });
 
