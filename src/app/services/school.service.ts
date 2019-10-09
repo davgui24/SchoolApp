@@ -50,6 +50,7 @@ export class SchoolService {
 
   crearSchool(school: School) {
     this.afDB.database.ref("/schools/" + school.id).set(school);
+    return true;
   }
 
   editarSchool(school: School) {

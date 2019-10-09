@@ -30,7 +30,7 @@
                   </ion-item>
                   <ion-item>
                       <ion-label position="floating">Telephone</ion-label>
-                      <ion-input maxlength="10" pattern="[0-9]*"  formControlName="telephone" type="tel" placeholder="Enter telephone" autocomplete="off"></ion-input>
+                      <ion-input maxlength="10" type="number" onKeyPress="if(this.value.length==16) return false;"  [pattern]="expRegTel"  formControlName="telephone" type="tel" placeholder="Enter telephone" autocomplete="off"></ion-input>
                       <ion-text color="danger"  *ngIf="frmEntity().telephone.invalid && frmEntity().telephone.dirty">
                         Required field.
                       </ion-text>

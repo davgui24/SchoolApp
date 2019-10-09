@@ -16,11 +16,13 @@ export class RegisterSchoolPage implements OnInit {
 
   public FormEntity: FormGroup;
 
-  user: User;
+  userLogin: User;
   school: School;
+  schoolCurrent: School;
   name: string;
   director: string;
   telephone: string;
+  expRegTel: '/^[9|6|7][0-16]{8}$/';
 
   constructor(private _schoolService: SchoolService,
               private _configOptionservice: ConfigOptionsService,
@@ -29,8 +31,16 @@ export class RegisterSchoolPage implements OnInit {
               public alertController: AlertController) { }
 
   ngOnInit() {
-    this.user = this._userService.getLocalStorage();
-    this._configOptionservice.roleLogin.emit(this.user.role);
+    this.userLogin = this._userService.getLocalStorage();
+    this._configOptionservice.roleLogin.emit(this.userLogin.role);
+
+    if(localStorage.getItem('schoolList')){
+      this.schoolCurrent = JSON.parse(localStorage.getItem('schoolList'));
+    }else{
+      this.schoolCurrent = new School('', '', '');
+    }
+    console.log(this.schoolCurrent);
+
     this.initForm();
   }
 
@@ -38,18 +48,18 @@ export class RegisterSchoolPage implements OnInit {
 
   private initForm() {
     this.FormEntity = new FormGroup({
-        name: new FormControl('', [
+        name: new FormControl(this.schoolCurrent.name, [
             Validators.required,
             Validators.minLength(6),
             Validators.maxLength(100)
         ]),
-        director: new FormControl('', [
+        director: new FormControl(this.schoolCurrent.director, [
           Validators.required,
           Validators.minLength(6),
           Validators.maxLength(100)
       ]),
 
-        telephone: new FormControl('', [
+        telephone: new FormControl(this.schoolCurrent.telephone, [
           Validators.required,
           Validators.maxLength(10),
           Validators.minLength(7)
@@ -75,8 +85,33 @@ export class RegisterSchoolPage implements OnInit {
   registerForm(){
     if(this.FormEntity.valid){
       this.school = new School(this.FormEntity.value.name, this.FormEntity.value.director, this.FormEntity.value.telephone);
-      this._schoolService.crearSchool(this.school);
-      this.FormEntity.reset();
+
+      if(localStorage.getItem('schoolList')){
+            // CODIGO PARA ACTUALIZAE EL COLEGIO
+            let schoolCurrent: School = JSON.parse(localStorage.getItem('schoolList'));
+            schoolCurrent.name = this.school.name;
+            schoolCurrent.director = this.school.director;
+            schoolCurrent.telephone = this.school.telephone;
+            schoolCurrent.dateUpdate = new Date().toString();
+    
+             if(this._schoolService.editarSchool(schoolCurrent)){
+              this.presentAlert('👍', 'Success', 'The school was successfully published').then(data => {
+                console.log(data);
+                this.FormEntity.reset();
+              })
+            }else{
+              this.presentAlert('👎', 'Error', 'Error editing school');
+            }
+      }else{
+        // CODIGO PARA CREAR EL COLEGIO
+        if(this._schoolService.crearSchool(this.school)){
+          this.presentAlert('👍', 'Success', 'The school was successfully created').then(() => {
+            this.FormEntity.reset();
+          })
+        }else{
+          this.presentAlert('👎', 'Error', 'Error creating school');
+        }
+      }
     }else{
       this.markAsDirty(this.FormEntity);
     }
@@ -85,11 +120,11 @@ export class RegisterSchoolPage implements OnInit {
 
   // --------------------
 
-  async presentAlertError() {
+  async presentAlert(header: string, subHeader: string, message: string) {
     const alert = await this.alertController.create({
-      header: 'Error!!',
-      subHeader: 'Check',
-      message: 'Verify the fields',
+      header: header,
+      subHeader: subHeader,
+      message: message,
       buttons: ['OK']
     });
 
@@ -111,17 +146,10 @@ export class RegisterSchoolPage implements OnInit {
   
        console.log('Loading dismissed!');
     }
-  
-  
-    async presentLoadingWithOptions() {
-      const loading = await this.loadingController.create({
-        spinner: null,
-        duration: 5000,
-        message: 'Please wait...',
-        translucent: true,
-        cssClass: 'custom-class custom-loading'
-      });
-      return await loading.present();
-    }
+
+     // *******************
+     ngOnDestroy(): void {
+      localStorage.removeItem('schoolList');
+  }
 
 }

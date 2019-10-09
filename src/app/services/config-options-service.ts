@@ -201,7 +201,7 @@ export class ConfigOptionsService {
       },
       {
         title: 'School',
-        url: 'home/' + user.id,
+        url: 'list-school',
         icon: 'home',
         validation: sideOption.school
       },
