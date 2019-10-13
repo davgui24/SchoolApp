@@ -8,7 +8,7 @@ export class Subject {
     code: string;
     course: Course;
     teacher: string;
-    state: boolean;
+    stateTeacher: boolean;
     stateGroup: boolean;
     dateCreate: string;
     dateDelete: string;
@@ -18,7 +18,7 @@ export class Subject {
             this.name = name;
             this.code = code;
             this.school = school;
-            this.state = false;
+            this.stateTeacher = false;
             this.stateGroup = false;
             this.course = course;
             this.teacher = '';

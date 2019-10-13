@@ -1,4 +1,20 @@
-<ion-item-group>
+<ion-header>
+  <ion-toolbar color="primary" padding>
+      <ion-buttons slot="start">
+          <ion-back-button text="Atrás" *ngIf="urlBackGlobal" defaultHref="list-user"></ion-back-button>
+          <ion-back-button text="Atrás" *ngIf="urlBackAdmin" defaultHref="list-admin"></ion-back-button>
+          <ion-back-button text="Atrás" *ngIf="urlBackTeacher" defaultHref="list-teacher"></ion-back-button>
+          <ion-back-button text="Atrás" *ngIf="urlBackStudent" defaultHref="list-student"></ion-back-button>
+          <ion-back-button text="Atrás" *ngIf="urlBackFather" defaultHref="list-father"></ion-back-button>
+      </ion-buttons>
+      <ion-title>
+          <!-- <h1>Hola</h1> -->
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
     <ion-grid style="margin-left: 5%; margin-top: 10%; margin-right: 5%;">
         <form [formGroup]="FormEntity">
           <ion-row>
@@ -88,7 +104,7 @@
                 <ion-item *ngIf="inputFormUser.InputSubject">
                     <ion-label position="floating">Subject</ion-label>
                     <ion-select formControlName="subject" multiple="true" [(ngModel)]='subjectsTeacher'>
-                        <ion-select-option [value]="subject.id" *ngFor="let subject of subjects"> {{subject.name }} - {{ subject.code }}</ion-select-option>
+                        <ion-select-option [value]="subject.id" *ngFor="let subject of subjects">{{ subject.code }} - {{subject.name }}</ion-select-option>
                     </ion-select>
                     <ion-text color="danger" *ngIf="frmEntity().subject.invalid && frmEntity().subject.dirty">
                         Required field.
@@ -119,5 +135,4 @@
           </ion-row>
         </form>
     </ion-grid>
-
-</ion-item-group>
+  </ion-content>

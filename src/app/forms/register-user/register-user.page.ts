@@ -48,6 +48,11 @@ export class RegisterUserPage implements OnInit, OnDestroy {
   subjectsTeacher: any[] = [];
 
   roleUrl: string;
+  urlBackGlobal: boolean = false;
+  urlBackAdmin: boolean = false;
+  urlBackTeacher: boolean = false;
+  urlBackStudent: boolean = false;
+  urlBackFather: boolean = false;
   
 
   constructor(private _userService: UserService,
@@ -78,9 +83,27 @@ export class RegisterUserPage implements OnInit, OnDestroy {
       this._schoolService.getSchools().then((schools: School[]) =>{
         this.schools = schools;
       })
+      
+      this.viewBotonBack();
       this.upLoadUserEdit();
       this.initForm();
     }
+
+ // CONFIGURAMOS LA RUTA DEL BOTON BACK DEPENDIENDO DE QUE LISTA VIENE
+ viewBotonBack(){
+  if(this.roleUrl == 'Global'){
+    this.urlBackGlobal = true;
+  }else if(this.roleUrl == 'Admin'){
+    this.urlBackAdmin = true;
+  }else if(this.roleUrl == 'Teacher'){
+    this.urlBackTeacher = true;
+  }else if(this.roleUrl == 'Student'){
+    this.urlBackStudent = true;
+  }else if(this.roleUrl == 'Father'){
+    this.urlBackFather = true;
+  }
+ }
+
 
 
     // en este metodo validamos si al formulario llegan valores, si es asi, entonces se va a editar y se agregan los valosres en los inputs
@@ -118,7 +141,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                
                
             for( let subject of this.school.subcjet){
-              if(!subject.state){
+              if(!subject.stateTeacher){
                 this.subjects.push(subject);
               } 
             }
@@ -133,7 +156,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
         // SELECIONAMOS LAS ID DE LAS ASIGNATURAS QUE DA ESTE PROFESOR Y LAS MARCAMOS EN EL SELECT DE HTML
         for(let subjectTeacher of this.userUrl.subject){
-          subjectTeacher.state = false;
+          subjectTeacher.stateTeacher = false;
           this.subjectsTeacher.push(subjectTeacher.id);
         }
         console.log( this.subjectsTeacher);
@@ -146,7 +169,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
       if(this.userUrl == null){
         this._schoolService.verificarSchool(this.userlogin.school).then((schoolDB: School) =>{
           for(let subject of schoolDB.subcjet){
-            if(!subject.state){
+            if(!subject.stateTeacher){
               this.subjects.push(subject);
             }
           }
@@ -319,7 +342,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                   for(let subjectCurrent of schoolDB.teachers[i].subject){
                     for(let j in schoolDB.subcjet){
                       if(subjectCurrent.id == schoolDB.subcjet[j].id){
-                        schoolDB.subcjet[j].state = false;
+                        schoolDB.subcjet[j].stateTeacher = false;
                       }
                     }
                   }
@@ -331,14 +354,14 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                   for(let j in schoolDB.subcjet){
                     for (let subject of this.FormEntity.value.subject){
                       if(subject === schoolDB.subcjet[j].id)
-                      schoolDB.subcjet[j].state = false;
+                      schoolDB.subcjet[j].stateTeacher = false;
                     }
                   }
                   
                   for(let subjectCurrent of this.FormEntity.value.subject){
                     for(let j in schoolDB.subcjet){
                       if(subjectCurrent === schoolDB.subcjet[j].id){
-                        schoolDB.subcjet[j].state = true;
+                        schoolDB.subcjet[j].stateTeacher = true;
                         schoolDB.teachers[i].subject.push(schoolDB.subcjet[j]);
                       }
                     }
@@ -430,7 +453,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                       for(let i in school.subcjet){
                          for(let subjectSelect of this.FormEntity.value.subject){
                            if (school.subcjet[i].id === subjectSelect){
-                            school.subcjet[i].state = true;
+                            school.subcjet[i].stateTeacher = true;
                             school.subcjet[i].teacher = userCreate.id;
                             subjectObjects.push(school.subcjet[i]);
                            }

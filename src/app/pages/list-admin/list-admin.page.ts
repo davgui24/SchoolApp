@@ -69,7 +69,7 @@ export class ListAdminPage implements OnInit {
   }
 
   addAdmin(){
-    this.navCtrl.navigateBack("register");
+    this.navCtrl.navigateBack("register/" + 'Admin');
   }
 
 

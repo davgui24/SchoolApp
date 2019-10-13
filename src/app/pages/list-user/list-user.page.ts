@@ -57,7 +57,7 @@ export class ListUserPage implements OnInit {
   }
 
   addUser(){
-    this.navCtrl.navigateBack("register/" + 'Teacher');
+    this.navCtrl.navigateBack("register/" + 'Global');
   }
 
 }

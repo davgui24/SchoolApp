@@ -139,9 +139,16 @@ export class RegisterSubjectsPage implements OnInit {
       }else{
         let validateSubject: boolean = false;
 
-        if(this.school.subcjet == null){
+        if(!this.school.subcjet){
           this.school.subcjet = [];
-          this.subject = new Subject(this.FormEntity.value.name, this.FormEntity.value.code, this.school.id, this.FormEntity.value.course);
+          let courseCurrent: Course;
+          for(let course of this.school.courses){
+            if(this.FormEntity.value.course == course.id){
+              courseCurrent = course;
+              break;
+            }
+          }
+          this.subject = new Subject(this.FormEntity.value.name, this.FormEntity.value.code, this.school.id, courseCurrent);
           this.school.subcjet.push(this.subject);
   
           if(this._schoolService.editarSchool(this.school)){
@@ -175,7 +182,7 @@ export class RegisterSubjectsPage implements OnInit {
   
             if(this._schoolService.editarSchool(this.school)){
               this.presentAlert(':)', '👍', 'The subject was created successfully');
-              // this.FormEntity.reset();
+              this.FormEntity.reset();
             }else{
               this.presentAlert(':(', '👎', 'Error creating subject');
             }

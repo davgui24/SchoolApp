@@ -45,17 +45,22 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
     if(localStorage.getItem('groupEdit')){
       this.group = JSON.parse(localStorage.getItem('groupEdit'));
       this._schoolServices.verificarSchool(this.userLogin.school).then((school: School) =>{
-       
-
 
         for(let courseDB of school.courses){
           if(courseDB.id == this.group.course){
-           for(let subject of school.subcjet){
-             if(subject.course.id == courseDB.id){
-              this.subjectsSelect.push(subject);
-             }
-           }
 
+              for(let subjectCurrent of this.group.subjects){
+                this.subjectsSelect.push(subjectCurrent);
+              }
+
+              for(let subjectDB of school.subcjet){
+                if(courseDB.id == subjectDB.course.id){
+                  if(!subjectDB.stateGroup){
+                    console.log('Los que estan sin uso', subjectDB);
+                    this.subjectsSelect.push(subjectDB);
+                  }
+                }
+              }
 
            for(let subjectGroup of this.group.subjects){
             for(let subjectSelect of this.subjectsSelect){
@@ -70,6 +75,8 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
 
         this.enableSelectSubject = true;
         this.enableSelectCourse = false;
+        // console.log('Estos son la materias', this.subjectsGroup);
+        console.log(this.subjectsSelect);
       })
     }else{
       this.enableSelectSubject = false;
@@ -97,7 +104,7 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
     this.enableSelectSubject = true;
     this.subjectsSelect = [];
         for(let subject of this.subjects){
-           if(subject.course.id == this.FormEntity.value.course){
+           if(subject.course.id == this.FormEntity.value.course && !subject.stateGroup){
             this.subjectsSelect.push(subject);
            }
         }
@@ -148,18 +155,66 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
 
   registerForm(){
     if(this.FormEntity.valid){
-
       if(localStorage.getItem('groupEdit')){
-        let newGroup: Group = new Group(this.FormEntity.value.name, this.FormEntity.value.director, this.userLogin.school, this.FormEntity.value.course, this.FormEntity.value.subjects);
+
+        let subjects: Subject[] = [];
+        for(let i in this.school.subcjet){
+          for(let subjectSelet of this.FormEntity.value.subjects){
+            if(this.school.subcjet[i].id == subjectSelet){
+              subjects.push(this.school.subcjet[i]);
+            }
+          }
+        }
+
+        let newGroup: Group = new Group(this.FormEntity.value.name, this.FormEntity.value.director, this.userLogin.school, this.FormEntity.value.course, subjects);
         let groupCurrent: Group = JSON.parse(localStorage.getItem('groupEdit'));
         groupCurrent.name = newGroup.name;
         groupCurrent.directorGroup = newGroup.directorGroup;
         groupCurrent.course = newGroup.course;
         groupCurrent.subjects = newGroup.subjects;
+
+
+        // Igualamos lso stateGroup a false  a todar las asignaturas que vienen en grupo del localstorage
+         for(let i in this.school.subcjet){
+           for(let subjectCurrent of JSON.parse(localStorage.getItem('groupEdit')).subjects){
+            if(this.school.subcjet[i].id == subjectCurrent.id){
+              this.school.subcjet[i].stateGroup = false;
+            }
+           }
+         }
+
+        // vaciamos el arreglo de asignatiras el el grupo selecionado
+        for(let i in this.school.groups){
+          if(this.school.groups[i].id == groupCurrent.id){
+            this.school.groups[i].subjects = [];
+          }
+        }
+
+        // Igualamos lso stateGroup a false  a todar las asignaturas que vienen en grupo del localstorage
+        for(let i in this.school.subcjet){
+          for(let subjectCurrent of groupCurrent.subjects){
+          if(this.school.subcjet[i].id == subjectCurrent.id){
+            this.school.subcjet[i].stateGroup = true;
+          }
+          }
+        }
+
+
+        // asignamos las nuevas asignaturas
+        for(let i in this.school.groups){
+          if(this.school.groups[i].id == groupCurrent.id){
+            this.school.groups[i].subjects = groupCurrent.subjects;
+          }
+        }
+
+          console.log(this.school); 
+      
         groupCurrent.dateUpdate = new Date().toString();
         for(let i in this.school.groups){
           if(groupCurrent.id == this.school.groups[i].id){
+            
             this.school.groups[i] = groupCurrent;
+            console.log(this.school);
             if(this._schoolServices.editarSchool(this.school)){
               this.presentAlert('👍', 'Success', 'The group was edited correctly')
               this.navCtrl.navigateBack("list-group");
@@ -172,10 +227,10 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
       }else{
         let validateGroup: boolean = false;
         let subjects: Subject[] = [];
-        console.log('Entro aqui');
         for(let subjectDB of this.school.subcjet){
           for(let subjectSelect of this.FormEntity.value.subjects){
             if(subjectSelect == subjectDB.id){
+              subjectDB.stateGroup = true;
               subjects.push(subjectDB);
             }
           }
@@ -200,10 +255,8 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
           }
 
           if(validateGroup){
-            console.log('Entro 1');
             this.presentAlert('👎', 'Failure', 'A group with this registered name already exists.')
           }else{
-            console.log('Entro 2');
             this.school.groups.push(newGroup);
             if(this._schoolServices.editarSchool(this.school)){
               this.presentAlert('👍', 'Success', 'The group has been created successfully');
@@ -237,8 +290,7 @@ export class RegisterGroupPage implements OnInit, OnDestroy {
 
   // *******************
       ngOnDestroy(): void {
-        console.log('Me fui');
-        localStorage.removeItem('groupEdit');
+       localStorage.removeItem('groupEdit');
     }
 
 
