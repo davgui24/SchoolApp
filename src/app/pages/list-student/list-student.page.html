@@ -1,0 +1,26 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>listAdmin</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="addStudent()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+
+  <ion-list style="margin: 10%;" *ngFor="let student of students">
+      <ion-item-sliding>
+        <ion-item>
+          <ion-label>{{ student.name }}</ion-label>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option (click)="editStudent()">Edit</ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+  </ion-list>
+
+</ion-content>

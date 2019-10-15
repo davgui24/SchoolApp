@@ -74,15 +74,10 @@
                         </ion-text>
                   </ion-item>
                   
-                  <ion-item  *ngIf="inputFormUser.c">
+                  <ion-item  *ngIf="inputFormUser.ImputGroup">
                     <ion-label position="floating">Group</ion-label>
                     <ion-select formControlName="group">
-                        <ion-select-option value="7-E">7-E</ion-select-option>
-                        <ion-select-option value="6-A">6-A</ion-select-option>
-                        <ion-select-option value="8-B">8-B</ion-select-option>
-                        <ion-select-option value="6-Q">6-Q</ion-select-option>
-                        <ion-select-option value="11-A">11-A</ion-select-option>
-                        <ion-select-option value="9-C">9-C</ion-select-option>
+                        <ion-select-option [value]="group.id" *ngFor="let group of groups">{{group.name}}</ion-select-option>
                       </ion-select>
                      <ion-text color="danger" *ngIf="frmEntity().group.invalid && frmEntity().group.dirty">
                         Required field.

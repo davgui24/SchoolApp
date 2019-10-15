@@ -41,6 +41,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
   school: School = null;
   role: string = '';
   group: Group = null;
+  groups: Group[] = [];
 
   schools: School[] = [];
   courses: Course[] = [];
@@ -158,9 +159,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
         for(let subjectTeacher of this.userUrl.subject){
           subjectTeacher.stateTeacher = false;
           this.subjectsTeacher.push(subjectTeacher.id);
-        }
-        console.log( this.subjectsTeacher);
-        
+        }        
       }
 
     
@@ -172,6 +171,10 @@ export class RegisterUserPage implements OnInit, OnDestroy {
             if(!subject.stateTeacher){
               this.subjects.push(subject);
             }
+          }
+
+          for(let groupDB of schoolDB.groups){
+            this.groups.push(groupDB);
           }
         })
       }else{
@@ -290,9 +293,9 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                userDB = userEdit;
                userDB.dateUpdate = new Date().toString();
                if(this._userService.editarUsuario(userDB)){
-                 this.presentAlert(':)', 'Good!', 'The Global is updated successfully.');
+                 this.presentAlert('😃', 'Good!', 'The Global is updated successfully.');
                }else{
-                 this.presentAlert(':(', 'Bad!', 'The user could not be updated.');
+                 this.presentAlert('😞', 'Bad!', 'The user could not be updated.');
                }
               })
 
@@ -313,9 +316,9 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                     console.log(schoolDB.admin[i]);
                     if(this._schoolService.editarSchool(schoolDB)){
                       this.navCtrl.navigateBack('list-user');
-                      this.presentAlert(':)', 'Good!', 'The Admin is updated successfully.');
+                      this.presentAlert('😃', 'Good!', 'The Admin is updated successfully.');
                     }else{
-                      this.presentAlert(':(', 'Bad!', 'The Admin could not be updated.');
+                      this.presentAlert('😞', 'Bad!', 'The Admin could not be updated.');
                     }
                     break;
                   }else{
@@ -371,10 +374,10 @@ export class RegisterUserPage implements OnInit, OnDestroy {
               }
               
               if(this._schoolService.editarSchool(schoolDB)){
-                this.presentAlert(':)', 'Good!', 'The teacher is updated successfully.');
+                this.presentAlert('😃', 'Good!', 'The teacher is updated successfully.');
                 this.navCtrl.navigateBack('list-teacher');
               }else{
-                this.presentAlert(':(', 'Bad!', 'The teacher could not be updated.');
+                this.presentAlert('😞', 'Bad!', 'The teacher could not be updated.');
               }
             })
             
@@ -405,7 +408,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                      }
                     }
                   if(validateAdmin){
-                    this.presentAlert(':(', 'Bad!', 'This admin is already registered.');
+                    this.presentAlert('🤔', 'Bad!', 'This admin is already registered.');
                   }else{
                     userCreate = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
                     userCreate.school = this.FormEntity.value.school;
@@ -418,7 +421,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                           schoolDB.admin.push(userCreate);
                         }
                         if(this._schoolService.editarSchool(schoolDB)){
-                          this.presentAlert(':)', 'Good!', 'The Admin was created successfully.');
+                          this.presentAlert('😃', 'Good!', 'The Admin was created successfully.');
                         }
                       })
                       this.FormEntity.reset();
@@ -441,7 +444,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                    
                   }
                   if(validateTeacher){
-                    this.presentAlert(':(', 'Bad!', 'This Teacher is already registered.');
+                    this.presentAlert('🤔', 'Bad!', 'This Teacher is already registered.');
                   }else{
                     userCreate = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
                     userCreate.school = this.userlogin.school;
@@ -469,11 +472,11 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                       }
 
                       if(this._schoolService.editarSchool(school)){
-                        this.presentAlert(':)', 'Good!', 'The teacher was created successfully.');
+                        this.presentAlert('😃', 'Good!', 'The teacher was created successfully.');
                         this.FormEntity.reset();
                         this.navCtrl.navigateBack('list-teacher');
                       }else{
-                        this.presentAlert(':(', 'Bad!', 'The teacher could not be registered.');
+                        this.presentAlert('🤔', 'Bad!', 'The teacher could not be registered.');
                       }
 
                     })
@@ -482,6 +485,43 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
   
               }else if(this.roleUrl == 'Student' && this.userlogin.role == 'Admin'){
+                this._schoolService.verificarSchool(this.userlogin.school).then((school: School) =>{
+                  let groupCurrent: Group;
+                  for(let groupDB of school.groups){
+                    if(groupDB.id == this.FormEntity.value.group){
+                      groupCurrent = groupDB;
+                      break;
+                    }
+                  }
+
+                    let validateStudent: boolean = false;
+                    if(!school.students){
+                      school.students = [];
+                    }else{
+                      for(let student of school.students){
+                        if(student.username = this.FormEntity.value.username){
+                          validateStudent = true;
+                          break;
+                        }
+                      }
+                    }
+
+                    if(validateStudent){
+                      this.presentAlert('🤔', 'Bad!', 'The student could not be registered.');
+                    }else{
+                      let student = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+                      student.group = groupCurrent;
+                      school.students.push(student);
+                      if(this._schoolService.editarSchool(school)){
+                        this.presentAlert('😃', 'Good!', 'The student was created successfully.');
+                        this.FormEntity.reset();
+                      }else{
+                        this.presentAlert('😞', 'Error!', 'The student was created correctly.');
+                      }
+                    }
+                 
+                })
+
 
 
               }else if(this.roleUrl == 'Father' && this.userlogin.role == 'Admin'){
@@ -497,15 +537,15 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                     }
                   }
                   if(validateGlobal){
-                    this.presentAlert(':(', 'Bad!', 'The user could not be created.');
+                    this.presentAlert('😞', 'Bad!', 'The user could not be created.');
                   }else{
                   userCreate = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
                     userCreate.dateCreate = new Date().toString();
                     if(this._userService.editarUsuario(userCreate)){
                       this.FormEntity.reset();
-                      this.presentAlert(':)', 'Good!', 'The Global was created successfully.');
+                      this.presentAlert('😃', 'Good!', 'The Global was created successfully.');
                     }else{
-                      this.presentAlert(':(', 'Bad!', 'The Global could not be updated.');
+                      this.presentAlert('😞', 'Bad!', 'The Global could not be updated.');
                     }
                   }
                 })
@@ -513,10 +553,6 @@ export class RegisterUserPage implements OnInit, OnDestroy {
               }
 
             }
-      
-        
-
-
       }else{
         this.markAsDirty(this.FormEntity);
       }
@@ -530,6 +566,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
       localStorage.removeItem('userEdit');
       localStorage.removeItem('adminEdit');
       localStorage.removeItem('teacherEdit')
+      localStorage.removeItem('studentEdit')
     }
 
     // ---------------------

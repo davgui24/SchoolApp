@@ -5,7 +5,8 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "login",
+    // redirectTo: "login",
+    redirectTo: localStorage.getItem('role') ? 'home' : 'login',
     pathMatch: "full"
   },
   {
@@ -24,7 +25,11 @@ const routes: Routes = [
   { path: 'list-course', loadChildren: './pages/list-course/list-course.module#ListCoursePageModule' },
   { path: 'list-teacher', loadChildren: './pages/list-teacher/list-teacher.module#ListTeacherPageModule' },
   { path: 'list-subject', loadChildren: './pages/list-subject/list-subject.module#ListSubjectPageModule' },
-  { path: 'list-group', loadChildren: './pages/list-group/list-group.module#ListGroupPageModule' },  { path: 'list-school', loadChildren: './pages/list-school/list-school.module#ListSchoolPageModule' },
+  { path: 'list-group', loadChildren: './pages/list-group/list-group.module#ListGroupPageModule' },
+  { path: 'list-school', loadChildren: './pages/list-school/list-school.module#ListSchoolPageModule' },  { path: 'list-student', loadChildren: './pages/list-student/list-student.module#ListStudentPageModule' },
+
+ 
+
 
 
 

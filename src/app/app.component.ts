@@ -40,8 +40,10 @@ export class AppComponent implements OnInit {
     // recibimos el evento ta sea de login o de homedir, recivimos el usuario y segun el rol carga el menú
     this._configOptionservice.roleLogin.subscribe(role =>{
      if(role==null || role == ''){
+      console.log('EVENT EMMITER', role);
        this.appPages = [];
       }else{
+        console.log('EVENT EMMITER', role);
         this.sideOption = this._configOptionservice.configOptionSidemenu(role);
         this.appPages = this._configOptionservice.upLoadMenu(this.sideOption, this.user);
       }

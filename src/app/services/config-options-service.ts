@@ -36,7 +36,7 @@ export class ConfigOptionsService {
       inputFormUser.inputSchool= false;
       inputFormUser.ImputGroup = true;
       inputFormUser.ImputStudents = false;
-      inputFormUser.ImputCourse = true;
+      inputFormUser.ImputCourse = false;
       inputFormUser.InputSubject = false;
     }else if(role == 'Father') {
       inputFormUser.inputSchool= false;
@@ -189,7 +189,7 @@ export class ConfigOptionsService {
       },
       {
         title: 'Students',
-        url: 'list-user',
+        url: 'list-student',
         icon: 'person-add',
         validation: sideOption.student
       },
@@ -225,13 +225,13 @@ export class ConfigOptionsService {
       },
       {
         title: 'Activity',
-        url: 'home/' + user.id,
+        url: 'home',
         icon: 'person-add',
         validation: sideOption.activity
       },
       {
         title: 'LogOut',
-        url: '../',
+        url: 'login',
         icon: 'power',
         validation: sideOption.logOut
       },
