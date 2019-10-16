@@ -30,7 +30,7 @@
 
                     <ion-item>
                       <ion-label position="floating">User name</ion-label>
-                      <ion-input formControlName="username" type="text"  placeholder="Enter user" autocomplete="off" [disabled]="userUrl!=null"></ion-input>
+                      <ion-input formControlName="username" type="text"  placeholder="Enter user" autocomplete="off" [disabled]="userUrl.username != ''"></ion-input>
                       <ion-text color="danger" *ngIf="frmEntity().username.invalid && frmEntity().username.dirty">
                         Required field.
                       </ion-text>
@@ -53,7 +53,7 @@
                     <ion-item *ngIf="inputFormUser.inputSchool">
                         <ion-label position="floating">School</ion-label>
                         <ion-select formControlName="school" name="school">
-                            <ion-select-option *ngFor="let school of schools"  [value]="school">{{school.name}}</ion-select-option>
+                            <ion-select-option *ngFor="let school of schools"  [value]="school.id">{{school.name}}</ion-select-option>
                           </ion-select>
                           <ion-text color="danger" *ngIf="frmEntity().school.invalid && frmEntity().school.dirty">
                             Required field.
@@ -76,7 +76,7 @@
                   
                   <ion-item  *ngIf="inputFormUser.ImputGroup">
                     <ion-label position="floating">Group</ion-label>
-                    <ion-select formControlName="group">
+                    <ion-select formControlName="group" [(ngModel)]='groupCurrent'>
                         <ion-select-option [value]="group.id" *ngFor="let group of groups">{{group.name}}</ion-select-option>
                       </ion-select>
                      <ion-text color="danger" *ngIf="frmEntity().group.invalid && frmEntity().group.dirty">

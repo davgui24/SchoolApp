@@ -39,9 +39,11 @@ export class RegisterUserPage implements OnInit, OnDestroy {
   username: string = '';
   password: string = '';
   school: School = null;
+  schoolId: string;
   role: string = '';
   group: Group = null;
   groups: Group[] = [];
+  groupCurrent: string;
 
   schools: School[] = [];
   courses: Course[] = [];
@@ -113,23 +115,23 @@ export class RegisterUserPage implements OnInit, OnDestroy {
       if(JSON.parse(localStorage.getItem('userEdit'))){
         this.userUrl = JSON.parse(localStorage.getItem('userEdit'));
       }else if(JSON.parse(localStorage.getItem('adminEdit'))){
-        this.userUrl = JSON.parse(localStorage.getItem('adminEdit'));
-        this._schoolService.getSchools().then((schools: School[]) =>{
+          this.userUrl = JSON.parse(localStorage.getItem('adminEdit'));
+          this._schoolService.getSchools().then((schools: School[]) =>{
 
-          this.schools = schools;
+            this.schools = schools;
 
-          for(let school of this.schools){
-             if(school.id == this.userUrl.school){
-               this.school = school;
-               
-               
-            for( let subject of this.school.subcjet){
-              this.subjects.push(subject);
+            for(let school of this.schools){
+              if(school.id == this.userUrl.school){
+                this.school = school;
+                
+                
+              for( let subject of this.school.subcjet){
+                this.subjects.push(subject);
+              }
+              break;
             }
-            break;
           }
-        }
-      })
+        })
       }else if(this.userUrl = JSON.parse(localStorage.getItem('teacherEdit'))){
         this.userUrl = JSON.parse(localStorage.getItem('teacherEdit'));
         this._schoolService.getSchools().then((schools: School[]) =>{
@@ -159,13 +161,41 @@ export class RegisterUserPage implements OnInit, OnDestroy {
         for(let subjectTeacher of this.userUrl.subject){
           subjectTeacher.stateTeacher = false;
           this.subjectsTeacher.push(subjectTeacher.id);
-        }        
+        }    
+      }else if(JSON.parse(localStorage.getItem('studentEdit'))){
+        this.userUrl = JSON.parse(localStorage.getItem('studentEdit'));
+        this.groupCurrent = this.userUrl.group.id;
+
+        this._schoolService.getSchools().then((schools: School[]) =>{
+
+          this.schools = schools;
+
+          for(let school of this.schools){
+             if(school.id == this.userlogin.school){
+               this.school = school;
+               
+            for( let group of this.school.groups){
+             this.groups.push(group);
+            }
+            break;
+           }
+          }
+        })
       }
 
     
 
       // CUANDO EL USURIO NO VIENE DE UNA LISTA
       if(this.userUrl == null){
+        let course = new Course('','','');
+        let subject = new Subject('','','',course);
+        let group = new Group('','','','',[subject])
+        this.userUrl = new User('', '', '', this.roleUrl);
+        this.userUrl.group = group;
+        this.userUrl.subject = [subject];
+        this.userUrl.students = [];
+
+
         this._schoolService.verificarSchool(this.userlogin.school).then((schoolDB: School) =>{
           for(let subject of schoolDB.subcjet){
             if(!subject.stateTeacher){
@@ -177,15 +207,6 @@ export class RegisterUserPage implements OnInit, OnDestroy {
             this.groups.push(groupDB);
           }
         })
-      }else{
-        this.name = this.userUrl.name;
-        this.username = this.userUrl.username;
-        this.password = this.userUrl.password;
-        this.role = this.userUrl.role;
-
-        // ESTOS QUEDAN PARA CUANDO TRABAJEMOS LA LISTA DE ADMINS Y TEACHERS
-        // this.school = this.userUrl.school
-        // this.students = this.userUrl.students;
       }
     }
 
@@ -226,34 +247,34 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
 // Aqui le damos los valores iniciales y resticciones a cada input
     this.FormEntity = new FormGroup({
-        name: new FormControl(this.name, [
+        name: new FormControl(this.userUrl.name, [
             Validators.required,
             Validators.minLength(6),
             Validators.maxLength(50)
         ]),
-        username: new FormControl(this.username, [
+        username: new FormControl(this.userUrl.username, [
           Validators.required,
           Validators.minLength(6),
           Validators.maxLength(30)
       ]),
 
-        password: new FormControl(this.password, [
+        password: new FormControl(this.userUrl.password, [
             Validators.required,
             Validators.minLength(6),
             Validators.maxLength(15),
         ]),
 
-        school: new FormControl(this.school, school),
+        school: new FormControl(this.userUrl.school, school),
 
-        role: new FormControl(this.roleUrl, [
+        role: new FormControl(this.userUrl.role, [
             Validators.required
       ]),
 
-        group: new FormControl(null, group),
+        group: new FormControl(this.userUrl.group, group),
 
         course: new FormControl(null, course),
 
-        students: new FormControl(null, student),
+        students: new FormControl(this.userUrl.students, student),
 
         subject: new FormControl(null, subject),
     });
@@ -384,6 +405,32 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
             }else if(JSON.parse(localStorage.getItem('studentEdit')) && this.userlogin.role == 'Admin'){
               userEdit = JSON.parse(localStorage.getItem('studentEdit'));
+              let group: Group;
+              for(let groupCurrent of this.school.groups){
+                if(groupCurrent.id == this.FormEntity.value.group){
+                  group = groupCurrent;
+                  break;
+                }
+              }
+
+              userEdit.dateUpdate = new Date().toString();
+              userEdit.name = this.FormEntity.value.name;
+              userEdit.password = this.FormEntity.value.password;
+              userEdit.group = group;
+
+              for(let i in this.school.students){
+                if(this.school.students[i].id == userEdit.id){
+                  this.school.students[i] = userEdit;
+                  break;
+                }
+              }
+
+              if(this._schoolService.editarSchool(this.school)){
+                this.presentAlert('😃', 'Good!', 'The student is updated successfully.');
+                this.navCtrl.navigateBack('list-student');
+              }else{
+                this.presentAlert('😞', 'Bad!', 'The student could not be updated.');
+              }
 
             }else if(JSON.parse(localStorage.getItem('fatherEdit')) && this.userlogin.role == 'Admin'){
               userEdit = JSON.parse(localStorage.getItem('fatherEdit'));
@@ -499,7 +546,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
                       school.students = [];
                     }else{
                       for(let student of school.students){
-                        if(student.username = this.FormEntity.value.username){
+                        if(student.username == this.FormEntity.value.username){
                           validateStudent = true;
                           break;
                         }
