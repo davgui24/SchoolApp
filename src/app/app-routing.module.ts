@@ -27,6 +27,7 @@ const routes: Routes = [
   { path: 'list-subject', loadChildren: './pages/list-subject/list-subject.module#ListSubjectPageModule' },
   { path: 'list-group', loadChildren: './pages/list-group/list-group.module#ListGroupPageModule' },
   { path: 'list-school', loadChildren: './pages/list-school/list-school.module#ListSchoolPageModule' },  { path: 'list-student', loadChildren: './pages/list-student/list-student.module#ListStudentPageModule' },
+  { path: 'detail-admin', loadChildren: './pages/detail-admin/detail-admin.module#DetailAdminPageModule' },
 
  
 

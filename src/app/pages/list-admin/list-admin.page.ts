@@ -75,4 +75,11 @@ export class ListAdminPage implements OnInit {
 
   // +++++++++++++++++++++++++
 
+
+  viewDetailAdmin(admin){
+    localStorage.setItem('detailAdmin', JSON.stringify(admin));
+    this.navCtrl.navigateBack('detail-admin');
+    console.log(admin);
+  }
+
 }
