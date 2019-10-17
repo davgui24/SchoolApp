@@ -82,5 +82,11 @@ export class ListTeacherPage implements OnInit {
   loadData(event){
     console.log(event);
   }
+  viewDetail(teacher){
+
+    console.log(teacher);
+    localStorage.setItem('detailTeacher', JSON.stringify(teacher))
+    this.navCtrl.navigateBack('detail-teacher');
+  }
 
 }
