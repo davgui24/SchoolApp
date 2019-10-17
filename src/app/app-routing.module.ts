@@ -26,9 +26,12 @@ const routes: Routes = [
   { path: 'list-teacher', loadChildren: './pages/list-teacher/list-teacher.module#ListTeacherPageModule' },
   { path: 'list-subject', loadChildren: './pages/list-subject/list-subject.module#ListSubjectPageModule' },
   { path: 'list-group', loadChildren: './pages/list-group/list-group.module#ListGroupPageModule' },
-  { path: 'list-school', loadChildren: './pages/list-school/list-school.module#ListSchoolPageModule' },  { path: 'list-student', loadChildren: './pages/list-student/list-student.module#ListStudentPageModule' },
+  { path: 'list-school', loadChildren: './pages/list-school/list-school.module#ListSchoolPageModule' },
+  { path: 'list-student', loadChildren: './pages/list-student/list-student.module#ListStudentPageModule' },
+  { path: 'list-father', loadChildren: './pages/list-father/list-father.module#ListFatherPageModule' },
   { path: 'detail-admin', loadChildren: './pages/detail-admin/detail-admin.module#DetailAdminPageModule' },
   { path: 'detail-teacher', loadChildren: './pages/detail-teacher/detail-teacher.module#DetailTeacherPageModule' },
+
 
  
 

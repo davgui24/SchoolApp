@@ -89,13 +89,6 @@ export class RegisterUserPage implements OnInit, OnDestroy {
       // Carga de colegios
       this._schoolService.getSchools().then((schools: School[]) =>{
         this.schools = schools;
-
-        this._schoolService.verificarSchool(this.userlogin.school).then((school: School) =>{
-          for(let studentDB of school.students){
-            this.students.push(studentDB);
-            this.studentsAux.push(studentDB);
-          }
-        })
       })
       
       this.viewBotonBack();
@@ -196,7 +189,8 @@ export class RegisterUserPage implements OnInit, OnDestroy {
         })
       }else if(JSON.parse(localStorage.getItem('fatherEdit'))){
         this.userUrl = JSON.parse(localStorage.getItem('fatherEdit'));
-        this.groupCurrent = this.userUrl.group.id;
+
+        this.students = [];
 
         this._schoolService.getSchools().then((schools: School[]) =>{
 
@@ -205,9 +199,27 @@ export class RegisterUserPage implements OnInit, OnDestroy {
           for(let school of this.schools){
              if(school.id == this.userlogin.school){
                this.school = school;
+
+               for(let allStudents of this.school.students){
+                this.studentsAux.push(allStudents);
+               }
+
+               for(let studentDB of this.school.students){
+                 this.students.push(studentDB);
+               }
+
+               for(let studentDB of this.students){
+                for(let studentCurrent of this.userUrl.students){
+                    if(studentCurrent.id == studentDB.id){
+                      let index = this.students.indexOf(studentDB);
+                      this.students.splice(index, 1);
+                    }
+                  }
+                }
+    
                
-            for( let group of this.school.groups){
-             this.groups.push(group);
+            for( let fatherDB of this.userUrl.students){
+              this.studentSelect.push(fatherDB);
             }
             break;
            }
@@ -237,6 +249,11 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
           for(let groupDB of schoolDB.groups){
             this.groups.push(groupDB);
+          }
+
+          for(let studentDB of schoolDB.students){
+            this.students.push(studentDB);
+            this.studentsAux.push(studentDB);
           }
         })
       }
@@ -308,7 +325,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
         students: new FormControl(this.userUrl.students, student),
 
-        subject: new FormControl(null, subject),
+        subject: new FormControl(this.userUrl, subject),
     });
   }
 
@@ -466,6 +483,26 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
             }else if(JSON.parse(localStorage.getItem('fatherEdit')) && this.userlogin.role == 'Admin'){
               userEdit = JSON.parse(localStorage.getItem('fatherEdit'));
+              userEdit.students = [];
+              userEdit.students = this.studentSelect;
+              userEdit.dateUpdate = new Date().toString();
+              userEdit.name = this.FormEntity.value.name;
+              userEdit.username = this.FormEntity.value.username;
+              userEdit.password = this.FormEntity.value.password;
+              
+              for(let i in this.school.fathers){
+                if(this.school.fathers[i].id == userEdit.id){
+                  this.school.fathers[i] = userEdit;
+                  break;
+                }
+              }
+               
+              if(this._schoolService.editarSchool(this.school)){
+                this.presentAlert('😃', 'Good!', 'The father is updated successfully.');
+                this.navCtrl.navigateBack('list-father');
+              }else{
+                this.presentAlert('😞', 'Bad!', 'The father could not be updated.');
+              }
               
             }else{
 // ***************************************************** CODIGO CUANDO NO HAY NINGUN USUARIO PARA EDITAR, ENTONCES SE CREA
@@ -678,8 +715,9 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     ngOnDestroy(): void {
       localStorage.removeItem('userEdit');
       localStorage.removeItem('adminEdit');
-      localStorage.removeItem('teacherEdit')
-      localStorage.removeItem('studentEdit')
+      localStorage.removeItem('teacherEdit');
+      localStorage.removeItem('studentEdit');
+      localStorage.removeItem('fatherEdit')
     }
 
     // ---------------------
@@ -734,6 +772,20 @@ export class RegisterUserPage implements OnInit, OnDestroy {
             }
           }
         })
+      }
+
+
+      // -----------------------
+
+      removeStudent(student: User){
+        for(let studenSelect of this.studentSelect){
+          if(studenSelect.id == student.id){
+            let index = this.studentSelect.indexOf(studenSelect);
+            this.studentSelect.splice(index, 1);
+            this.students.push(studenSelect);
+            break;
+          }
+        }
       }
 
       logScrollStart(){

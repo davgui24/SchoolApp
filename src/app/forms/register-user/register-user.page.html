@@ -133,10 +133,12 @@
                               <ion-row style="font-size: 15px; font-weight: bold; text-align: center;">
                                 <ion-col>Name</ion-col>
                                 <ion-col>Grade</ion-col>
+                                <ion-col>Remove</ion-col>
                               </ion-row>
                               <ion-row  style="font-size: 13px; text-align: center;" *ngFor="let student of studentSelect">
                                   <ion-col>{{ student.name }}</ion-col>
                                   <ion-col>{{ student.group.name }}</ion-col>
+                                  <ion-col (click)="removeStudent(student)"><ion-icon name="trash"></ion-icon></ion-col>
                               </ion-row>
                             </ion-grid>
                             <ion-text color="danger" *ngIf="validateSelectStudent">

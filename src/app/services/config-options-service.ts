@@ -195,7 +195,7 @@ export class ConfigOptionsService {
       },
       {
         title: 'Father',
-        url: 'list-user',
+        url: 'list-father',
         icon: 'person-add',
         validation: sideOption.father
       },
