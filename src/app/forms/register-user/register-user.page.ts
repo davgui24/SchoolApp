@@ -32,6 +32,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
   admins: User[] = [];
   teachers: User[] = [];
   students: User[] = [];
+  studentsAux: User[] = [];
   fathers: User[] = [];
   user: User = null;
   userUrl: User = null;
@@ -44,6 +45,9 @@ export class RegisterUserPage implements OnInit, OnDestroy {
   group: Group = null;
   groups: Group[] = [];
   groupCurrent: string;
+  search: string;
+  validateSelectStudent: boolean = false;
+
 
   schools: School[] = [];
   courses: Course[] = [];
@@ -85,6 +89,13 @@ export class RegisterUserPage implements OnInit, OnDestroy {
       // Carga de colegios
       this._schoolService.getSchools().then((schools: School[]) =>{
         this.schools = schools;
+
+        this._schoolService.verificarSchool(this.userlogin.school).then((school: School) =>{
+          for(let studentDB of school.students){
+            this.students.push(studentDB);
+            this.studentsAux.push(studentDB);
+          }
+        })
       })
       
       this.viewBotonBack();
@@ -104,6 +115,8 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     this.urlBackStudent = true;
   }else if(this.roleUrl == 'Father'){
     this.urlBackFather = true;
+  }else{
+    this.navCtrl.navigateBack('home');
   }
  }
 
@@ -181,6 +194,25 @@ export class RegisterUserPage implements OnInit, OnDestroy {
            }
           }
         })
+      }else if(JSON.parse(localStorage.getItem('fatherEdit'))){
+        this.userUrl = JSON.parse(localStorage.getItem('fatherEdit'));
+        this.groupCurrent = this.userUrl.group.id;
+
+        this._schoolService.getSchools().then((schools: School[]) =>{
+
+          this.schools = schools;
+
+          for(let school of this.schools){
+             if(school.id == this.userlogin.school){
+               this.school = school;
+               
+            for( let group of this.school.groups){
+             this.groups.push(group);
+            }
+            break;
+           }
+          }
+        })
       }
 
     
@@ -223,7 +255,7 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     if(inputFormUser.ImputStudents){
       student = [Validators.required];
     }else{
-      student = [] 
+      student = [Validators.nullValidator] 
     }
     if(inputFormUser.ImputGroup){
       group = Validators.required
@@ -572,8 +604,42 @@ export class RegisterUserPage implements OnInit, OnDestroy {
 
 
               }else if(this.roleUrl == 'Father' && this.userlogin.role == 'Admin'){
+                if(this.studentSelect.length<=0){
+                  this.validateSelectStudent = true;
+                }else{
+                  let validateFather: boolean = false;
+                  let newFather = new User(this.FormEntity.value.name, this.FormEntity.value.username, this.FormEntity.value.password, this.FormEntity.value.role);
+                  newFather.students = this.studentSelect;
 
-  
+                  this._schoolService.verificarSchool(this.userlogin.school).then((school: School) =>{
+                    if(school.fathers){
+                      for(let fatherDB of school.fathers){
+                        if(fatherDB.username == this.FormEntity.value.username){
+                          validateFather = true;
+                          break;
+                        }
+                      }
+
+                      if(validateFather){
+                        this.presentAlert('🤔', 'Bad!', 'The father could not be registered.');
+                        return;
+                      }else{
+                        school.fathers.push(newFather);
+                      }
+                    }else{
+                      school.fathers = [];
+                      school.fathers.push(newFather);
+                    }
+
+                    if(this._schoolService.editarSchool(school)){
+                      this.presentAlert('😃', 'Good!', 'The father was created successfully.');
+                      this.FormEntity.reset();
+                    }else{
+                      this.presentAlert('😞', 'Error!', 'The student was created correctly.');
+                    }
+                  })
+                }
+               
               }else if(this.roleUrl == 'Global' && this.userlogin.role == 'Global'){
                 this._userService.getUsuarios().then((globalsDB: User[]) =>{
                   let validateGlobal: boolean = false;
@@ -628,4 +694,54 @@ export class RegisterUserPage implements OnInit, OnDestroy {
     
         await alert.present();
       }
+
+
+
+      // -------------------
+
+      searchStudent(){
+        console.log(this.FormEntity.value.students);
+        if(this.search && this.search.trim() != ''){
+          this.students = this.studentsAux.filter((item =>{
+          return ((item.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1) ||
+              (String(item.username).toLowerCase().indexOf(this.search.toLowerCase()) > -1));
+          }))
+        }else if(this.search.trim() == ''){
+          this.students = this.studentsAux;
+        }
+      }
+
+
+      studentSelect: User[] = [];
+      selectStudent(){
+        this._schoolService.verificarSchool(this.userlogin.school).then((school: School) =>{
+ 
+          for(let studentDB of school.students){
+            for(let studentsIdSelect of this.FormEntity.value.students){
+              if(studentDB.id == studentsIdSelect){
+                this.studentSelect.push(studentDB);
+              }
+            }
+
+
+            for(let studentSelect of this.studentSelect){
+             for(let i in this.students){
+              if(studentSelect.id == this.students[i].id){
+                var index = this.students.indexOf( this.students[i] );
+                this.students.splice( index, 1 );
+              }
+             }
+            }
+          }
+        })
+      }
+
+      logScrollStart(){
+
+      }
+    
+      loadData(event){
+        console.log(event);
+      }
+    
 }

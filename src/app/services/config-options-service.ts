@@ -41,7 +41,7 @@ export class ConfigOptionsService {
     }else if(role == 'Father') {
       inputFormUser.inputSchool= false;
       inputFormUser.ImputGroup = false;
-      inputFormUser.ImputStudents = false;
+      inputFormUser.ImputStudents = true;
       inputFormUser.ImputCourse = false;
       inputFormUser.InputSubject = false;
     }
@@ -194,7 +194,7 @@ export class ConfigOptionsService {
         validation: sideOption.student
       },
       {
-        title: 'father',
+        title: 'Father',
         url: 'list-user',
         icon: 'person-add',
         validation: sideOption.father
