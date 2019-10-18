@@ -30,7 +30,8 @@ const routes: Routes = [
   { path: 'list-student', loadChildren: './pages/list-student/list-student.module#ListStudentPageModule' },
   { path: 'list-father', loadChildren: './pages/list-father/list-father.module#ListFatherPageModule' },
   { path: 'detail-admin', loadChildren: './pages/detail-admin/detail-admin.module#DetailAdminPageModule' },
-  { path: 'detail-teacher', loadChildren: './pages/detail-teacher/detail-teacher.module#DetailTeacherPageModule' },
+  { path: 'detail-teacher', loadChildren: './pages/detail-teacher/detail-teacher.module#DetailTeacherPageModule' },  { path: 'register-activity', loadChildren: './forms/register-activity/register-activity.module#RegisterActivityPageModule' },
+
 
 
  
