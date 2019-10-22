@@ -19,6 +19,9 @@ import { firebaseConfig } from './config';
 import { MenuPageModule } from './components/menu/menu.module';
 
 
+import { ImagePicker } from '@ionic-native/image-picker/ngx';
+
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,6 +39,7 @@ import { MenuPageModule } from './components/menu/menu.module';
     StatusBar,
     SplashScreen,
     AngularFireDatabase ,
+    ImagePicker,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

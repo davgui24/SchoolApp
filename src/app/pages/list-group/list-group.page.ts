@@ -65,4 +65,14 @@ export class ListGroupPage implements OnInit {
     localStorage.setItem('groupEdit', JSON.stringify(group));
     this.navCtrl.navigateBack('register-group');
   }
+
+
+   // -----------------------
+   logScrollStart(){
+
+  }
+
+  loadData(event){
+    console.log(event);
+  }
 }

@@ -225,7 +225,7 @@ export class ConfigOptionsService {
       },
       {
         title: 'Activity',
-        url: 'home',
+        url: 'register-activity',
         icon: 'person-add',
         validation: sideOption.activity
       },
